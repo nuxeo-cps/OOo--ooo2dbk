@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Parametres" script:language="StarBasic">
+sub enumereControles
+leDoc = thisComponent
+oDlg=Dialogue(&quot;dlgOutils&quot;,&quot;Indesko_OOo2dbk&quot;)
+lesControles = oDlg.controls
+
+open &quot;/home/lgodard/liste_ctrl_ooo2dbk-Bis.txt&quot; for output as #1
+print #1,ubound(lesControles)
+for i=0 to ubound(lesControles)
+libel=&quot;***&quot;
+print #1,&quot;&apos;&quot;,i, lescontroles(i).model.name
+on error resume next
+libel= lesControles(i).model.label
+if libel &lt;&gt;&quot;***&quot; then
+	print #1,&quot;ctrl=oDlg.getControl(&quot;&quot;&quot;+lescontroles(i).model.name+&quot;&quot;&quot;)&quot;+chr(10)+&quot;ctrl.model.label=&quot;&quot;&quot;+libel+&quot;&quot;&quot;&quot;+chr(10)
+endif
+suite:
+next i
+
+close #1
+print &quot;ok&quot;
+end sub
+&apos;--------
+sub genereRSCstring
+	
+	open &quot;/home/lgodard/GUI.txt&quot; for input as #1
+	open &quot;/home/lgodard/GUI2.txt&quot; for output as #2
+	while not eof(1)
+		line input #1, ligne
+		decoupe = split(ligne, &quot;=&quot;)
+		chaine = decoupe(0) + &quot;=&quot;&quot;&quot; + trim(decoupe(0))+&quot;&quot;&quot;&quot;
+		print #2, chaine
+	wend 
+	
+	close #1
+	close #2
+	
+end sub
+</script:module>

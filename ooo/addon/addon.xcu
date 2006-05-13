@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Addons" oor:package="org.openoffice.Office">
+    <node oor:name="AddonUI">
+        <node oor:name="OfficeMenuBar">
+            <node oor:name="com.indesko.openoffice.ooo2dbk" oor:op="replace">
+                <prop oor:name="Title" oor:type="xs:string">
+                    <value>Indes~ko</value>
+                </prop>
+                <prop oor:name="Context" oor:type="xs:string">
+                    <value>com.sun.star.text.TextDocument</value>
+                </prop>
+                <node oor:name="Submenu">
+                    <node oor:name="m1" oor:op="replace">
+                        <prop oor:name="URL" oor:type="xs:string">
+                            <value>macro:///Indesko_OOo2dbk.GesFenetreOutils.ChargeFenetre</value>
+                        </prop>
+                        <prop oor:name="Title" oor:type="xs:string">
+                            <value>~OOo2dbk</value>
+                        </prop>
+                       <prop oor:name="Target" oor:type="xs:string">
+                            <value>_self</value>
+                        </prop>
+                        <prop oor:name="ImageIdentifier" oor:type="xs:string">
+                            <value>%origin%/Indesko_OOo2dbk/icons/ooo2dbk</value>
+                        </prop>
+                    </node>
+                </node>
+            </node>
+        </node>
+    </node>
+</oor:component-data>

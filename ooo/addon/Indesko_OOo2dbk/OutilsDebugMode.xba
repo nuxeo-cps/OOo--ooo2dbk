@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="OutilsDebugMode" script:language="StarBasic">&apos;debug routines
+Public debugMode as boolean
+
+&apos;-----------------------
+&apos;General Debug Routines
+&apos;-----------------------
+Function CheckDebugMode() as boolean
+	&apos;switch true/false
+	CheckDebugMode = false
+End function
+&apos;------------------------
+&apos; Project Specific debug routines
+&apos;------------------------
+
+</script:module>

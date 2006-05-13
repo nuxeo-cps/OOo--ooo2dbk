@@ -1,0 +1,12 @@
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- setup.py for linux deployemnt
+Bug fixes:
+~~~~~~~~~~
+- Better documentation for the print-orientation feature.
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+-

@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="GesFenetreOutils" script:language="StarBasic">REM  *****  BASIC  *****
+public const nbMaxAuteurs = 20
+public const nbMaxOrgAuteurs = 4
+public const nbMaxOrgCommanditaire = 4
+public const racineFieldMaster=&quot;com.sun.star.text.FieldMaster.User&quot;
+
+
+public listeChamp_author()
+public listeChamp_corpauthor()
+public listeChamp_contractsponsor()
+public listeChamp_metainfoGenerale()
+public listeChamp_metainfoResume()
+
+public listeChamp_metainfoConference()
+
+public oDlg as object
+
+global leListenerTop &apos;listener pour fermeture de par la croix
+global leListenerStyles
+
+dim arreter as boolean &apos;Falg d&apos;arret de boucle ppale pour fermer la fentre
+
+public TailleIni as new com.sun.star.awt.Size &apos;Taille initiale de la fenetre
+
+dim CurIndexSectionsVisibles() 
+dim initialisation as boolean
+
+public lesValeursIni()
+
+const version_assistant=&quot;1.0&quot;
+
+&apos;------------------
+
+Sub ChargeFenetre
+
+dim leControle
+dim i
+dim listenerEnRoute as boolean
+dim debugMode as boolean
+
+&apos;DEBUG MODE
+debugMode =CheckDebugMode()
+
+
+
+
+&apos;Verifei que l&apos;assistant n&apos;est pas deja lancé
+if not isNull(oDlg) then
+	message = MSG_LOAD_ALREADY_1 + chr(10)
+	message = message + MSG_LOAD_ALREADY_2
+	Indesko_MsgBox( message, 48, GUI_WIZARDNAME)
+	exit sub
+endif
+
+
+&apos;Memorisation de l&apos;objet Thiscomponenet
+&apos;Contournement du bug OLE : #IZ39159
+if not isOleError then
+	leDoc = thisComponent
+else	
+	message = MSG_LOAD_OLE_1 + chr(10)
+	message = message + MSG_LOAD_OLE_2 +chr(10)+ chr(10)
+	message = message + MSG_LOAD_OLE_3 +chr(10)+chr(10)
+	MsgBox( message, 48, GUI_WIZARDNAME)
+	exit sub
+endif
+
+
+&apos;Test que c&apos;est bien un modele Indesko
+if versionIndesko = &quot;-1&quot; then
+	MsgBox( MSG_LOAD_TEMPLATE,48,GUI_WIZARDNAME)
+	exit sub
+endif
+
+&apos;Maj NumeroVersion Assitant
+if not leDoc.textFieldMasters.hasByName(racineFieldMaster+&quot;.indesko_version_assistant&quot;) then
+	leTextFieldMaster = leDoc.createInstance(racineFieldMaster)
+	leTextFieldMaster.Name = &quot;indesko_version_assistant&quot;
+endif
+leTextFieldMaster = leDoc.textFieldMasters.getByName(racineFieldMaster+&quot;.indesko_version_assistant&quot;)
+letextFieldMaster.content = version_assistant
+leDoc.textFields.refresh
+
+
+&apos;Charge la fenetre
+oDlg=Dialogue(&quot;dlgOutils&quot;,&quot;Indesko_OOo2dbk&quot;)
+&apos;call prepareTranslateList
+call switchLanguage
+&apos;call RSC_EN
+&apos;call TranslateGUI
+
+&apos;Initialise le dialogue
+oDlg.Title=GUI_WIZARDNAME +&quot; &quot; + cstr(version_assistant)
+
+
+TailleIni.height = oDlg.size.height
+TailleIni.width = oDlg.size.width
+
+
+call InitVariablesDlg
+
+&apos;initialise liste atteindre
+
+call Initialise_liste_atteindre
+initialisation = true
+&apos;initialise chk visible (step2)
+for i=0 to ubound(tabVisible)
+	leControle=oDlg.getControl(&quot;chkVisibleSection_&quot; + cstr(i))
+	leControle.label = tabVisible(i,1)
+next i
+
+&apos;initialise Stylist Light
+call InitialiseCategoriesStylistLight
+
+initialisation = false
+
+&apos;Affiche la fenetre
+arreter=false
+
+listenerEnRoute = not isEmpty(leListenerTop) or not isEmpty(leListenerStyles)
+if listenerEnRoute then
+	call  supprimeListener
+endif
+
+call enregistreListener
+
+&apos;positionne sur premier ecran (ppal)
+oDlg.Model.step = 1
+
+oDlg.setVisible(true)
+
+
+continue=true 
+&apos;pour la gestion de demande de confirmation si saisie bordereau en cours
+&apos; si fermeture brutale
+while continue
+	continue = false
+	arreter = false
+	while not arreter
+	&apos;boucle infinie arreter dans sub boutonFerme
+		wait 20
+		if oDlg.model.step = 12 then
+			call majStylesEnCours 
+		endif
+	wend
+	continue = Not AbandonBordereau()
+wend
+
+call supprimeListener
+
+&apos;Ferme la fenetre
+oDlg.setVisible(false)
+
+oDlg.dispose
+
+exit sub
+
+GesErr:
+if isOleError then
+	message = MSG_LOAD_ERROR_1 +chr(10)+chr(10)
+	message = message + MSG_LOAD_ERROR_2 +chr(10)+chr(10)
+else
+	message = MSG_LOAD_ERROR_3
+endif
+	Indesko_MsgBox( message, 48, GUI_WIZARDNAME)
+	call  supprimeListener
+	oDlg.setVisible(false)
+	oDlg.dispose
+	arreter=true
+
+End Sub
+&apos;------------------------
+sub Initialise_liste_atteindre
+&apos;initialise liste atteindre
+
+dim leControle
+dim laSection
+dim nbListe, nomSection
+dim ajouter
+
+call majTabSections
+
+leControle=oDlg.getControl(&quot;lstAtteindre&quot;)
+leControle.removeItems(0,leControle.itemCount)
+redim CurIndexSectionsVisibles(0)
+for i=0 to ubound(tabSections)
+	nomSection = tabSections(i,2)
+	select case nomSection
+		case &quot;&quot;,  &quot;bordereau&quot;, &quot;document&quot;, &quot;annexes&quot;,&quot;metainfo_abstract&quot;
+			ajouter=true
+		case else
+			laSection=leDoc.TextSections.getByName(nomSection)
+			ajouter = laSection.isVisible
+	end select	
+	
+	if ajouter then
+		nbListe = ubound(CurIndexSectionsVisibles()) + 1 
+		redim preserve CurIndexSectionsVisibles(0 to nbListe)
+		CurIndexSectionsVisibles(nbListe)=i
+		leControle.addItem(tabSections(i,1),nbListe-1)
+	endif
+next i
+
+end sub
+&apos;------------------------------
+sub action_lstAtteindre
+
+dim leControle
+dim indx
+
+leControle = oDlg.getControl(&quot;lstAtteindre&quot;)
+
+indx = CurIndexSectionsVisibles(leControle.getSelectedItemPos+1)
+select case tabSections(indx,2)
+	case &quot;&quot;
+		&apos;on ne fait rient séparation
+	case &quot;metainfo_abstract&quot;
+		call atteindreTextField(tabSections(indx,2))
+	case &quot;document&quot;&apos;, &quot;annexes&quot;
+		call AtteindreDocument(indx)
+	case else
+		call AtteindreSection(tabSections(indx,2))
+end select
+
+end sub
+&apos;------------------------
+sub action_btcVisibleSection
+&apos;initialise chk visible (step2)
+for i=0 to ubound(tabVisible)
+	leControle=oDlg.getControl(&quot;chkVisibleSection_&quot; + cstr(i))
+	laSection = leDoc.TextSections.getByName(tabVisible(i,2))
+	if Lasection.isVisible then
+		leControle.state = 1
+	else
+		leControle.state = 0	
+	endif
+next i
+	oDlg.Model.step=2
+end sub
+&apos;------------------------
+sub boutonFerme
+	arreter=true
+end sub
+&apos;------------------------
+sub action_btcRetour
+
+	oDlg.Model.step = 1
+	
+end sub
+
+&apos;------------------------
+sub action_chkVisibleSection (evt)
+	leControle=evt.Source
+	if leControle.state = 0 then
+		montrerSection = false
+	else
+		montrerSection = true
+	endif
+	nomControle = leControle.Model.name
+	decoupe = split(nomControle,&quot;_&quot;)
+	indx=decoupe(ubound(decoupe))
+	
+	&apos;Message de confirmation
+	if not montrerSection then
+		NomSection = tabVisible(indx,1)
+		message = MSG_VISIBILITY_1 +chr(10)+chr(9)+ NomSection 
+		message = message +chr(10)
+		reponse=Indesko_MsgBox(message,4 + 32 + 256,MSG_VISIBILITY_TITLE )
+		if reponse=7 then
+		&apos;utilisateur annule --&gt; on sort
+			leControle.state = 1
+			exit sub
+		endif
+	endif
+
+call VisibiliteSection(indx, montrerSection)
+call Initialise_liste_atteindre
+
+end sub
+&apos;----------------------
+sub action_insererIndex
+
+laSelection = leDoc.currentController.selection
+
+if trim(laSelection(0).string)&lt;&gt;&quot;&quot; and laSelection.count=1 then
+	document   = leDoc.CurrentController.Frame
+	dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	dim arg(0) as new com.sun.star.beans.PropertyValue
+	arg(0).name=&quot;InteractionHandler&quot;
+	arg(0).value = false
+	dispatcher.executeDispatch(document, &quot;.uno:InsertIndexesEntry&quot;, &quot;&quot;, 0, arg())
+endif
+
+end sub
+&apos;----------------------
+sub action_insererBiblio
+
+	document   = leDoc.CurrentController.Frame
+	dispatcher = createUnoService(&quot;com.sun.star.frame.DispatchHelper&quot;)
+	dim arg(0) as new com.sun.star.beans.PropertyValue
+	arg(0).name=&quot;InteractionHandler&quot;
+	arg(0).value = false
+	dispatcher.executeDispatch(document, &quot;.uno:InsertAuthoritiesEntry&quot;, &quot;&quot;, 0, arg())
+
+end sub
+&apos;-----------------------
+sub action_glossaire
+ call ajouter_entree_glossaire()
+end sub
+&apos;------------------------
+&apos; Raffraichir le document
+&apos;------------------------
+sub action_rafraichir
+
+	call Rafraichir_document
+
+end sub
+&apos;------------------------
+&apos; Stylist Light
+&apos;------------------------
+sub action_StylistLight
+
+leLibelle=oDlg.getControl(&quot;btcStylistLight&quot;)
+if oDlg.model.step &lt;&gt; 12 then
+	leLibelle.Model.label = GUI_WIZARD
+	oDlg.model.step = 12
+else
+	leLibelle.Model.label = GUI_STYLISTHELPER
+	call action_btcRetour 
+endif
+
+end sub
+
+&apos;-----------------------
+&apos; GESTION DU BORDEREAU
+&apos;-----------------------
+sub action_gererBordereau
+
+	continue = AbandonBordereau()
+	if continue then		
+		oDlg.Model.step = 4
+	endif
+
+end sub
+&apos;----------------------
+sub ajouteBordereau(evt)
+
+leNomControle = evt.source.model.name
+
+select case leNomControle
+
+	case &quot;btcAuteur_Ajoute&quot;
+		leStep=5
+		typeTableau=&quot;auteur_&quot;
+		nomBoutonAction=&quot;btcGoAuteur&quot;
+		nbMax = nbMaxAuteurs
+		listeChamp=listeChamp_author
+		
+	case &quot;btcOrgAuteur_Ajoute&quot;
+		leStep=6
+		typeTableau=&quot;organisme_auteur_&quot;
+		nbMax = nbMaxOrgAuteurs
+		nomBoutonAction=&quot;btcGoOrgAuteur&quot;
+		listeChamp=listeChamp_corpauthor
+		
+	case &quot;btcOrgCom_Ajoute&quot;
+		leStep=7
+		typeTableau=&quot;organisme_commanditaire_&quot;
+		nbMax = nbMaxOrgCommanditaire
+		nomBoutonAction=&quot;btcGoOrgCommanditaire&quot;
+		listeChamp=listeChamp_contractsponsor
+		
+end select
+
+numFormulaire = RechercheNumTableau(typeTableau)
+
+if numFormulaire &lt; nbMax then
+	leControle = oDlg.getControl(nomBoutonAction)
+	leControle.model.Tag = cstr(numFormulaire+1)
+	lecontrole.model.label  = GUI_CREATE&apos;&quot;Créer&quot;
+	call NettoieEcran(listeChamp)
+	lesValeursIni = RecupereValeursFormulaire(listeChamp,leStep )
+	oDlg.Model.step = leStep
+	leControle=oDlg.getControl(listeChamp(0)) &apos;Focus sur le premier champ
+	leControle.setFocus
+else
+	Indesko_MsgBox( MSG_METADATA_MAX_ADD +&quot; (&quot;+cstr(nbMax)+&quot;)&quot;)
+endif
+
+end sub
+&apos;-------------------------
+sub supprimerBordereau(evt)
+
+dim laListe
+
+leNomControle = evt.source.model.name
+
+select case leNomControle
+	case &quot;btcAuteur_Supprime&quot;
+		leStep=5
+		typeTableau=&quot;auteur_&quot;
+		libTitre = MSG_METADATA_AUTHOR
+
+	case &quot;btcOrgAuteur_Supprime&quot;
+		leStep=6
+		typeTableau=&quot;organisme_auteur_&quot;
+		libTitre = MSG_METADATA_CORPAUTHOR
+
+	case &quot;btcOrgCom_Supprime&quot;
+		leStep=7
+		typeTableau=&quot;organisme_commanditaire_&quot;
+		libTitre = MSG_METADATA_CONTRACTSPONSOR
+
+end select
+
+&apos;choisir lequel
+call ChoisirLequel(typeTableau,libTitre,1,leStep,GUI_DELETE)
+
+
+end sub
+&apos;-----------------
+sub ChoixOK
+
+&apos;recuper les infos de choix
+	leControle = oDlg.getControl(&quot;lblChoisir&quot;)
+	leStep = clng(leControle.model.tag)
+	
+	leControle = oDlg.getControl(&quot;btcChoisir&quot;)
+	numFormulaire = leControle.model.Tag 
+	labelBouton  = leControle.model.label
+	
+	if numFormulaire = &quot;direct&quot; then
+		numFormulaire = &quot;&quot;
+	else
+		leControle = oDlg.getControl(&quot;lstChoix&quot;)
+		chaine=leControle.selectedItem
+		num=split(chaine,&quot;|&quot;)
+		numFormulaire=trim(num(0))	
+	endif
+
+select case leStep
+	case 5
+		racineChamp=&quot;metainfo_author&quot;
+		nomBoutonAction=&quot;btcGoAuteur&quot;
+		if ubound(listeChamp_author)=-1 then
+			listeChamp_author = trouveListeChamp(leStep)
+		endif
+		listeChamp=listeChamp_author
+	case 6
+		racineChamp=&quot;metainfo_corpauthor&quot;
+		nomBoutonAction=&quot;btcGoOrgAuteur&quot;
+		if ubound(listeChamp_corpauthor)=-1 then
+			listeChamp_corpauthor = trouveListeChamp(leStep)
+		endif
+		listeChamp=listeChamp_corpauthor	
+	case 7
+		racineChamp=&quot;metainfo_contractsponsor&quot;
+		nomBoutonAction=&quot;btcGoOrgCommanditaire&quot;
+		if ubound(listeChamp_contractsponsor)=-1 then
+			listeChamp_contractsponsor = trouveListeChamp(leStep)
+		endif
+		listeChamp=listeChamp_contractsponsor
+	case 8
+		racineChamp=&quot;metainfo&quot;
+		nomBoutonAction=&quot;btcGoInfosGenerales&quot;
+		if ubound(listeChamp_metainfoGenerale)=-1 then
+			listeChamp_metainfoGenerale = trouveListeChamp(leStep)
+		endif
+		listeChamp=listeChamp_metainfoGenerale	
+		
+	case 9
+		racineChamp=&quot;metainfo&quot;
+		nomBoutonAction=&quot;btcGoInfosGenerales&quot;
+		if ubound(listeChamp_metainfoResume)=-1 then
+			listeChamp_metainfoResume = trouveListeChamp(leStep)
+		endif
+		listeChamp=listeChamp_metainfoResume		
+
+	case 11
+		racineChamp=&quot;metainfo_confgroup&quot;
+		nomBoutonAction=&quot;btcGoConference&quot;
+		if ubound(listeChamp_metainfoConference)=-1 then
+			listeChamp_metainfoConference = trouveListeChamp(leStep)
+		endif
+		listeChamp=listeChamp_metainfoConference
+
+end select
+
+&apos;remplir le formulaire
+call RemplirFormulaireFromTextField(listeChamp, leStep, racineChamp, numFormulaire)
+
+&apos;afficher
+	leControle = oDlg.getControl(nomBoutonAction)
+	leControle.model.Tag = cstr(numFormulaire)
+	lecontrole.model.label  = labelBouton
+	oDlg.Model.step = leStep
+	leControle=oDlg.getControl(listeChamp(0)) &apos;Focus sur le premier champ
+	leControle.setFocus
+
+end sub
+&apos;------------------------
+sub ModifierBordereau(evt)
+
+leNomControle = evt.source.model.name
+
+select case leNomControle
+	case &quot;btcAuteur_Modifie&quot;
+		leStep=5
+		typeTableau=&quot;auteur_&quot;
+		libTitre = MSG_METADATA_AUTHOR&apos;&quot;Auteur&quot;
+		demanderLequel=true
+
+	case &quot;btcOrgAuteur_Modifie&quot;
+		leStep=6
+		typeTableau=&quot;organisme_auteur_&quot;
+		libTitre = MSG_METADATA_CORPAUTHOR&apos;&quot;Organisme auteur&quot;
+		demanderLequel=true
+
+	case &quot;btcOrgCom_Modifie&quot;
+		leStep=7
+		typeTableau=&quot;organisme_commanditaire_&quot;
+		libTitre = MSG_METADATA_CONTRACTSPONSOR&apos;&quot;Organisme commanditaire&quot;
+		demanderLequel=true
+		
+	case &quot;btcInfo_Modifie&quot;
+		leStep=8
+		demanderLequel=false
+		
+	case &quot;btcResume_Modifie&quot;
+		leStep=9	
+		demanderLequel=false
+		
+	case &quot;btcInfoContrat_Modifie&quot;
+		leStep=10
+		demanderLequel=false	
+		
+	case &quot;btcConference_Modifie&quot;
+		leStep=11
+		demanderLequel=false			
+	case else
+		exit sub
+
+end select
+
+if demanderLequel then
+	&apos;choisir lequel
+	call ChoisirLequel(typeTableau,libTitre,0,leStep,GUI_MODIFY)&apos;&quot;Modifier&quot;
+else
+	&apos;rempli les infos
+	leControle = oDlg.getControl(&quot;lblChoisir&quot;)
+	leControle.model.tag = leStep
+	
+	leControle = oDlg.getControl(&quot;btcChoisir&quot;)
+	leControle.model.Tag = &quot;direct&quot;
+	&apos;leControle.model.label = &quot;Modifier&quot;
+	leControle.model.label = GUI_MODIFY&apos;&quot;Modifier&quot;
+
+	call ChoixOK
+
+endif
+
+end sub
+
+&apos;------------------------
+sub bordereau_btcGo(evt)
+
+typeAction = evt.source.model.label
+leStep=evt.source.model.step
+numFormulaire = evt.source.model.tag
+
+saisieOK = true
+
+select case typeAction
+	case GUI_CREATE&apos;&quot;Créer&quot;
+		saisieOK = TraiteFormulaireAjouter(leStep, numFormulaire)
+	case GUI_DELETE&apos;&quot;Supprimer&quot;
+		call TraiteFormulaireSupprimer(leStep, numFormulaire)	
+	case GUI_MODIFY&apos;&quot;Modifier&quot;
+		saisieOK = TraiteFormulaireModifier(leStep, numFormulaire)
+end select
+
+&apos;retour au bordereau
+if saisieOK then 
+	call action_gererBordereau
+endif
+
+end sub
+
+&apos;-----------------------
+&apos; GESTION DES LISTENERS
+&apos;-----------------------
+sub enregistreListener
+dim leControle
+&apos;Listener pour la croix de fermeture
+	leListenerTop=createUnoListener(&quot;TopListen_&quot;, &quot;com.sun.star.awt.XTopWindowListener&quot;)
+	oDlg.addTopWindowlistener(leListenerTop)
+	call EnregistreListenerStylist
+end sub
+&apos;----------------
+sub EnregistreListenerStylist
+
+&apos;Listener pour application des styles par doubleClick
+	leListenerStyles=createUnoListener(&quot;MouseStyleListen_&quot;, &quot;com.sun.star.awt.XMouseListener&quot;)
+	leControle=oDlg.getControl(&quot;lstStyles&quot;)
+	leControle.addMouselistener(leListenerStyles)	
+
+end sub
+&apos;--------------------
+sub supprimeListenerStylist
+on error resume next
+
+&apos;Listener pour application des styles par doubleClick
+	if not isEmpty(	leListenerStyles) then
+		leControle=oDlg.getControl(&quot;lstStyles&quot;)
+		leControle.removeMouselistener(leListenerStyles)
+
+	endif
+end sub
+
+&apos;----------------
+sub supprimeListener
+dim leControle 
+&apos;Listener pour la croix de fermeture
+	oDlg.removeTopWindowListener(leListenerTop)
+	call supprimeListenerStylist
+end sub
+&apos;-----------------------------------
+&apos;Listener pour la croix de fermeture
+&apos;-----------------------------------
+sub TopListen_WindowClosing
+	arreter=true
+end sub
+sub  TopListen_windowOpened
+end sub
+sub  TopListen_windowClosed
+end sub
+sub TopListen_windowMinimized
+end sub
+sub  TopListen_windowNormalized
+end sub
+sub  TopListen_windowActivated
+end sub
+sub  TopListen_windowDeactivated
+end sub
+sub  TopListen_disposing
+end sub
+
+&apos;-----------------------------------
+&apos;Listener pour application des styles par doubleClick
+&apos;-----------------------------------
+sub mouseStyleListen_mousePressed(oEvt)
+	if oEvt.clickCount = 2 then
+		call  AppliqueStyle
+	endif
+end sub
+sub mouseStyleListen_mouseReleased(oEvt)
+end sub
+sub mouseStyleListen_mouseEntered(oEvt)
+end sub
+sub mouseStyleListen_mouseExited(oEvt)
+end sub
+sub mouseStyleListen_disposing(oEvt)
+end sub
+&apos;-----------------------------------
+sub EnrouleDeroule
+
+dim uneTaille as new com.sun.star.awt.Size
+dim leLabel
+
+leLabel=oDlg.getControl(&quot;lbl_reduire&quot;)	
+	if oDlg.size.height=TailleIni.height then
+		unetaille.height=leLabel.PosSize.Y + leLabel.PosSize.height&apos;20
+		uneTaille.width = leLabel.PosSize.X + leLabel.PosSize.width&apos;TailleIni.width/2
+		leLabel.text=GUI_WINDOW_MAXIMIZE&apos;&quot;Dérouler la fenêtre&quot;
+	else
+		uneTaille.height = TailleIni.height		
+		uneTaille.width = TailleIni.width
+		leLabel.text=GUI_WINDOW_MINIMIZE
+	endif
+	
+	&apos;uneTaille.width = TailleIni.width
+	
+	oDlg.setPosSize(0,0,uneTaille.width, uneTaille.height, com.sun.star.awt.PosSize.SIZE) 
+
+
+end sub
+&apos;----------------------------------------
+function ChoisirLequel(typeTableau,libTitre,garderRang, leStep,labelBouton)
+
+	leControleListe = oDlg.getControl(&quot;lstChoix&quot;)
+	leControleListe.removeItems(0,leControleListe.ItemCount)
+	
+	laListe=EnumereTableaux(typeTableau)
+	
+	for i=0 to ubound(laListe())
+		leTableau = laListe(i)
+		num=split(leTableau.name,&quot;_&quot;)
+		if clng(num(ubound(num))) &gt; garderRang then
+			chaine= num(ubound(num))+&quot; | &quot;
+			laCell=leTableau.getCellByPosition(1,0)
+			chaine=chaine + laCell.string
+			laCell=leTableau.getCellByPosition(1,1)
+			chaine= chaine + &quot; &quot; +laCell.string
+			leControleListe.addItem(chaine, leControleListe.itemCount)
+		endif	
+	next i
+	
+	if leControleListe.itemCount = 0 then
+		Indesko_MsgBox(libtitre+chr(10)+MSG_CHOOSE_DELETE_NO,48,GUI_WIZARDNAME)
+	else
+	
+		leControleListe.selectItemPos(0,true)
+		
+		leControle = oDlg.getControl(&quot;lblChoisir&quot;)
+		leControle.model.label= libTitre
+		leControle.model.tag = leStep
+		
+		leControle = oDlg.getControl(&quot;btcChoisir&quot;)
+		leControle.model.Tag = cstr(numFormulaire)
+		lecontrole.model.label  = labelBouton
+	
+		oDlg.model.step = 15
+
+	endif
+	
+	
+end function
+
+&apos;------------------------
+sub NettoieEcran(laListe)
+
+for i=0 to ubound(laListe)
+
+	leControle=oDlg.getControl(laListe(i))
+
+	select case leControle.model.serviceName
+		case &quot;stardiv.vcl.controlmodel.Edit&quot;
+			leControle.text=&quot;&quot;
+		case &quot;stardiv.vcl.controlmodel.ListBox&quot;
+			leControle.selectItem(0,true)
+		case &quot;stardiv.vcl.controlmodel.DateField&quot;
+			leControle.date
+			lesValeurs(nb,2)=StrToDate(cstr(date))	
+		case else
+			print MSG_GUI_CONTROL_ERROR+&quot; : &quot; &amp; lecontrole.model.servicename
+	end select				
+next i
+
+end sub
+&apos;-----------------
+&apos;Les annexes
+&apos;-----------------
+sub action_annexes
+	call ini_liste_annexes
+	oDlg.Model.step=13
+end sub
+&apos;---------------
+sub InsereAnnexeFin
+	&apos;raceCondition
+	lebouton = oDlg.getControl(&quot;btcInsererAnnexe&quot;)
+	leBouton.model.enabled = false
+	
+	laSection=leDoc.TextSections.getByName(&quot;annexes&quot;)
+	call InsererAnnexe(leDoc.text.end)
+	call Initialise_liste_atteindre &apos;et met à jour la tab des annexes
+	call ini_liste_annexes
+	
+	&apos;raceCondition
+	leBouton.model.enabled = true	
+end sub
+&apos;--------------------
+sub ini_liste_annexes
+	
+	call majTabSections
+	
+	leControle = oDlg.getControl(&quot;lstAnnexes&quot;)
+	leControle.removeItems(0, leControle.itemCount)
+	
+	for i=1 to ubound(tabAnnexes(),1)
+		leControle.additem(tabAnnexes(i,1),i-1)
+	next i
+	
+	leControle.selectItemPos(0,true)
+	
+end sub
+
+&apos;----------
+sub supprime_une_annexe
+
+	leControle=oDlg.getControl(&quot;lstAnnexes&quot;)
+	indx = leControle.selectedItemPos + 1
+	if indx &gt; 0 then
+		if messageConfirme(MSG_APPENDIX_DELETE_CONFIRM_ONE) then
+			nomSection=tabAnnexes(indx,2)
+			call SupprimeUneAnnexe(nomSection)
+			call Initialise_liste_atteindre &apos;et met à jour la tab des annexes
+			call ini_liste_annexes
+		endif
+	endif
+
+end sub
+&apos;----------
+sub supprimer_toutes_annexes
+	if messageConfirme(MSG_APPENDIX_DELETE_CONFIRM_ALL) then
+		call SupprimeToutesLesAnnexes
+		&apos;maj des listes
+		call Initialise_liste_atteindre &apos;et met à jour la tab des annexes
+		call ini_liste_annexes
+	endif
+end sub
+&apos;---------------------
+function messageConfirme(message)
+
+retour = Indesko_MsgBox(message, 4 + 32 +128, GUI_WIZARDNAME)
+messageConfirme = (retour = 6)
+
+end function
+
+&apos;-----------------
+&apos;Valide le document
+&apos;----------------
+sub action_valide
+	message = Valide_Document()
+	if message = &quot;&quot; then
+		message = MSG_VALIDITY_OK
+	endif
+	leControl=oDlg.getControl(&quot;txtValide&quot;)
+	leControl.text = message 
+	oDlg.Model.step=14
+end sub
+</script:module>

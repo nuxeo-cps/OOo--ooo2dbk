@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="OutilDev" script:language="StarBasic">
+
+Public leDoc
+
+Function isOleError() as boolean
+if ThisComponent.supportsService(&quot;com.sun.star.text.TextDocument&quot;) then
+	retour = false
+else 
+	retour = true
+endif
+
+isOleError = retour
+
+end function
+
+&apos;------------------------
+sub VerifieOnSave
+
+leDoc = thisComponent
+
+on error resume next
+
+call FixOutline
+call InitVariablesDlg
+
+message = Valide_Document
+
+if message &lt;&gt; &quot;&quot; then
+	Indesko_MsgBox( MSG_VALIDITY_NOT_OK,48,GUI_WIZARDNAME)
+endif
+
+end sub
+&apos;-----------------------
+sub FermeOnClose
+&apos;Fermeture de l&apos;assistant à la fermeture du document
+if not isNull(oDlg) then
+	oDlg.model.step=1
+	arreter=True
+	wait 100	
+endif
+end sub
+&apos;-----------------------
+sub PrepareOnLoad
+leDoc = thisComponent
+on error resume next
+	call FixOutline
+end sub
+&apos;--------------------
+Sub FixOutline()
+
+dim aProp as new com.sun.star.beans.PropertyValue
+dim fixNumbering(1 to 10) as boolean &apos;Fixe la numerotation oui/non
+
+&apos;Titres normaux
+
+for i=1 to 10
+	fixNumbering(i)=True
+next i
+
+OutlineNumbering = leDoc.ChapterNumberingRules
+
+change = false
+for i=0 to OutlineNumbering.count-1
+
+	myLevel = OutlineNumbering.getByIndex(i)
+	
+	for j=lbound(myLevel) to ubound(myLevel)
+		aProp = myLevel(j)
+		if aProp.Name=&quot;HeadingStyleName&quot; then
+			myLevel(j)=aProp
+			change =true				 			
+		endif
+	next j
+	
+	if change and fixNumbering(i+1) then
+		for j=lbound(myLevel) to ubound(myLevel)
+			aProp = myLevel(j)
+			&apos;Numbering type may be lost - hard coding it to 1,2,3
+			if aProp.Name=&quot;NumberingType&quot; then
+				aProp.value = 4
+				myLevel(j)=aProp
+				change = true
+			endif		
+		next j
+	endif
+	
+	if change then
+		OutlineNumbering.replaceByIndex(i,myLevel)
+	endif
+	
+next i
+
+End Sub
+
+&apos;-----------
+Function Valide_Document() as string
+&apos;retourne chaine des messages des eventuels problemes
+dim message
+message=&quot;&quot;
+saut = chr(10)
+nbSouligne = 40
+
+&apos;reinitialise le champ metainfo_validity_checked
+leTextFieldValide = leDoc.textFieldMasters.getByName(racineFieldMaster &amp; &quot;.metainfo_validity_checked&quot;)
+leTextFieldValide.Content = &quot;0&quot;
+
+&apos;Nettoyage des champs non utilisés
+call NettoyerTextFields
+&apos;Netooyage des styles de page non utilisés
+call NettoyerStylesPage
+
+&apos;mets à jour les champs
+call rempliProprieteDocument
+
+
+&apos;verifie les champs obligatoire : Titre
+taille=0
+leTextField = leDoc.textFieldMasters.getByName(racineFieldMaster &amp; &quot;.metainfo_title&quot;)
+taille = taille &amp; len(trim(leTextField.Content))
+if taille = 0 then
+	message = message &amp; MSG_VALIDITY_METADATA_MANDATORY &amp; saut
+	message = message &amp; string(nbSouligne,&quot;-&quot;)&amp; saut
+	message = message &amp; MSG_VALIDITY_METADATA_MANDATORY_TITLE &amp; saut
+	message = message &amp; saut &amp; saut
+endif
+
+
+&apos;verifie les champs obligatoire : Date
+taille=0
+leTextField = leDoc.textFieldMasters.getByName(racineFieldMaster &amp; &quot;.metainfo_date&quot;)
+taille = taille &amp; len(trim(leTextField.Content))
+if taille = 0 then
+	message = message &amp; MSG_VALIDITY_METADATA_MANDATORY &amp; saut
+	message = message &amp; string(nbSouligne,&quot;-&quot;)&amp; saut
+	message = message &amp; MSG_VALIDITY_METADATA_MANDATORY_DATE &amp; saut
+	message = message &amp; saut &amp; saut
+endif
+
+&apos;verifie les champs obligatoire : auteurs
+taille=0
+leTextField = leDoc.textFieldMasters.getByName(racineFieldMaster &amp; &quot;.metainfo_author1_surname&quot;)
+taille = taille &amp; len(trim(leTextField.Content))
+leTextField = leDoc.textFieldMasters.getByName(racineFieldMaster &amp; &quot;.metainfo_corpauthor1_orgname&quot;)
+taille = taille &amp; len(trim(leTextField.Content))
+if taille = 0 then
+	message = message &amp; MSG_VALIDITY_METADATA_MANDATORY &amp; saut
+	message = message &amp; string(nbSouligne,&quot;-&quot;)&amp; saut
+	message = message &amp; MSG_VALIDITY_METADATA_MANDATORY_AUTHORS &amp; saut
+	message = message &amp; saut &amp; saut	
+endif
+
+&apos;verifie les champs obligatoire : organisme commanditaire
+taille=0
+leTextField = leDoc.textFieldMasters.getByName(racineFieldMaster &amp; &quot;.metainfo_contractsponsor1_orgname&quot;)
+taille = taille &amp; len(trim(leTextField.Content))
+if taille = 0 then
+	message = message &amp; MSG_VALIDITY_METADATA_MANDATORY &amp; saut
+	message = message &amp; string(nbSouligne,&quot;-&quot;)&amp; saut
+	message = message &amp; MSG_VALIDITY_METADATA_MANDATORY_SPONSOR &amp; saut
+	message = message &amp; saut &amp; saut	
+endif
+
+&apos;verifie l&apos;outline numbering
+retour = ExploreNiveauxTitre()
+if retour &lt;&gt; &quot;&quot; then
+	message = message &amp; MSG_VALIDITY_STRUCTURE &amp; saut
+	message = message &amp; string(nbSouligne,&quot;-&quot;)&amp; saut
+	message = message &amp; retour 
+	message = message &amp; saut &amp; saut	
+endif
+
+&apos;Verifie les style de titres des sections visibles
+&apos;Verfie que les section ayant pour style preface Title ne sont pas vides
+retour = StyleDesSections()
+if Retour &lt;&gt;&quot;&quot; then
+	message = message &amp; MSG_VALIDITY_PRE_POST_SECTIONS &amp; saut
+	message = message &amp; string(nbSouligne,&quot;-&quot;)&amp; saut
+	message = message &amp; retour 
+	message = message &amp; saut &amp; saut	
+endif
+&apos;idem sur les sections
+retour = VerifieAnnexes()
+if Retour &lt;&gt;&quot;&quot; then
+	message = message &amp; MSG_VALIDITY_APPENDIX &amp; saut
+	message = message &amp; string(nbSouligne,&quot;-&quot;)&amp; saut
+	message = message &amp; retour 
+	message = message &amp; saut &amp; saut	
+endif
+
+&apos;maj champ metainfo_validity_checked
+if message=&quot;&quot; then
+	leTextFieldValide.Content = &quot;1&quot;
+endif
+
+Valide_Document = message
+
+end function
+&apos;---------------
+Function StyleDesSections() as string
+&apos;Verifie les styles de titres des sections visibles - premier paragraphe de la section
+&apos;Verfie que les section ayant pour style preface Title ne sont pas vides
+message=&quot;&quot;
+saut = chr(10)
+
+for i=lbound(tabVisible(),1) to ubound(tabVisible(),1)
+	laSection = leDoc.TextSections.getByName(tabVisible(i,2))
+	if laSection.isVisible then
+		leStyle = laSection.anchor.start.paraStyleName
+		if leStyle&lt;&gt;tabVisible(i,4) then
+			message = message + tabVisible(i,1) + saut
+			message = message + chr(9) + MSG_VALIDITY_SECTION_STYLE +&quot; &quot; + tabVisible(i,4)+saut
+		endif
+		message = message + chkSectionVide(laSection, tabVisible(i,1), &quot;la partie&quot;,tabVisible(i,3) )
+	endif
+next i
+
+StyleDesSections = message
+
+end function
+&apos;----------------
+function VerifieAnnexes() as string
+
+leTableau = ListeSectionAnnexes()
+
+message=&quot;&quot;
+saut = chr(10)
+NomStyleTitre = &quot;Appendix Title&quot;
+
+for i=1 to ubound(leTableau(),1)
+	laSection = leDoc.TextSections.getByName(leTableau(i,2))
+	if laSection.isVisible then
+		leStyle = laSection.anchor.start.paraStyleName
+		if leStyle&lt;&gt;NomStyleTitre then
+			message = message + leTableau(i,1)+saut
+			message = message + chr(9) + MSG_VALIDITY_APPENDIX_STYLE + &quot; : &quot; + NomStyleTitre + saut
+			&apos;message=message + &quot;L&apos;annexe &quot;+leTableau(i,1)
+			&apos;message = message + &quot; doit commencer par le style &quot; + NomStyleTitre + saut
+		endif
+		message = message + chkSectionVide(laSection, leTableau(i,1),&quot;l&apos;annexe&quot;, false)
+	endif
+next i
+
+VerifieAnnexes = message
+
+end function
+&apos;--------------
+function chkSectionVide(laSection , libelle, typeSection, isSectionIndex as boolean ) as string
+saut = chr(10)
+message=&quot;&quot;
+			&apos;le titre Contient du texte ?
+			leCurseur = leDoc.text.createTextCursorByRange(laSection.anchor.start)
+			leCurseur.gotoEndOfSentence(true)
+			isTitreVide = (trim(leCurseur.string) = &quot;&quot;)
+			if isTitreVide then
+				message = MSG_VALIDITY_SECTION_TITLE+saut&apos;&quot;Le titre de &quot;+ typeSection+&quot; &quot; + libelle + &quot; ne peut être vide&quot;+saut
+			endif
+			
+			leCurseur.gotoNextSentence(false)
+			leCurseur.gotoRange(laSection.anchor.end, true)
+			
+			autreCurseur = leDoc.text.createTextCursorByRange(leCurseur)
+			autreCurseur.collapseToStart
+			sectionVide=true
+			continuer = not equalUNOobjects(autreCurseur.start,laSection.anchor.end)&apos;(autreCurseur.start = laSection.anchor.end)
+			&apos;on analyse ce qui est dans cette section
+			while sectionVide and continuer
+				autreCurseur.goToEndOfSentence(true)
+				if isEmpty(autreCurseur.documentIndex) or isSectionIndex then
+					&apos;on saute ce qui est index sauf si predefini
+					sectionVide=(trim(autreCurseur.string)=&quot;&quot;)
+				endif
+				autreCurseur.collapseToEnd(false)
+				continuer = (leDoc.text.compareRegionEnds(autreCurseur,laSection.anchor.end) = 1)&apos;not equalUNOobjects(autreCurseur.end,laSection.anchor.end)
+				autreCurseur.gotoNextSentence(false)		
+			wend
+				
+			&apos;Contient un tableau ?
+			if sectionVide then
+				trouveTableauDansSection = false
+				for j=0 to leDoc.textTables.count-1
+					unTableau = leDoc.textTables(j)
+					if not isEmpty(unTableau.textSection) then
+						leNom = unTableau.textSection.name
+					else
+						leNom = &quot;&quot;
+					endif
+					trouveTableauDansSection = trouveTableauDansSection or (leNom =  laSection.Name)
+				next j
+				sectionVide = not trouveTableauDansSection
+			endif
+			
+
+			leCurseur = leDoc.text.createTextCursorByRange(laSection.anchor.start)
+			leCurseur.gotoRange(laSection.anchor.end, true)
+			trouveImageDansSection = contientTextContent(leCurseur)			
+									
+			if sectionVide and not trouveImageDansSection then
+				&apos;message = message + &quot;Attention : &quot; + typeSection + &quot; &quot; + libelle + &quot; ne peut être vide&quot; + saut
+				message = message+libelle+saut+chr(9)
+				message = message + MSG_VALIDITY_SECTION_EMPTY + saut
+			endif
+
+chkSectionVide = message
+end function
+&apos;---------------------
+function contientTableau(leCurseur) as boolean
+
+retour = false
+depasse=false
+
+		monEnum = leCurseur.createEnumeration
+		&apos;monEnum = leCurseur.createContentEnumeration(&quot;com.sun.star.text.TextTable&quot;)
+
+		while monEnum.hasMoreelements and not retour and not depasse
+			unEnum=monEnum.nextElement
+			&apos;ce paragraphe contient il un tableau
+			if unEnum.supportsService(&quot;com.sun.star.text.TextTable&quot;) then
+				retour = true
+			else
+				&apos;verifie que l&apos;on a pas dépassé la fin du curseur
+				depasse=true
+				if leDoc.text.compareRegionStarts(unEnum, leCurseur) &lt; 1 then
+					if leDoc.text.compareRegionEnds(leCurseur, unEnum ) &lt; 1 then
+						depasse=false
+					endif
+				endif							
+			endif
+		wend
+
+contientTableau = retour
+
+end function
+&apos;---------------------
+
+function contientTextContent(leCurseur) as boolean
+	unEnum = leCurseur.createContentEnumeration (&quot;com.sun.star.text.TextContent&quot;)
+	retour = unEnum.hasMoreElements
+
+	retour=false
+	while unEnum.hasMoreElements
+		unObj=unEnum.nextElement
+		select case unObj.ImplementationName
+			case &quot;SwXTextGraphicObject&quot;, &quot;SwXTextEmbeddedObject&quot;
+				retour = true
+			case &quot;SwXTextFrame&quot;
+				if trim(unObj.string)&lt;&gt;&quot;&quot; then
+					retour = true
+				endif
+		end select
+	wend
+	contientTextContent = retour	
+end function
+
+
+&apos;-----------------
+function ContientOlE(leCurseur) as boolean
+
+retour = false
+	for i=0 to leDoc.embeddedObjects.count-1
+		unOLE = leDoc.embeddedObjects(i)
+		if leDoc.text.compareRegionStarts( unOLE.anchor, leCurseur) = -1 then
+		&apos; commence apres
+			if leDoc.text.compareRegionEnds(leCurseur, unOLE.anchor ) = -1 then
+			&apos; termine avant
+				retour=true
+				exit for
+			endif
+		endif
+	next i
+	
+ContientOlE = retour
+end function
+&apos;---------------------
+function versionIndesko() 
+&apos; cherche le champ indesko_modele_version
+&apos; retourne -1 si non trouve
+
+retour=&quot;-1&quot;
+
+nomChamp=&quot;com.sun.star.text.FieldMaster.User.indesko_version_modele&quot;
+
+on error goto fin
+
+&apos;leComposant = starDesktop.currentComponent
+&apos;Bug Ooo : leDoc n&apos;est pas rafraichi apres entree dans objet OLE
+if leDoc.supportsService(&quot;com.sun.star.text.TextDocument&quot;) then
+	LesTextFields = leDoc.textFieldMasters
+	if LesTextFields.hasByName(nomChamp) then
+		leChamp=LesTextFields.getByName(nomChamp)
+		retour = leChamp.Content
+	endif
+endif
+
+fin:
+versionIndesko = retour
+	
+end function
+
+&apos;---------------------------------------
+&apos; Fonction based on LoadDialog from soffice.Tools.ModuleControls
+&apos; Libname is defined elsewhere in this library
+&apos; WindowTitle is defined elsewhere in this library
+Function Dialogue (DialogName as String, LibName as string, Optional NoCenter As Boolean)
+Dim oLibContainer as Object, oLib as Object
+Dim oLibDialog as Object
+Dim oRuntimeDialog as Object
+
+oLibContainer = DialogLibraries
+oLibContainer.LoadLibrary(Libname)
+oLib = oLibContainer.GetByName(Libname)
+oLibDialog = oLib.GetByName(DialogName)
+oRuntimeDialog = CreateUnoDialog(oLibDialog)
+oRuntimeDialog.Model.Title = WindowTitle
+if isMissing(NoCenter)  then
+  CenterDialog(oRuntimeDialog)
+elseif not NoCenter then
+  CenterDialog(oRuntimeDialog)
+end if
+Dialogue = oRuntimeDialog
+End Function
+
+
+
+&apos; this routine was initially provided by Berend Cornelius [Berend.Cornelius@sun.com]
+&apos; adaptation by Bernard Marcelly (useless instruction suppressed)
+Sub CenterDialog( oDialog As Object)
+  Dim CurPosSize as new com.sun.star.awt.Rectangle
+  Dim FramePosSize As Object
+  Dim WindowHeight As Long, WindowWidth As Long, DialogWidth As Long, DialogHeight As Long
+  Dim iXPos As Long, iYPos As Long
+  FramePosSize = leDoc.getCurrentController().Frame.getComponentWindow.PosSize
+  CurPosSize = oDialog.getPosSize()
+  WindowHeight = FramePosSize.Height
+  WindowWidth = FramePosSize.Width
+  DialogWidth = CurPosSize.Width
+  DialogHeight = CurPosSize.Height
+  iXPos = ((WindowWidth/2) - (DialogWidth/2))
+  iYPos = ((WindowHeight/2) - (DialogHeight/2))
+  oDialog.setPosSize(iXPos, iYPos, DialogWidth, DialogHeight, com.sun.star.awt.PosSize.POS)
+End Sub
+
+&apos;-------------
+		
+function ExploreNiveauxTitre() as string
+
+message =&quot;&quot;
+saut = chr(10)
+
+chercheur = leDoc.createSearchDescriptor
+chercheur.searchStyles = true
+
+for i=1 to 7 &apos;les niveaux 8 à 10 sont reservés
+
+chercheur.searchString = &quot;Titre &quot; + cstr(i)
+trouveur = leDoc.findFirst(chercheur) 
+
+while not isNull (trouveur)
+	lachaine = trouveur.string
+	if instr(lachaine,&quot;0.&quot;) &gt; 0 then
+		message = message + MSG_VALIDITY_HEADING_LEVEL+&quot; : &quot; &apos;message + &quot;Niveau de titre &quot; + cstr(i)+&quot;  incorrect : &quot;
+		message = message + laChaine + saut		
+	endif
+	
+	&apos;verifie que le titre n&apos;est pas vide
+	TitreVide=true
+	for j=1 to len(lachaine)
+		cara=lcase(mid(laChaine, j, 1))
+		if asc(cara)&gt;=asc(&quot;a&quot;) and asc(cara)&lt;=asc(&quot;z&quot;) then
+			TitreVide=false
+			exit for
+		endif
+	next j
+	if TitreVide then
+		message = message + MSG_VALIDITY_HEADING_EMPTY + &quot; : &quot; 
+		message = message + laChaine + saut
+		&apos;message = message + &quot;Contenu de titre &quot; + cstr(i)+&quot;  incorrect : &quot;
+		&apos;message = message + laChaine +&quot; ne peut être vide&quot; + saut				
+	endif
+	
+	&apos;verifie que l&apos;on a bien du texte entre les niveaux de tires
+	leCurseur = leDoc.text.createTextCursor()
+	leCurseur.goToRange(trouveur.start, false)
+	leCurseur.goToNextParagraph(false)
+
+	if left(leCurseur.paraStyleName,7) &lt;&gt; &quot;Heading&quot; then
+		chercheNonVide = true
+		while chercheNonVide
+			leCurseur.gotoEndOfParagraph(true)
+			if len(leCurseur.string) &gt; 0 then
+				chercheNonvide=false
+				if left(leCurseur.paraStyleName,7) &lt;&gt; &quot;Heading&quot; then
+					if isEmpty(leCurseur.textSection) then
+						bon = true
+					else
+						bon = false
+					endif
+				else
+					if niveauOutline(leCurseur.paraStyleName) &gt; i then &apos;on a le droit à des elements de niveaux inferieurs
+						bon  = true
+					else
+						bon = false
+					endif
+				endif
+			else
+				leCurseur.goToNextParagraph(false)
+			endif	
+		wend
+	else
+		&apos;print niveauOutline(leCurseur.paraStyleName)
+		if niveauOutline(leCurseur.paraStyleName) &gt; i then &apos;on a le droit à des elements de niveaux inferieurs
+			bon  = true
+		else
+			bon = false
+		endif
+	endif
+	
+	&apos;creation du cursuer du niveau de titre
+	&apos;verifie que l&apos;on a pas un tableau seulement
+	if not bon then
+		leCurseur.gotoStartofParagraph(false)
+		curseurNiveau= leDoc.text.createTextCursor()
+		curseurNiveau.goToRange(trouveur.start, false)
+		curseurNiveau.gotoRange(leCurseur, true)
+		&apos;verifie que l&apos;on a pas un tableau seulement
+		bon = contientTableau(curseurNiveau)
+	endif
+	
+	&apos;verifie que l&apos;on a pas une image/OLE seulement
+	&apos;regarde tout c equi est com.sun.star.TextContent
+	if not bon then
+		bon = contientTextContent(curseurNiveau)
+	endif
+		 
+	&apos;message de paragraphe non vide 
+	if not bon then
+		message = message + laChaine + saut + chr(9)
+		message = message + MSG_VALIDITY_PARAGRAPH_EMPTY +saut
+		&apos;message = message + &quot;le Paragraphe &quot;  + laChaine + &quot; ne peut être vide&quot; + saut
+	endif
+	 
+	 trouveur = leDoc.findNext(trouveur.end, chercheur)
+
+wend
+
+next i
+
+ExploreNiveauxTitre = message
+
+end function
+
+function niveauOutline(leStyle) as long
+&apos;retourne le niveau d&apos;outline numberring associé au style
+&apos;retourne 0 si n&apos;est pas un niveau de titre
+	retour = 0
+	OutlineNumbering = leDoc.ChapterNumberingRules
+
+	for i=0 to OutlineNumbering.count-1
+	
+		myLevel = OutlineNumbering.getByIndex(i)
+		
+		for j=lbound(myLevel) to ubound(myLevel)
+			aProp = myLevel(j)
+			if aProp.Name=&quot;HeadingStyleName&quot; then
+				if aProp.value = leStyle then
+					retour = i+1
+					niveauOutline = retour
+					exit function
+				endif				 			
+			endif
+		next j
+	next i
+
+	niveauOutline = retour
+end function
+
+&apos;---------------------------
+Sub NettoyerStylesPage
+
+dim Avirer()
+
+Redim Avirer(0)
+
+leDoc=ThisComponent
+laFamille = leDoc.StyleFamilies.getByName(&quot;PageStyles&quot;)
+
+for i=0 to lafamille.count-1
+	leStyle = laFamille(i)
+	if leStyle.isUserDefined then
+		if not leStyle.isInUse then
+			leNom = leStyle.displayName
+			if instr(leNom,&quot;_modele_&quot;) = 0 then
+				&apos;print &quot;Virer &quot; + leNom
+				nb=ubound(aVirer())+1
+				redim preserve aVirer(0 to nb)
+				aVirer(nb)=leNom	
+			endif
+		endif
+	endif
+next i
+
+for i=1 to ubound(aVirer())
+	laFamille.removeByName(aVirer(i))
+next i
+
+end sub
+&apos;----------------
+function Indesko_MsgBox(message, optional icone, optional titre)
+
+call EnrouleDeroule
+
+if isMissing(icone) then
+	retour = msgbox(message)
+else	
+	retour = msgbox(message, icone, titre)
+endif
+
+call EnrouleDeroule
+
+Indesko_MsgBox = retour
+
+end function
+
+</script:module>

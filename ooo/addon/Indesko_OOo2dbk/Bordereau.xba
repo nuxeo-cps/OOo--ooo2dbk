@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Bordereau" script:language="StarBasic">
+
+&apos;-----------------
+&apos; AJOUTER
+&apos;-----------------
+function TraiteFormulaireAjouter(leStep, numFormulaire) as boolean
+
+dim lesValeurs()
+
+select case leStep
+	case 5
+		racineChamp=&quot;metainfo_author&quot;
+		if ubound(listeChamp_author)=-1 then
+			listeChamp_author = trouveListeChamp(leStep)
+		endif
+		listeChamp=listeChamp_author
+	case 6
+		racineChamp=&quot;metainfo_corpauthor&quot;
+		if ubound(listeChamp_corpauthor)=-1 then
+			listeChamp_corpauthor = trouveListeChamp(leStep)
+		endif
+		listeChamp=listeChamp_corpauthor	
+	case 7
+		racineChamp=&quot;metainfo_contractsponsor&quot;
+		if ubound(listeChamp_contractsponsor)=-1 then
+			listeChamp_contractsponsor = trouveListeChamp(leStep)
+		endif
+		listeChamp=listeChamp_contractsponsor
+end select
+
+
+&apos;Recupere Valeurs
+lesValeurs = RecupereValeursFormulaire(listeChamp,leStep )
+
+&apos;Controle les valeurs
+isValide = checkValeurs(lesValeurs, leStep)
+
+if isValide then
+
+	call AjouteAutoTexte(numFormulaire, racineChamp, lesValeurs)
+	call rempliProprieteDocument
+
+endif
+
+&apos;Reinitialise lesValeurIni
+lesValeursIni = RecupereValeursFormulaire(listeChamp,leStep )
+
+TraiteFormulaireAjouter = isValide
+
+end function
+&apos;--------------------------
+sub AjouteAutoTexte(numFormulaire, racineChamp, optional lesValeurs)
+&apos;cree sous-section
+dim SectionParent, leCurseur, maNouvelleSection
+
+select case racineChamp
+
+	case &quot;metainfo_author&quot;
+		nomSectionPrincipale =&quot;bordereau_auteur&quot;
+		symboleAutotexte = &quot;A&quot;
+		racineTableau=&quot;auteur_&quot;
+		libTitre = MSG_METADATA_AUTHOR_N
+	
+	case &quot;metainfo_corpauthor&quot;
+		nomSectionPrincipale =&quot;bordereau_orgauteur&quot;
+		symboleAutotexte = &quot;O&quot;
+		racineTableau=&quot;organisme_auteur_&quot;
+		libTitre = MSG_METADATA_CORPAUTHOR_N 
+			
+	case &quot;metainfo_contractsponsor&quot;
+		nomSectionPrincipale =&quot;bordereau_orgcommanditaire&quot;
+		symboleAutotexte = &quot;F&quot;
+		racineTableau=&quot;organisme_commanditaire_&quot;
+		libTitre = &quot;Organisme Commanditaire N°&quot;
+		
+end select
+
+&apos;Maj des textFields ou creation eventuelle
+if not isMissing(lesValeurs) then
+	nbValeurs = ubound(lesValeurs(),1)
+	for i=1 to nbValeurs
+	
+		decoupe=split( lesValeurs(i,1),&quot;_&quot;)
+		decoupe(1) = decoupe(1)+ cstr(numFormulaire)
+		nomDbk = join(decoupe,&quot;_&quot;)
+		nomField = racineFieldMaster + &quot;.&quot; + nomDbk
+
+		if  not leDoc.TextFieldMasters.hasByName(nomField) then
+			leTextFieldMaster = leDoc.createInstance(racineFieldMaster)
+			leTextFieldMaster.Name = nomDbk&apos;racineChamp + cstr(numFormulaire)+&quot;_&quot;+ lesValeurs(i,1)	
+		endif
+		leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+		letextFieldMaster.content = lesValeurs(i,2)
+	next i
+endif
+
+
+&apos;cree la section parent
+SectionParent = leDoc.TextSections.getByName(nomSectionPrincipale)
+maNouvelleSection = leDoc.createInstance(&quot;com.sun.star.text.TextSection&quot;)
+maNouvelleSection.name = nomSectionPrincipale +&quot;_&quot; +cstr(numFormulaire)
+leCurseur = leDoc.text.createTextCursorByRange(SectionParent.anchor.end)
+
+leDoc.text.insertTextContent(leCurseur, maNouvelleSection, false)
+
+leCurseur=leDoc.Text.createTextCursorByRange(manouvelleSection.anchor.start)
+leCurseur.charWeight = 150
+leDoc.Text.insertString(leCurseur,libTitre+cstr(numFormulaire),false)
+leCurseur.charWeight = 100
+saut = com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK
+leDoc.text.insertControlCharacter(leCurseur, saut,false)
+
+call InsereTableauBordereau(leCurseur, racineTableau, cstr(numFormulaire))
+
+leTableau = leDoc.texttables.getByName(racineTableau + cstr(numFormulaire))
+leTableauModele = leDoc.textTables.getByName(racineTableau + &quot;1&quot;)
+
+nbligne=leTableau.rows.count
+
+for i=0 to nbLigne-1
+	laCell=leTableau.getCellByPosition(1,i)
+	laCellModele = leTableauModele.getCellByPosition(1,i)
+	leChamp = getFieldFromCell(laCellModele)
+	nomField = racineFieldMaster + &quot;.&quot; + racineChamp + cstr(numFormulaire)+&quot;_&quot;+ leChamp 
+	if  not leDoc.TextFieldMasters.hasByName(nomField) then
+		leTextFieldMaster = leDoc.createInstance(racineFieldMaster)
+		leTextFieldMaster.Name = racineChamp + cstr(numFormulaire)+&quot;_&quot;+ leChamp
+	endif
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+	leField=leDoc.createInstance(&quot;com.sun.star.text.TextField.User&quot;)
+	leField.attachTextFieldMaster(leTextFieldMaster)
+	laCell.string=&quot;&quot;
+	leCurseur=laCell.text.createTextCursor()
+	laCell.insertTextContent(leCurseur,leField,false)
+next i
+
+end sub
+&apos;----------------
+sub InsereTableauBordereau(MonCurseur, RacineNomTableauModele, nouveauNumero)
+
+leTableau = leDoc.texttables.getByName(RacineNomTableauModele+&quot;1&quot;)
+lesCol = leTableau.columns.getByIndex(0)
+
+lesDonnees = leTableau.DataArray
+
+monTableau = leDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
+monTableau.initialize(ubound(lesDonnees)+1,2)
+
+leDoc.text.insertTextContent(monCurseur, monTableau, false)
+
+monTableau.name=RacineNomTableauModele+nouveauNumero
+monTableau.TableColumnSeparators = leTableau.TableColumnSeparators
+monTableau.TableBorder = leTableau.TableBorder
+
+ligne = monTableau.getCellRangeByPosition(0,0,1,0)
+ligneIni = leTableau.getCellRangeByPosition(0,0,1,0)
+ligne.paraStyleName = ligneIni.paraStyleName
+
+for i=0 to ubound(lesDonnees)
+	laCellIni = leTableau.getCellByPosition(0,i)
+	lacell = monTableau.getCellByPosition(0,i)
+	laCell.string = laCellIni.string
+next i
+
+end sub
+
+function getFieldFromCell(laCell)
+monEnum = laCell.createEnumeration
+while monEnum.hasMoreElements
+	para = monEnum.nextElement
+	enumpara = para.createEnumeration()
+	lepara = enumpara.nextelement
+	leField = lepara.TextField.textFieldMaster.Name
+	decoupe = split(leField,&quot;_&quot;)
+	retour=decoupe(2)
+	for j = 3 to ubound(decoupe) &apos;gere orgcommanditaire qui peut avoir 4 elements
+		retour = retour + &quot;_&quot; + decoupe(j)
+	next j
+wend
+getFieldFromCell = retour
+end function
+
+
+&apos;-------------------
+&apos; SUPPRIMER
+&apos;--------------------
+sub TraiteFormulaireSupprimer(leStep, numFormulaire)
+
+
+dim LesValeurs()
+dim listeChamps()
+
+select case leStep
+	case 5
+		racineChamp=&quot;metainfo_author&quot;
+		if ubound(listeChamp_author)=-1 then
+			listeChamp_author = trouveListeChamp(leStep)
+		endif
+		listeChamps=listeChamp_author
+	case 6
+		racineChamp=&quot;metainfo_corpauthor&quot;	
+		if ubound(listeChamp_corpauthor)=-1 then
+			listeChamp_corpauthor = trouveListeChamp(leStep)
+		endif
+		listeChamps=listeChamp_corpauthor
+	case 7
+		racineChamp=&quot;metainfo_contractsponsor&quot;
+		if ubound(listeChamp_contractsponsor)=-1 then
+			listeChamp_contractsponsor = trouveListeChamp(leStep)
+		endif
+		listeChamps=listeChamp_contractsponsor
+end select
+
+call SupprimeAutoTexte(numFormulaire, racineChamp,listeChamps())
+call rempliProprieteDocument
+
+end sub
+&apos;----------------
+sub SupprimeAutoTexte(numFormulaire, racineChamp, listeChamps)
+
+&apos;parametres
+select case racineChamp
+	case &quot;metainfo_author&quot;
+		racineTableau=&quot;auteur_&quot;
+		nomSectionPrincipale =&quot;bordereau_auteur&quot;
+	case &quot;metainfo_corpauthor&quot;
+		nomSectionPrincipale =&quot;bordereau_orgauteur&quot;
+		racineTableau=&quot;organisme_auteur_&quot;
+	case &quot;metainfo_contractsponsor&quot;
+		nomSectionPrincipale =&quot;bordereau_orgcommanditaire&quot;
+		racineTableau=&quot;organisme_commanditaire_&quot;
+
+end select
+
+&apos;cherche tableau max
+numMax = RechercheNumTableau(racineTableau)
+
+&apos;boucle sur les tableaux - vire les sections
+for i=clng(numFormulaire) to numMax
+	NomSection=	nomSectionPrincipale +&quot;_&quot;+cstr(i)
+	call supprimeSection(NomSection)
+next i
+
+&apos;decale les champs
+racineNom=racineFieldMaster + &quot;.&quot; + racineChamp
+for i=clng(numFormulaire) to numMax-1
+	for j=0 to ubound(listeChamps)
+		nomChamp=listeChamps(j)
+
+		decoupe=split(nomChamp,&quot;_&quot;)
+		decoupe(1) = decoupe(1)+ cstr(i+1)
+		nomDbkAncien = join(decoupe,&quot;_&quot;)
+		nomFieldAncien = racineFieldMaster + &quot;.&quot; + nomDbkAncien		
+		decoupe=split(nomChamp,&quot;_&quot;)
+		decoupe(1) = decoupe(1)+ cstr(i)
+		nomDbkNouveau = join(decoupe,&quot;_&quot;)
+		nomFieldNouveau = racineFieldMaster + &quot;.&quot; + nomDbkNouveau
+		
+		ancienTextField=leDoc.TextFieldmasters.getByName(nomFieldAncien)
+		nouveauTextField=leDoc.TextFieldmasters.getByName(nomFieldNouveau)
+		nouveauTextField.content = ancienTextField.content
+	next j
+next i
+
+&apos; boucle pour l&apos;ajout
+for i=clng(numFormulaire) to numMax-1
+	call AjouteAutoTexte(cstr(i), racineChamp) 
+next i
+
+&apos;Nettoie les textfields non utilisés
+call NettoyerTextFields
+
+leDoc.TextFields.refresh
+
+end sub
+&apos;-----------------
+sub SupprimeSection(nomSection as string)
+
+dim laSection, monCurseur
+laSection=leDoc.TextSections.getByName(nomSection)
+laSection.anchor.string=&quot;&quot;
+leDoc.Text.removeTextContent(laSection)
+
+end sub
+
+&apos;--------------------
+&apos; MODIFIER
+&apos;--------------------
+function TraiteFormulaireModifier(leStep, numFormulaire) as boolean
+
+select case leStep
+	case 5
+		racineChamp=&quot;metainfo_author&quot;
+		listeChamp=listeChamp_author
+	case 6
+		racineChamp=&quot;metainfo_corpauthor&quot;
+		listeChamp=listeChamp_corpauthor
+	case 7
+		racineChamp=&quot;metainfo_contractsponsor&quot;
+		listeChamp=listeChamp_contractsponsor
+	case 8
+		racineChamp=&quot;metainfo&quot;
+		listeChamp=listeChamp_metainfoGenerale
+	case 9
+		racineChamp=&quot;metainfo&quot;
+		listeChamp=listeChamp_metainfoResume
+	case 11
+		racineChamp=&quot;metainfo&quot;
+		listeChamp=listeChamp_metainfoConference
+end select
+
+&apos;Recupere Valeurs
+lesValeurs = RecupereValeursFormulaire(listeChamp,leStep )
+
+&apos;Controle les valeurs
+isValide = checkValeurs(lesValeurs, leStep)
+
+if isValide then
+	nbValeurs = ubound(lesValeurs(),1)
+	for i=1 to nbValeurs
+	
+		decoupe=split( lesValeurs(i,1),&quot;_&quot;)
+		decoupe(1) = decoupe(1)+ cstr(numFormulaire)
+		nomDbk = join(decoupe,&quot;_&quot;)
+		nomField = racineFieldMaster + &quot;.&quot; + nomDbk
+	
+		&apos;nomField = racineFieldMaster + &quot;.&quot; + racineChamp + cstr(numFormulaire)+&quot;_&quot;+ lesValeurs(i,1) 
+		if  not leDoc.TextFieldMasters.hasByName(nomField) then
+			leTextFieldMaster = leDoc.createInstance(racineFieldMaster)
+			leTextFieldMaster.Name = nomDbk&apos;racineChamp + cstr(numFormulaire)+&quot;_&quot;+ lesValeurs(i,1)	
+		endif
+		leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+		letextFieldMaster.content = lesValeurs(i,2)
+	next i
+	
+	leDoc.TextFields.refresh
+	
+	call rempliProprieteDocument
+endif
+
+&apos;Reinitialise lesValeurIni
+lesValeursIni = RecupereValeursFormulaire(listeChamp,leStep )
+
+TraiteFormulaireModifier = isValide
+
+end function
+&apos;--------------------------
+function checkValeurs(lesValeurs, leStep) as boolean
+
+retour=true
+nbValeurs = ubound(lesValeurs(),1)
+
+message=&quot;&quot;
+
+select case leStep
+	case 5
+		for i=1 to nbValeurs
+			if lesValeurs(i,1)=&quot;metainfo_author_surname&quot; and trim(lesValeurs(i,2))=&quot;&quot; then
+				message=message + MSG_METADATA_CHK_AUTHOR_NAME + chr(10)
+				retour = false
+			endif		
+		next i
+	case 6
+		chaine = &quot;&quot;
+		leTitre  = &quot;&quot;
+		for i=1 to nbValeurs
+			chaine = chaine + trim(lesValeurs(i,2))
+			if lesValeurs(i,1)=&quot;metainfo_corpauthor_orgname&quot; then
+				leTitre = trim(lesValeurs(i,2))
+			endif			
+&apos;			if lesValeurs(i,1)=&quot;metainfo_corpauthor_orgname&quot; and trim(lesValeurs(i,2))=&quot;&quot; then
+&apos;				message=message + MSG_METADATA_CHK_CORPAUTHOR_NAME + chr(10)
+&apos;				retour = false
+&apos;			endif		
+		next i
+		if leTitre = &quot;&quot; and chaine &lt;&gt; &quot;&quot; then
+			&apos;some informations without mandatory CORPAUTHOR_NAME
+			message=message + MSG_METADATA_CHK_CORPAUTHOR_NAME + chr(10)
+			retour = false				
+		endif		
+	case 7
+		chaine = &quot;&quot;
+		leTitre = &quot;&quot;
+		for i=1 to nbValeurs
+			chaine = chaine + trim(lesValeurs(i,2))
+			if lesValeurs(i,1)=&quot;metainfo_contractsponsor_orgname&quot; then
+				leTitre = trim(lesValeurs(i,2))
+			endif
+&apos;			if lesValeurs(i,1)=&quot;metainfo_contractsponsor_orgname&quot; and trim(lesValeurs(i,2))=&quot;&quot; then
+&apos;				message=message + MSG_METADATA_CHK_CONTRACTSPONSOR_NAME + chr(10)
+&apos;				retour = false
+&apos;			endif		
+		next i	
+		if leTitre = &quot;&quot; and chaine &lt;&gt; &quot;&quot; then
+			&apos;some informations without mandatory CONTRACTSPONSOR_NAME
+			message=message + MSG_METADATA_CHK_CONTRACTSPONSOR_NAME + chr(10)
+			retour = false				
+		endif
+	case 8
+		for i=1 to nbValeurs
+			if lesValeurs(i,1)=&quot;metainfo_title&quot; and trim(lesValeurs(i,2))=&quot;&quot; then
+				message=message + MSG_METADATA_CHK_TITLE + chr(10)
+				retour = false
+			endif
+			if lesValeurs(i,1)=&quot;metainfo_date&quot; and trim(lesValeurs(i,2))=&quot;&quot; then
+				message=message + MSG_METADATA_CHK_DATE  + chr(10)
+				retour = false
+			endif			
+		next i
+	case 11
+		for i=1 to nbValeurs
+			if lesValeurs(i,1)=&quot;metainfo_confgroup_conftitle&quot; and trim(lesValeurs(i,2))=&quot;&quot; then
+				message=message + MSG_METADATA_CHK_CONFGROUP_TITLE + chr(10)
+				retour = false
+			endif			
+		next i		
+end select
+
+if not retour then
+	Indesko_MsgBox( message,48, GUI_WIZARDNAME)
+endif
+
+checkValeurs=retour
+
+end function
+
+&apos;-------------------
+&apos; PROPRIETES DU DOCUMENT
+&apos;------------------
+sub rempliProprieteDocument
+
+&apos;les controles .hasByName sur certains elements ne sont pas utiles
+
+&apos;Propriétés du document : title
+nomField = racineFieldMaster + &quot;.metainfo_title&quot;
+if leDoc.TextFieldMasters.hasByName(nomField) then 
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+	leDoc.documentInfo.Title = leTextFieldMaster.content
+endif
+
+&apos;Propriétés du document : keywords
+nomField = racineFieldMaster + &quot;.metainfo_keywords&quot; 
+if leDoc.TextFieldMasters.hasByName(nomField) then
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+	leDoc.documentInfo.Keywords = leTextFieldMaster.content
+endif
+
+&apos;Propriétés du document : 4 auteurs dans info1
+chaine=&quot;&quot;
+for i=1 to 4
+	nomField = racineFieldMaster + &quot;.metainfo_author&quot;+cstr(i)+&quot;_surname&quot; 
+	if leDoc.TextFieldMasters.hasByName(nomField) then
+		leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+		leNom =  trim(leTextFieldMaster.content)
+		if leNom &lt;&gt; &quot;&quot; then
+			&apos;chaine = chaine + valeur +&quot; &quot;
+			nomField = racineFieldMaster + &quot;.metainfo_author&quot;+cstr(i)+&quot;_firstname&quot; 
+			leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+			lePrenom =  trim(leTextFieldMaster.content)
+			chaine = chaine + lePrenom + &quot; &quot; + leNom + &quot;, &quot; &apos;valeur +&quot;, &quot;
+		endif
+	endif
+next i
+
+if len(chaine) &gt; 2 then
+	chaine=left(chaine, len(chaine)-2)
+endif
+&apos;leDoc.documentInfo.Author = chaine
+&apos;Bug:  limite à 31 carcateres
+&apos; sinon coupe au dernier espace blanc
+&apos;si pas de separateur, coupe à 31 caracteres
+&apos;si separateur virgule, prends le premier champ
+&apos;si _, se comporte comme espace limite 31
+
+leDoc.documentInfo.setUserFieldName(0,MSG_METADATA_AUTHORS)
+leDoc.documentInfo.setUserFieldValue(0,chaine)
+
+&apos;Propriétés du document : 3 organismes auteurs dans infos2 à 4
+for i=1 to 3
+	nomField = racineFieldMaster + &quot;.metainfo_corpauthor&quot;+cstr(i)+&quot;_orgname&quot; 
+	if leDoc.TextFieldMasters.hasByName(nomField) then
+		leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+		valeur =  trim(leTextFieldMaster.content)
+		leDoc.documentInfo.setUserFieldName(i,MSG_METADATA_CORPAUTHOR+&quot; &quot; + cstr(i))
+		leDoc.documentInfo.setUserFieldValue(i,Valeur)
+	endif
+next i
+
+&apos;Champs de concatenation pour aafficvhage dans le modèle
+
+&apos;Concatenation des 20 auteurs
+chaine=&quot;&quot;
+for i=1 to nbMaxAuteurs
+	nomField = racineFieldMaster + &quot;.metainfo_author&quot;+cstr(i)+&quot;_surname&quot; 
+	if leDoc.TextFieldMasters.hasByName(nomField) then
+		leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+		leNom =  trim(leTextFieldMaster.content)
+		if leNom &lt;&gt; &quot;&quot; then
+			&apos;chaine = chaine + valeur +&quot; &quot;
+			nomField = racineFieldMaster + &quot;.metainfo_author&quot;+cstr(i)+&quot;_firstname&quot; 
+			leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+			lePrenom =  trim(leTextFieldMaster.content)
+			chaine = chaine + lePrenom + &quot; &quot; + leNom + &quot;,&quot;+chr(10) &apos;chaine + valeur +&quot;, &quot;
+		endif
+	endif
+next i
+if len(chaine)&gt; 2 then
+	chaine=left(chaine, len(chaine)-2)
+endif
+nomField = racineFieldMaster + &quot;.indesko_auteurs&quot; 
+leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+leTextFieldMaster.content = chaine
+
+&apos;Concatenation des 4 organismes auteurs
+chaine=&quot;&quot;
+for i=1 to nbMaxOrgAuteurs
+	nomField = racineFieldMaster + &quot;.metainfo_corpauthor&quot;+cstr(i)+&quot;_orgname&quot; 
+	if leDoc.TextFieldMasters.hasByName(nomField) then
+		leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+		valeur =  trim(leTextFieldMaster.content)
+		if valeur&lt;&gt;&quot;&quot; then
+			chaine = chaine + valeur +&quot;, &quot;
+		endif
+	endif
+next i
+if len(chaine)&gt; 2 then
+	chaine=left(chaine, len(chaine)-2)
+endif
+leTextFieldMaster = leDoc.TextFieldMasters.getByName(racineFieldMaster + &quot;.indesko_organismes_auteurs&quot;)
+leTextFieldMaster.content = chaine
+
+&apos;Concatenation des 4 organismes commanditaires
+chaine=&quot;&quot;
+for i=1 to nbMaxOrgCommanditaire
+	nomField = racineFieldMaster + &quot;.metainfo_contractsponsor&quot;+cstr(i)+&quot;_orgname&quot; 
+	if leDoc.TextFieldMasters.hasByName(nomField) then
+		leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+		valeur =  trim(leTextFieldMaster.content)
+		if valeur&lt;&gt;&quot;&quot; then
+			chaine = chaine + valeur +&quot;, &quot;
+		endif
+	endif
+next i
+if len(chaine)&gt; 2 then
+	chaine=left(chaine, len(chaine)-2)
+endif
+leTextFieldMaster = leDoc.TextFieldMasters.getByName(racineFieldMaster + &quot;.indesko_organismes_commanditaires&quot;)
+leTextFieldMaster.content = chaine
+
+&apos;traitement de la date au format MMMM AAAA
+nomField = racineFieldMaster + &quot;.metainfo_date&quot; 
+if leDoc.TextFieldMasters.hasByName(nomField) then
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+	valeur =  trim(leTextFieldMaster.content)
+endif
+leTextFieldMaster = leDoc.TextFieldMasters.getByName(racineFieldMaster + &quot;.indesko_date&quot;)
+if valeur&lt;&gt;&quot;&quot; then
+	leTextFieldMaster.content = FormateDate_MoisAnnee(valeur)
+else
+	leTextFieldMaster.content=&quot;&quot;
+endif
+
+&apos;visibilité des liobelles sur la page de garde
+nomField = racineFieldMaster + &quot;.metainfo_releaseinfo_collection&quot;
+leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField) 
+	montrer = (leTextFieldMaster.content &lt;&gt; &quot;&quot;)
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(racineFieldMaster + &quot;.indesko_lib_collection&quot;)
+	for i=0 to ubound(leTextFieldMaster.dependentTextFields)
+		leTextFieldMaster.dependentTextFields(i).isVisible = montrer
+	next i
+		
+nomField = racineFieldMaster + &quot;.metainfo_releaseinfo_subcollection&quot; 
+leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField) 
+	montrer = (leTextFieldMaster.content &lt;&gt; &quot;&quot;)
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(racineFieldMaster + &quot;.indesko_lib_souscollection&quot;)
+	for i=0 to ubound(leTextFieldMaster.dependentTextFields)
+		leTextFieldMaster.dependentTextFields(i).isVisible = montrer
+	next i
+
+nomField = racineFieldMaster + &quot;.metainfo_volumenum&quot; 
+leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField) 
+	montrer = (leTextFieldMaster.content &lt;&gt; &quot;&quot;)
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(racineFieldMaster + &quot;.indesko_lib_numvol&quot;)
+	for i=0 to ubound(leTextFieldMaster.dependentTextFields)
+		leTextFieldMaster.dependentTextFields(i).isVisible = montrer
+	next i
+	
+nomField = racineFieldMaster + &quot;.metainfo_seriesvolnums&quot; 
+leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField) 
+	montrer = (leTextFieldMaster.content &lt;&gt; &quot;&quot;)
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(racineFieldMaster + &quot;.indesko_lib_numfascicule&quot;)
+	for i=0 to ubound(leTextFieldMaster.dependentTextFields)
+		leTextFieldMaster.dependentTextFields(i).isVisible = montrer
+	next i
+
+leDoc.textfields.refresh
+
+end sub
+&apos;-------------------
+&apos; FONCTIONS GENERALES
+&apos;------------------
+function FormateDate_MoisAnnee(chaine) as string
+&apos; l&apos;instruction Format de OOoBasic est buggée et pas &quot;reliable&quot;
+on error resume next
+mois=month(chaine)
+annee=year(chaine)
+
+select Case mois
+	case 1:mois_long = MSG_MONTH_1
+	case 2:mois_long = MSG_MONTH_2
+	case 3:mois_long = MSG_MONTH_3
+	case 4:mois_long = MSG_MONTH_4
+	case 5:mois_long = MSG_MONTH_5
+	case 6:mois_long = MSG_MONTH_6
+	case 7:mois_long = MSG_MONTH_7
+	case 8:mois_long = MSG_MONTH_8
+	case 9:mois_long = MSG_MONTH_9
+	case 10:mois_long = MSG_MONTH_10
+	case 11:mois_long = MSG_MONTH_11
+	case 12:mois_long = MSG_MONTH_12
+end select
+
+FormateDate_MoisAnnee = mois_long &amp; &quot; &quot; &amp; annee
+
+end function
+
+&apos;--------------------
+function RechercheNumTableau(TypeTableau as string) as long
+
+lesTableaux=leDoc.TextTables
+
+nbmax=0
+racineSection=&quot;bordereau_&quot;
+
+for i=0 to lesTableaux.count-1
+	leTableau=lesTableaux(i)
+	if left(leTableau.name,len(TypeTableau))=TypeTableau then
+		if not isEmpty(leTableau.textSection) then
+			if left(leTableau.textSection.name,len(racineSection))=racineSection then
+				nb=mid(leTableau.name, len(TypeTableau)+1)
+				if nb &gt; nbMax then
+					nbMax=nb
+				endif
+			endif
+		endif
+	endif
+next i
+
+RechercheNumTableau = nbMax
+
+end function
+&apos;---------------------
+function EnumereTableaux(Typetableau)
+
+dim liste()
+
+lesTableaux=leDoc.TextTables
+
+nb=-1
+racineSection=&quot;bordereau_&quot;
+
+for i=0 to lesTableaux.count-1
+	leTableau=lesTableaux(i)
+	if left(leTableau.name,len(TypeTableau))=TypeTableau then
+		if not isEmpty(leTableau.textSection) then
+			if left(leTableau.textSection.name,len(racineSection))=racineSection then
+				nb=nb+1
+				redim preserve liste(0 to nb)
+				liste(nb)=leTableau			
+			endif
+		endif
+	endif
+next i
+
+EnumereTableaux = liste()
+
+end function
+&apos;-------------
+function RecupereValeursFormulaire(listeChamp, leStep)
+
+dim LesValeurs()
+reDim lesValeurs(0, 1 to 2)
+
+
+for i=0 to ubound(listeChamp)
+	leControle=oDlg.getControl(listeChamp(i))
+	nb=ubound(lesValeurs(),1) + 1
+	redim preserve lesValeurs(0 to nb, 1 to 2)
+	lesValeurs(nb,1)=listeChamp(i)
+	select case leControle.model.serviceName
+		case &quot;stardiv.vcl.controlmodel.Edit&quot;
+			lesValeurs(nb,2) = leControle.text
+		case &quot;stardiv.vcl.controlmodel.ListBox&quot;
+			lesValeurs(nb,2)=leControle.selectedItem
+		case &quot;stardiv.vcl.controlmodel.DateField&quot;
+			lesValeurs(nb,2)=DateToStr(leControle.Date)	
+		case else
+			print MSG_GUI_CONTROL_ERROR + &quot; : &quot; &amp; lecontrole.model.servicename
+	end select
+	&apos;DEBUG MODE
+	if CheckDebugMode then
+		if lesValeurs(nb,2)=&quot;&quot; then
+			lesValeurs(nb,2) = lesValeurs(nb,1)
+		endif
+	endif		
+next i
+
+RecupereValeursFormulaire = lesValeurs()
+
+end function
+&apos;---------------
+sub RemplirFormulaireFromTextField(listeChamp, leStep, racineChamp, numFormulaire)
+
+
+for i=0 to ubound(listeChamp)
+	nomChamp = listeChamp(i)
+	leControle=oDlg.getControl(listeChamp(i))
+	
+		decoupe=split( nomChamp,&quot;_&quot;)
+		decoupe(1) = decoupe(1)+ cstr(numFormulaire)
+		nomDbk = join(decoupe,&quot;_&quot;)
+		nomField = racineFieldMaster + &quot;.&quot; + nomDbk
+	
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+	laValeur = leTextFieldMaster.content
+	select case leControle.model.serviceName
+		case &quot;stardiv.vcl.controlmodel.Edit&quot;
+			leControle.text = laValeur
+		case &quot;stardiv.vcl.controlmodel.ListBox&quot;
+			leControle.SelectItem(laValeur,true)
+		case &quot;stardiv.vcl.controlmodel.DateField&quot;
+			if trim(laValeur)=&quot;&quot; then
+				leControle.Text = laValeur
+			else
+				leControle.Date=StrToDate(laValeur)	
+			endif
+		case else
+			print lecontrole.model.servicename
+	end select				
+next i
+
+lesValeursIni = RecupereValeursFormulaire(listeChamp,leStep )
+
+end sub
+&apos;---------------
+function StrToDate(arg) as string
+&apos;jj/mm/yyyy --&gt; yyyymmjj pour affichhage datefield
+jj=left(arg,2)
+mm=mid(arg,4,2)
+yyyy=right(arg,4)
+StrToDate = yyyy &amp; mm &amp; jj
+end function
+
+function DateToStr(arg) as string
+&apos;yyyymmjj --&gt; jj/mm/yyyy
+if len(arg) = 8 then
+	jj=right(arg,2)
+	mm=mid(arg,5,2)
+	yyyy=left(arg,4)
+	DateToStr = jj &amp; &quot;/&quot; &amp; mm &amp; &quot;/&quot; &amp; yyyy
+else
+	DateToStr=&quot;&quot;
+endif
+end function
+&apos;-------------------------------
+&apos; confirmation Abandon bordereau
+&apos;-------------------------------
+function AbandonBordereau()
+dim retour as boolean
+
+	select case oDlg.Model.step
+		case 5,6,7,8,9,11
+			if isFormulaireModifie(oDlg.Model.step) then
+				reponse = Indesko_MsgBox(MSG_METADATA_CANCEL_1+chr(10)+MSG_METADATA_CANCEL_2,32+4,GUI_WIZARDNAME)
+				retour =(reponse = 6) &apos;oui
+			else
+				retour = true
+			endif
+		case else
+			retour = true
+	end select
+
+AbandonBordereau = retour
+
+end function
+&apos;-----------------------
+function isFormulaireModifie(leStep) as boolean
+
+select case leStep
+	case 5
+		racineChamp=&quot;metainfo_author&quot;
+		listeChamp=listeChamp_author
+	case 6
+		racineChamp=&quot;metainfo_corpauthor&quot;
+		listeChamp=listeChamp_corpauthor
+	case 7
+		racineChamp=&quot;metainfo_contractsponsor&quot;
+		listeChamp=listeChamp_contractsponsor
+	case 8
+		racineChamp=&quot;metainfo&quot;
+		listeChamp=listeChamp_metainfoGenerale
+	case 9
+		racineChamp=&quot;metainfo&quot;
+		listeChamp=listeChamp_metainfoResume
+	case 11
+		racineChamp=&quot;metainfo&quot;
+		listeChamp=listeChamp_metainfoConference
+end select
+
+&apos;Recupere Valeurs
+lesValeurs = RecupereValeursFormulaire(listeChamp,leStep)
+
+&apos;boucle de verification
+dim isIdem as boolean
+isIdem = true
+
+for i = 1 to ubound(lesValeurs(),1)
+	isIdem = isIdem and (lesValeursIni(i,2) = lesValeurs(i,2))	
+next i
+
+isFormulaireModifie = not isIdem
+	
+end function
+&apos;-------------
+sub NettoyerTextFields
+&apos;supprime tous les textFields non utilisés
+&apos;sauf ceux commencant par indesko_
+lesFieldMasters = leDoc.textFieldMasters
+
+lesNoms = lesFieldMasters.elementNames
+
+for i=0 to ubound(lesNoms)
+	if instr(lesNoms(i),racineFieldMaster) &gt; 0 then &apos;commence par &quot;com.sun.star.text.FieldMaster.User&quot;
+		if instr(lesNoms(i), racineFieldMaster &amp;&quot;.indesko_&quot; ) = 0 and _
+		   instr(lesNoms(i), racineFieldMaster &amp;&quot;.metainfo_&quot; ) = 0 then&apos;ne contienet pas indesko_ et pas champ de stockage
+		   &apos; on regarde les dependant textFields
+			leTextFieldMaster= leDoc.textFieldMasters.getByName(lesNoms(i))
+			if ubound(leTextFieldMaster.dependentTextFields) = -1 then
+			&apos;Non utilisé, on efface
+				leTextFieldMaster.dispose()
+			endif
+		endif
+		&apos;on regarde les champs dupliques author, contractsponsor et corpauthor
+		if  instr(lesNoms(i),racineFieldMaster &amp;&quot;.metainfo_author&quot;) &lt;&gt; 0 or _
+			instr(lesNoms(i),racineFieldMaster &amp;&quot;.metainfo_corpauthor&quot;) &lt;&gt; 0 or _
+			instr(lesNoms(i),racineFieldMaster &amp;&quot;.metainfo_contractsponsor&quot;) &lt;&gt; 0 then
+		   &apos; on regarde les dependant textFields
+			leTextFieldMaster= leDoc.textFieldMasters.getByName(lesNoms(i))
+			if ubound(leTextFieldMaster.dependentTextFields) = -1 then
+			&apos;Non utilisé, on efface
+				leTextFieldMaster.dispose()
+			endif			
+		endif
+	endif
+next i
+
+end sub
+</script:module>

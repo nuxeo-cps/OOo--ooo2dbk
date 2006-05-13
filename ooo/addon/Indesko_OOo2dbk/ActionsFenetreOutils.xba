@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ActionsFenetreOutils" script:language="StarBasic">REM  *****  BASIC  *****
+option explicit
+
+public tabSections(0 to 15, 1 to 3) &apos;(1=1 libelle, 2=nom section;, 3= style de page de la section - inutile )
+&apos;public tabVisible(0 to 7,1 to 4) &apos;(1=1 libelle, 2=nom section 3=Ne pas nettoyer(index) 4=nom style premiere ligne
+public tabVisible(0 to 6,1 to 4) &apos;(1=1 libelle, 2=nom section 3=Ne pas nettoyer(index) 4=nom style premiere ligne
+public memTabSections()
+public tabAnnexes(0,0)
+
+&apos;----------------------------
+&apos; INITIALISE
+&apos;----------------------------
+sub InitVariablesDlg
+
+dim n as long
+dim nb as long
+dim i, j
+
+&apos; Liste de sections pour atteindre
+n=-1
+n=n+1:tabSections(n,1)=SECTION_BORDEREAU:tabSections(n,2)=&quot;bordereau&quot;:tabSections(n,3)=&quot;page_bordereau&quot;
+n=n+1:tabSections(n,1)=SECTION_ABSTRACT :tabSections(n,2)=&quot;bordereau_abstract&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=&quot;-------------------------------------------&quot;:tabSections(n,2)=&quot;&quot;:tabSections(n,3)=&quot;&quot;
+&apos; attention !! index &quot;2&quot; utilisé
+n=n+1:tabSections(n,1)=SECTION_FOREWORD:tabSections(n,2)=&quot;avant-propos&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=SECTION_PREFACE:tabSections(n,2)=&quot;preface&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=SECTION_TOC:tabSections(n,2)=&quot;sommaire&quot;:tabSections(n,3)=&quot;page_sommaire&quot;
+n=n+1:tabSections(n,1)=SECTION_INTRODUCTION:tabSections(n,2)=&quot;introduction&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=&quot;-------------------------------------------&quot;:tabSections(n,2)=&quot;&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=SECTION_BODY:tabSections(n,2)=&quot;document&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=&quot;-------------------------------------------&quot;:tabSections(n,2)=&quot;&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=SECTION_TABLE_INDEX:tabSections(n,2)=&quot;table_index&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=SECTION_TABLE_IMAGE:tabSections(n,2)=&quot;table_illustration&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=SECTION_GLOSSARY:tabSections(n,2)=&quot;glossaire&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=SECTION_BIBLIOGRAPHY:tabSections(n,2)=&quot;bibliographie&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=&quot;-------------------------------------------&quot;:tabSections(n,2)=&quot;&quot;:tabSections(n,3)=&quot;&quot;
+n=n+1:tabSections(n,1)=SECTION_APPENDIX :tabSections(n,2)=&quot;annexes&quot;:tabSections(n,3)=&quot;page_annexes&quot;
+
+redim memTabSections(lbound(tabSections(),1) to ubound(tabSections(),1), 1 to 3)
+for i=lbound(tabSections(),1) to ubound(tabSections(),1)
+	for j=lbound(tabSections(),2) to ubound(tabSections(),2)
+		memTabSections(i,j)=tabSections(i,j)
+	next j
+next i
+
+&apos;Liste de sections pour visibilite
+n=-1
+n=n+1: tabVisible(n,1)=SECTION_FOREWORD: tabVisible(n,2)=&quot;avant-propos&quot;
+	 	tabVisible(n,3)=false: tabVisible(n,4)=&quot;Preface Title&quot;
+n=n+1: tabVisible(n,1)=SECTION_PREFACE: tabVisible(n,2)=&quot;preface&quot;
+		 tabVisible(n,3)=false: tabVisible(n,4)=&quot;Preface Title&quot;
+&apos;n=n+1: tabVisible(n,1)=SECTION_TOC: tabVisible(n,2)=&quot;sommaire&quot;
+&apos;		 tabVisible(n,3)=true: tabVisible(n,4)=&quot;Preface Title&quot;
+n=n+1: tabVisible(n,1)=SECTION_INTRODUCTION: tabVisible(n,2)=&quot;introduction&quot;
+		 tabVisible(n,3)=false: tabVisible(n,4)=&quot;Preface Title&quot;
+n=n+1: tabVisible(n,1)=SECTION_TABLE_INDEX: tabVisible(n,2)=&quot;table_index&quot;
+		 tabVisible(n,3)=true: tabVisible(n,4)=&quot;Section Title&quot;
+n=n+1: tabVisible(n,1)=SECTION_TABLE_IMAGE: tabVisible(n,2)=&quot;table_illustration&quot;
+		 tabVisible(n,3)=true: tabVisible(n,4)=&quot;Section Title&quot;
+n=n+1: tabVisible(n,1)=SECTION_GLOSSARY: tabVisible(n,2)=&quot;glossaire&quot;
+		 tabVisible(n,3)=false: tabVisible(n,4)=&quot;Glossary Title&quot;
+n=n+1: tabVisible(n,1)=SECTION_BIBLIOGRAPHY : tabVisible(n,2)=&quot;bibliographie&quot;
+		 tabVisible(n,3)=true: tabVisible(n,4)=&quot;Section Title&quot;
+
+
+&apos;Nom des champs correspondants a des elements docbook
+
+&apos;Le premier champ de la liste recoit le focus lors de l&apos;éaffichage
+redim listeChamp_author(0 to 7)
+nb=-1
+nb=nb+1: listeChamp_author(nb)=&quot;metainfo_author_firstname&quot;
+nb=nb+1: listeChamp_author(nb)=&quot;metainfo_author_orgdiv&quot;
+nb=nb+1: listeChamp_author(nb)=&quot;metainfo_author_address&quot;
+nb=nb+1: listeChamp_author(nb)=&quot;metainfo_author_orgname_acronym&quot;
+nb=nb+1: listeChamp_author(nb)=&quot;metainfo_author_orgname&quot;
+nb=nb+1: listeChamp_author(nb)=&quot;metainfo_author_jobtitle_quality&quot;
+nb=nb+1: listeChamp_author(nb)=&quot;metainfo_author_jobtitle&quot;
+nb=nb+1: listeChamp_author(nb)=&quot;metainfo_author_surname&quot;
+
+
+redim listeChamp_corpauthor(0 to 11)
+nb=-1
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_orgname&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_orgname_acronym&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_orgdiv&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_address&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_pob&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_postcode&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_city&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_state&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_phone&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_fax&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_email&quot;
+nb=nb+1: listeChamp_corpauthor(nb)=&quot;metainfo_corpauthor_ulink&quot;
+
+redim listeChamp_contractsponsor(0 to 11)
+nb=-1
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_orgname&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_orgname_acronym&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_orgdiv&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_address&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_pob&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_postcode&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_city&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_state&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_phone&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_fax&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_email&quot;
+nb=nb+1: listeChamp_contractsponsor(nb)=&quot;metainfo_contractsponsor_ulink&quot;
+
+
+redim listeChamp_metainfoGenerale(0 to 11)
+nb=-1
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_title&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_subtitle&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_volumenum&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_seriesvolnums&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_keywords&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_bibliomisc&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_date&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_status&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_security&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_revhistory_security&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_contractnum&quot;
+nb=nb+1: listeChamp_metainfoGenerale(nb)=&quot;metainfo_isrn&quot;
+
+redim listeChamp_metainfoResume(0 to 0)
+nb=-1
+nb=nb+1: listeChamp_metainfoResume(nb)=&quot;metainfo_abstract&quot;
+
+
+redim listeChamp_metainfoConference(0 to 4)
+nb=-1
+nb=nb+1: listeChamp_metainfoConference(nb)=&quot;metainfo_confgroup_conftitle&quot;
+nb=nb+1: listeChamp_metainfoConference(nb)=&quot;metainfo_confgroup_confsponsor&quot;
+nb=nb+1: listeChamp_metainfoConference(nb)=&quot;metainfo_confgroup_confnum&quot;
+nb=nb+1: listeChamp_metainfoConference(nb)=&quot;metainfo_confgroup_confdates&quot;
+nb=nb+1: listeChamp_metainfoConference(nb)=&quot;metainfo_confgroup_address&quot;
+
+end sub
+&apos;----------------------------
+&apos; ATTEINDRE
+&apos;----------------------------
+sub AtteindreDocument(indx as long)
+	dim laSection,  leViewCursor
+	dim i
+	on error goto sortie
+	&apos;Recherche section precedente
+	&apos;si trouve rien reste à indx
+	for i=indx-1 to 0 step -1
+		if tabSections(i,2)&lt;&gt;&quot;&quot; then
+			indx=i
+			exit for
+		endif
+	next i
+
+	laSection = leDoc.TextSections.getByName(tabSections(indx,2))
+	leViewCursor = leDoc.currentController.viewCursor
+	leviewCursor.gotoRange(laSection.anchor.end, false)
+	leviewCursor.goDown(1,false)
+	leDoc.currentController.frame.componentWindow.setFocus()
+
+exit sub
+sortie:
+	&apos;Indesko_MsgBox( &quot;Section introuvable : &quot; + tabSections(indx,2))
+	Indesko_MsgBox( MSG_SECTION_NOT_FOUND + chr(10) + tabSections(indx,2))
+end sub
+&apos;----------------------------
+sub AtteindreSection(nomSection, optional aLaFin)
+	dim laSection,  leViewCursor, leRange
+
+	laSection = leDoc.TextSections.getByName(nomSection)
+	
+	if ismissing(aLaFin) then
+		aLafin = false
+	endif
+	if aLaFin then
+		leRange=laSection.anchor.end	
+	else
+		leRange=laSection.anchor.start
+	endif
+	
+leDoc.currentController.frame.componentWindow.setFocus()
+leDoc.currentController.select(leRange)
+
+end sub
+&apos;----------------------------
+sub AtteindreTextField (nomField)
+
+dim continue as boolean
+dim laPosition
+dim enum, leTextField
+
+enum=leDoc.textFields.createEnumeration
+continue = enum.hasMoreElements
+
+while continue
+	leTextField=enum.nextelement
+	if leTextField.textFieldMaster.name=nomField then
+		 laPosition= leTextField.anchor.start
+	endif
+	continue=enum.hasMoreelements	
+wend
+
+leDoc.currentController.select(laPosition)
+
+end sub
+&apos;----------------------------
+&apos; VISIBILITE DES SECTIONS
+&apos;----------------------------
+sub VisibiliteSection(indx as long, montrerSection as boolean)
+dim nomSection, laSection
+dim leService, leCurseur, monIndex
+dim saut
+dim isIndex
+dim messageUser
+
+	nomSection=tabVisible(indx,2)
+	laSection=leDoc.textSections.getByName(nomSection)
+	
+	isIndex = tabVisible(indx,3)
+	
+	if not isIndex then
+		if montrerSection=false then
+		&apos;on vide
+			laSection.anchor.string=&quot;&quot;
+
+			&apos;boucle sur les text contents pour suppression
+			dim startSection, endSection, unObj,i
+			dim laSectionSuivante, startSectionSuivante
+			startSection=leDoc.text.createTextCursorByRange(laSection.anchor.start)
+			laSectionSuivante = leDoc.textSections.getByName(tabVisible(indx+1,2))
+			startSectionSuivante=leDoc.text.createTextCursorByRange(laSEctionSuivante.anchor.start)
+			
+			dim document, dispatcher, NoArg()
+			dim uneAncre, leNom, uneSection
+
+			for i=0 to leDoc.drawPage.count-1
+				if i &lt;= leDoc.drawPage.count-1 then
+				&apos;le .count n&apos;est pas mis à jour lors de l&apos;effacement
+					unObj= leDoc.drawPage(i)
+					uneAncre = unObj.anchor
+					if not isNull(uneAncre) then
+						if not isEmpty(uneAncre.textSection) then
+							uneSection = uneAncre.textSection
+							leNom = uneSection.Name
+							if leNom = 	nomSection then
+								leDoc.drawPage.remove(unObj)
+								unobj.dispose
+							endif
+						endif
+					endif					
+				endif
+			next i
+						
+		else
+			&apos; determine eventuel text pour section non vide
+			if nomSection &lt;&gt; &quot;glossaire&quot; then
+				messageUser = MSG_SECTION_VISIBLE_WRITEHERE
+			else
+				messageUser = &quot;&quot;
+			endif
+			&apos;insere un saut de page à vent :)
+			leCurseur = leDoc.text.createTextCursorByRange(laSection.anchor.start)
+			leCurseur.breakType=com.sun.star.style.BreakType.PAGE_BEFORE
+			leCurseur.paraStyleName=tabVisible(indx,4)
+			leDoc.text.insertString(leCurseur, tabVisible(indx,1), false )
+			&apos;insere saut de paragraphe à prés
+			saut=com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK
+			leDoc.text.insertControlCharacter(leCurseur,saut, false)
+			leCurseur.paraStyleName=&quot;Standard&quot;
+			leDoc.text.insertString(leCurseur, messageUser, false )	
+		endif
+	endif
+	
+	laSection.isVisible = montrerSection
+	
+	&apos;on insere un exmple de lignes si glossaire visible
+	if nomSection = &quot;glossaire&quot; and montrerSection then
+		call ajouter_entree_glossaire()
+	endif
+	
+end sub
+&apos;---------------
+&apos;Rafraichir le  document
+&apos;----------------
+sub Rafraichir_document
+
+dim i, uneTableIndex
+
+&apos;resynchro des champs
+call rempliProprieteDocument
+
+&apos;les text fields
+leDoc.textFields.refresh
+
+&apos;les tables d&apos;indexs
+for i=0 to leDoc.DocumentIndexes.count-1
+	uneTableIndex = leDoc.DocumentIndexes(i)
+	uneTableIndex.update
+next i
+
+&apos;reconstruit la liste des sections
+call Initialise_liste_atteindre()
+
+&apos;Netooyage des styles de page non utilisés
+call NettoyerStylesPage
+
+Indesko_MsgBox( MSG_FIELD_UPDATED +chr(10)+MSG_INDEX_UPDATED , 64 , MSG_DOCUMENT_UPDATED )
+
+end sub
+
+&apos;--------------
+function FindIndexByName(leNom, leRangTableau, leTableau)
+dim retour as long
+dim i as long
+dim nb as long
+retour=-1
+
+nb=ubound(leTableau,1)
+for i=0 to nb
+	if leTableau(i,leRangTableau) = leNom then 
+		retour = i
+		exit for
+	endif
+next i
+
+FindIndexByName = retour
+
+end function
+&apos;----------------
+sub MajNbPages
+
+dim laSection
+dim leRange, leCurseur, leCurseurMem,leviewCursor
+dim nbpage, nbPageTotal, mempage
+dim leTextField
+
+	laSection=leDoc.textSections.getByName(&quot;preface&quot;)
+	lerange=laSection.anchor.end
+	leCurseur = leDoc.text.createTextCursorByRange(leRange)
+	leviewCursor=leDoc.currentcontroller.viewCursor
+	
+	&apos;on ne peut pas faire ca car si dan spied de page, marche pas
+	&apos;leCurseurMem=leDoc.text.createTextCursorByRange(leViewCursor)
+	memPage = leViewCursor.getPage
+	
+	leviewCursor.gotoRange(leCurseur,false)
+	nbpage=leViewCursor.getPage()
+	
+	leviewCursor.gotoEnd(false)
+	nbPageTotal = leViewCursor.getPage()
+	
+	&apos;on revient au point de depart (enfin presque)
+	leViewCursor.jumpToPage(memPage)
+	&apos;maj du champ
+	leDoc.textfields.refresh
+end sub
+&apos;-------------
+&apos; Glossaire
+&apos;------------
+sub ajouter_entree_glossaire ()
+
+dim laSection
+dim message
+dim reponse
+dim lecurseur, saut
+dim indx
+
+laSection=leDoc.TextSections.getByName(&quot;glossaire&quot;)	
+
+if not laSection.isVisible then
+	message = MSG_GLOSSARY_ADD_1+chr(10)+chr(10)
+	message = message + MSG_GLOSSARY_ADD_2 
+	reponse = Indesko_MsgBox (message, 4+32+128 ,MSG_GLOSSARY_ADD_TITLE)
+else
+	reponse = 6 &apos;oui
+endif
+
+if reponse = 6  then &apos;oui
+
+	if not laSection.isVisible then
+		indx = FindIndexByName(&quot;glossaire&quot;, 2,tabVisible() )
+		if indx &lt;&gt; -1 then
+			call VisibiliteSection(indx,true)
+		else
+			message = MSG_GLOSSARY_ADD_ERROR+chr(10)+chr(10)
+			Indesko_MsgBox( message, 48 ,MSG_GLOSSARY_ADD_TITLE )
+			exit sub		
+		endif
+	endif
+
+	leCurseur = leDoc.text.createTextCursorByRange(laSection.anchor.end)
+	saut=com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK
+	leDoc.text.insertControlCharacter(leCurseur,saut, false)
+	leCurseur.paraStyleName=&quot;Glossary Term&quot;
+	leDoc.text.insertString(leCurseur, MSG_GLOSSARY_INSERT_TERM, false )
+	leDoc.text.insertControlCharacter(leCurseur,saut, false)
+	leCurseur.goToNextParagraph(false)
+	leCurseur = leDoc.text.createTextCursorByRange(laSection.anchor.end)
+	leDoc.text.insertString(leCurseur, MSG_GLOSSARY_INSERT_DEFINITION, false )		
+
+	call AtteindreSection(&quot;glossaire&quot;, false)	
+
+endif
+
+end sub
+
+&apos;-------------
+&apos; ANNEXES
+&apos;-------------
+sub InsererAnnexe(leTextRange)
+&apos;Insere une annexe apres le textRange	
+
+dim maNouvelleSection
+dim leCurseur, saut
+dim leNom
+
+leNom=&quot;annexe_&quot;+cstr(now)
+saut=com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK
+
+call VerifieFinSection
+
+leCurseur = leDoc.text.createTextCursorByRange(leTextRange)
+
+saut = com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK
+leDoc.text.insertControlCharacter(leCurseur, saut,false)
+&apos;lecurseur.goLeft(1,false)
+
+maNouvelleSection = leDoc.createInstance(&quot;com.sun.star.text.TextSection&quot;)
+maNouvelleSection.name = leNom
+leDoc.text.insertTextContent(leCurseur, maNouvelleSection, false)
+
+leCurseur = leDoc.text.createTextCursorByRange(maNouvelleSection.anchor.start)
+leCurseur.breakType=com.sun.star.style.BreakType.PAGE_BEFORE
+leCurseur.paraStyleName=&quot;Appendix Title&quot;
+&apos;leCurseur.pageDescName=&quot;page_annexes&quot;
+leDoc.text.insertstring( leCurseur, MSG_APPENDIX_TITLE, false)
+leDoc.text.insertControlCharacter(leCurseur, saut,false)
+leDoc.text.insertControlCharacter(leCurseur, saut,false)
+
+&apos;insere section de fin non supprimable par l&apos;utilisateur
+dim maNouvelleSectionFin
+maNouvelleSectionFin = leDoc.createInstance(&quot;com.sun.star.text.TextSection&quot;)
+maNouvelleSectionFin.name = leNom &amp; &quot;_fin&quot;
+maNouvelleSectionFin.isProtected = true
+leDoc.text.insertTextContent(leCurseur, maNouvelleSectionFin, false)
+
+
+&apos;replace le curseur sur la nouvelle annexe
+dim leViewCursor
+leViewCursor = leDoc.currentcontroller.viewCursor
+leViewCursor.gotoRange(maNouvelleSection.anchor.start,false)
+
+end sub
+
+&apos;----------------
+sub VerifieFinSection()
+&apos;la fin du documement ne doit pas concorder avec la fin d&apos;une section
+&apos;detruit, recree la section et rajoute un paragraphe
+
+dim  leCurseur, maNouvelleSection, leCurseur2, saut, laSection
+dim memDebut, memFin
+dim nomSection
+
+if isEmpty(leDoc.text.end.TextSection) then
+	exit sub
+endif
+
+laSection = leDoc.text.end.TextSection
+saut = com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK
+
+nomSection=laSection.name
+
+&apos;les bornes de la section
+memDebut=laSection.anchor.start
+memFin=laSection.anchor.end
+
+&apos;on supprime
+leDoc.text.removeTextContent(laSection)
+
+&apos;insere saut de pargaraphe
+leCurseur2 = leDoc.text.createTextCursorByRange(memfin)
+leDoc.text.insertControlCharacter(leCurseur2, saut,false)
+
+&apos;on selectione
+leCurseur = leDoc.text.createTextCursorByRange(memDebut)
+leCurseur2.goleft(1,false)
+leCurseur.gotoRange(leCurseur2,true)
+
+&apos;on recree la section
+maNouvelleSection = leDoc.createInstance(&quot;com.sun.star.text.TextSection&quot;)
+maNouvelleSection.name = nomSection
+leDoc.text.insertTextContent(leCurseur, maNouvelleSection, true)
+
+end sub
+
+&apos;-----------------------------
+
+sub SupprimeToutesLesAnnexes
+dim laSectionAnnexe, leCurseurAnnexe
+laSectionAnnexe=leDoc.TextSections.getByName(&quot;annexes&quot;)
+leCurseurAnnexe=leDoc.text.createTextCursorByRange(laSectionAnnexe.anchor.end)
+leCurseurAnnexe.goRight(1,false)
+lecurseurAnnexe.gotoRange(leDoc.text.end,true)
+lecurseurAnnexe.string=&quot;&quot;
+
+end sub
+
+&apos;--------------
+sub SupprimeUneAnnexe(NomAnnexe)
+
+dim laSectionAnnexe, leCurseurAnnexe
+laSectionAnnexe=leDoc.TextSections.getByName(NomAnnexe)
+leCurseurAnnexe=leDoc.text.createTextCursorByRange(laSectionAnnexe.anchor.start)
+leCurseurAnnexe.goLeft(1,false)
+lecurseurAnnexe.gotoRange(laSectionAnnexe.anchor.end,true)
+lecurseurAnnexe.string=&quot;&quot;
+
+call MajNbPages
+
+end sub
+&apos;-------------
+function ListeSectionAnnexes()
+&apos;retourne un tableau à merger à tabSection
+
+dim lesSections, laSection, leCurseur
+dim i
+dim tabResult(0,1 to 3), nb
+nb=0
+lesSections = leDoc.textSections
+for i=0 to lesSections.count-1
+	laSection = lesSEctions(i)
+	if instr(laSection.name,&quot;annexe_&quot;) &gt; 0 and instr(laSection.name,&quot;_fin&quot;) = 0  then
+		nb = nb+ 1
+		redim preserve tabResult(0 to nb, 1 to 3)
+		tabResult(nb, 2) = laSection.name
+		tabResult(nb, 3) = laSection.anchor.pageStyleName
+		leCurseur = leDoc.text.createTextCursorByRange(laSection.anchor.start)
+		leCurseur.gotoEndOfSentence(true)
+		tabResult(nb, 1) = leCurseur.string
+	endif
+next i
+
+ListeSectionAnnexes = tabResult()
+
+end function
+
+
+&apos;--------------------
+sub majTabSections()
+
+&apos;dim tabAnnexes(0,0)
+dim i, j, nb
+
+tabAnnexes() = ListeSectionAnnexes()
+
+nb = ubound(tabAnnexes(),1) + ubound(memTabSections(),1)
+
+
+redim tabSections(0 to nb , 1 to 3)
+
+for i=lbound(memTabSections(),1) to ubound(memTabSections(),1)
+	for j=1 to 3
+		TabSections(i,j)=memTabSections(i,j)
+	next j
+next i
+
+for i=1 to ubound(tabAnnexes(),1)
+	for j=1 to 3
+		TabSections(i+ubound(memTabSections(),1),j) = tabAnnexes(i,j)
+	next j
+next i
+end sub
+
+
+</script:module>

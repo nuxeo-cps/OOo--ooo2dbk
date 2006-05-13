@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="StylistLight" script:language="StarBasic">
+&apos;---------------------------
+&apos; Parametrage de la fenetre
+&apos;---------------------------
+&apos;les tableaux dans type ... end type sont instables, voire ne marchent pas
+&apos;on ne peut donc prendre cette approche pour faire un truc plus dynamique :(
+&apos; obligé de reecrire un tableau par famille,
+&apos; pour pouvoir gerer le nombre different dans chaque famille (et eviter de surdimensionner)
+
+&apos;dim NomProprieteFamille() as string
+&apos;dim NomFamille() as string
+
+&apos;Liste des styles
+&apos;dim ContenuCara() as string &apos;Styles Caracteres retenus 
+&apos;dim ContenuPara() as string &apos;Styles paragraphe retenus
+&apos;dim ContenuMetaPara() as string &apos;Styles Meta-données Paragraphe retenus
+
+public lesCategories()
+
+&apos;----------------------------------
+Sub FabriqueCategories()
+
+dim LesStyles()
+
+nbCategories = 6
+Redim lesCategories(0 to nbCategories - 1, 1 to 4)
+
+&apos;Categorie 0 : action sur les caracteres
+categ = 0
+lesCategories(categ,1)=GUI_STYLIST_CHARACTER &apos;libelle
+lesCategories(categ,2)=&quot;CharStyleName&quot; &apos;propriete
+lesCategories(categ,3)=0 &apos;index famille OOo
+
+nbTotal=6
+redim Contenu(0 to nbTotal, 1 to 3)  as string &apos;(1 : nom affiché, 2 : Nom du style (displayName) 3: ne pas filtrer le style - special action )
+nb=-1
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_CHAR_DEFAULT: Contenu(nb,2)=STYLENAME_CHAR_DEFAULT : contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_CHAR_EMPHASIS: Contenu(nb,2)=STYLENAME_CHAR_EMPHASIS : contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_CHAR_STRONGEMPHASIS : Contenu(nb,2)=STYLENAME_CHAR_STRONGEMPHASIS : contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_CHAR_QUOTATION : Contenu(nb,2)=STYLENAME_CHAR_QUOTATION : contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_CHAR_UPPERSCRIPT : Contenu(nb,2)=&quot;Exposant&quot;: contenu(nb,3) = true
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_CHAR_SUBSCRIPT: Contenu(nb,2)=&quot;Indice&quot;: contenu(nb,3) = true
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_CHAR_UNDOSCRIPT : Contenu(nb,2)=&quot;CancelExposantIndice&quot;: contenu(nb,3) = true
+
+&apos;Filtre les styles accessibles
+resultat = ValideListe(contenu(), lesCategories(categ,3))
+
+lesCategories(categ,4)=resultat
+
+&apos;
+&apos;Categorie 1 : action sur les paragraphe
+&apos;
+categ = 1
+lesCategories(categ,1)=GUI_STYLIST_PARAGRAPH
+lesCategories(categ,2)=&quot;ParaStyleName&quot;
+lesCategories(categ,3)=1
+
+nbTotal=7
+redim Contenu(0 to nbTotal, 1 to 3) as string
+nb=-1
+
+laFamille = TrouveFamille(lesCategories(categ,3))
+
+nb=nb+1 : Contenu(nb,1) = GUI_STYLENAME_PARA_BODY : Contenu(nb,2) = STYLENAME_PARA_BODY: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1) = GUI_STYLENAME_PARA_QUOTATION : Contenu(nb,2) = STYLENAME_PARA_QUOTATION: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1) = GUI_STYLENAME_PARA_PREFORMATTED: Contenu(nb,2) = STYLENAME_PARA_PREFORMATTED : contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1) = GUI_STYLENAME_PARA_REMARK: Contenu(nb,2) = &quot;Remarque&quot;: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1) = GUI_STYLENAME_PARA_SECTION: Contenu(nb,2) = &quot;Section Title&quot;: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1) = GUI_STYLENAME_PARA_GLOSSARY: Contenu(nb,2) = &quot;Glossary Title&quot;: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1) = GUI_STYLENAME_PARA_PREFACE: Contenu(nb,2) = &quot;Preface Title&quot;: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1) = GUI_STYLENAME_PARA_LISTING: Contenu(nb,2) = &quot;ProgramListing&quot;: contenu(nb,3) = false
+
+&apos;Filtre les styles accessibles
+resultat = ValideListe(contenu(), lesCategories(categ,3))
+
+lesCategories(categ,4)=resultat
+
+&apos;
+&apos;Categorie 2 : action sur les titres
+&apos;
+categ = 2
+lesCategories(categ,1)=GUI_STYLIST_TITLES
+lesCategories(categ,2)=&quot;ParaStyleName&quot;
+lesCategories(categ,3)=1
+
+nbTotal=10
+redim Contenu(0 to nbTotal, 1 to 3) as string
+nb=-1
+
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_NO: Contenu(nb,2) = STYLENAME_PARA_DEFAULT: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_1: Contenu(nb,2) = STYLENAME_PARA_HEADING_1: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_2: Contenu(nb,2) = STYLENAME_PARA_HEADING_2: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_3: Contenu(nb,2) = STYLENAME_PARA_HEADING_3: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_4: Contenu(nb,2) = STYLENAME_PARA_HEADING_4: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_5: Contenu(nb,2) = STYLENAME_PARA_HEADING_5: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_6: Contenu(nb,2) = STYLENAME_PARA_HEADING_6: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_7: Contenu(nb,2) = STYLENAME_PARA_HEADING_7: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_8: Contenu(nb,2) = STYLENAME_PARA_HEADING_8: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_9: Contenu(nb,2) = STYLENAME_PARA_HEADING_9: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_PARA_HEADING_10: Contenu(nb,2) = STYLENAME_PARA_HEADING_10: contenu(nb,3) = false
+
+
+&apos;Filtre les styles accessibles
+resultat = ValideListe(contenu(), lesCategories(categ,3))
+
+lesCategories(categ,4)=resultat
+
+
+&apos;Categorie 3 : action sur les titres d&apos;annexes
+&apos;
+categ = 3
+lesCategories(categ,1)=GUI_STYLIST_APPENDIXTITLES
+lesCategories(categ,2)=&quot;ParaStyleName&quot;
+lesCategories(categ,3)=1 &apos;index famille OOo
+
+nbTotal=5
+redim Contenu(0 to nbTotal, 1 to 3) as string
+nb=-1
+
+
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_APPENDIX_HEADING_NO: Contenu(nb,2) = STYLENAME_PARA_DEFAULT: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_APPENDIX_HEADING_1: Contenu(nb,2) = &quot;Annexe Titre 1&quot;: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_APPENDIX_HEADING_2: Contenu(nb,2) = &quot;Annexe Titre 2&quot;: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_APPENDIX_HEADING_3: Contenu(nb,2) = &quot;Annexe Titre 3&quot;: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_APPENDIX_HEADING_4: Contenu(nb,2) = &quot;Annexe Titre 4&quot;: contenu(nb,3) = false
+nb=nb+1 : Contenu(nb,1)=GUI_STYLENAME_APPENDIX_HEADING_5: Contenu(nb,2) = &quot;Annexe Titre 5&quot;: contenu(nb,3) = false
+
+&apos;Filtre les styles accessibles
+resultat = ValideListe(contenu(), lesCategories(categ,3))
+
+lesCategories(categ,4)=resultat
+
+
+End Sub
+
+&apos;----------------------------------------------
+function ValideListe(laListe(), indxCategFamille)
+&apos; Retourne la sous-liste dont les types sont accessibles dans le contexte
+dim sousListe()
+
+dim prendre as boolean
+
+laFamille = TrouveFamille(indxCategFamille)
+
+nbListe = ubound(laListe,2)
+redim sousListe(0,1 to nbListe) 
+
+nbSousListe=-1
+for i = lbound(laListe,1) to ubound(laListe,1)
+	prendre = laListe(i,3)
+	if not prendre then
+		prendre =  (NomStyleInterne(laListe(i,2), laFamille)&lt;&gt;&quot;&quot;)
+	endif
+	if prendre then
+		nbSousListe = nbSousListe + 1
+		redim Preserve sousListe(0 to nbSousListe, 1 to nbListe)
+		for j=1 to nbListe
+			sousListe(nbSousListe,j) = laListe(i,j)
+		next j
+	endif
+next i
+
+ValideListe=sousListe()
+
+end function
+&apos;-----------------------------
+function NomStyleInterne(NomExterne as string, laFamille) as string
+&apos;retourne le.Name à partir du DisplayName , &quot;&quot; si non trouvé
+
+NomInterne=&quot;&quot;
+
+	for i=0 to laFamille.count-1
+		if laFamille(i).DisplayName = NomExterne then
+			NomInterne=laFamille(i).name
+			exit for
+		endif
+	next i
+
+NomStyleInterne=NomInterne
+
+end function
+&apos;-----------------------------
+function NomStyleExterne(NomInterne as string, laFamille) as string
+&apos;retourne le.DisplayName à partir du Name , NomInterne si non trouvé
+
+NomExterne=NomInterne
+
+if laFamille.hasByName(NomInterne) then &apos;Pas obligé mais blibde
+	leStyle=laFamille.getByName(NomInterne)
+	NomExterne = leStyle.displayName
+endif
+
+NomStyleExterne=NomExterne
+
+end function
+&apos;--------------------------------
+Function TrouveFamille(indxFamille)
+&apos; a partir de l&apos;index NomFamille, retourne la familel adequate
+
+TrouveFamille = leDoc.StyleFamilies(indxFamille)
+
+end Function
+
+&apos;---------------------
+sub InitialiseCategoriesStylistLight
+
+	if ubound(lesCategories(),1) = -1 then
+		call FabriqueCategories
+	endif
+	
+	lecontrole=oDlg.getControl(&quot;lstCategorie&quot;)
+	leControle.removeItems(0,leControle.itemCount)
+	for i=0 to ubound(lesCategories(),1)
+		leControle.addItem(lesCategories(i,1),i)
+	next i
+	leControle.selectitemPos (0,true) 
+
+end sub
+
+sub initialiseLstStyle
+
+	lecontrole=oDlg.getControl(&quot;lstCategorie&quot;)
+	categ = leControle.selectedItemPos
+	
+	lecontrole=oDlg.getControl(&quot;lstStyles&quot;)
+	leControle.removeItems(0,leControle.itemCount)
+	laListe=lesCategories(categ,4)
+	for i=0 to ubound(laListe(),1)
+		leControle.addItem(laListe(i,1),i)
+	next i
+
+	leControle.selectitemPos (0,true) 
+	
+end sub
+
+&apos;--------------------
+function majStylesEnCours as boolean
+
+&apos;on error resume next
+
+dim leParaStyle as string, leCaraStyle as string
+dim lePageStyle as string, leCadreStyle as string
+
+dim objSelection
+dim laSelection
+dim i as long
+dim leControle
+ on error resume next
+	leParaStyle=&quot;&quot;
+	leCaraStyle=&quot;&quot;
+	lePageStyle = &quot;&quot;
+	leCadreStyle=&quot;&quot;
+
+	 objSelection=leDoc.currentselection
+	 laSelection=objSelection(0)
+	 
+	 select case laSElection.ImplementationName
+	 	&apos;case &quot;SwXTextGraphicObject&quot;, &quot;SwXTextEmbeddedObject&quot;
+		&apos;	&apos;Securité - voir http://www.openoffice.org/issues/show_bug.cgi?id=38645
+		&apos;	msgBox &quot;Le StylistHelper ne peut pas gerer les images&quot;,48,&quot;Protection&quot;
+		&apos;	majStylesEnCours = false
+		&apos;	call action_btcRetour
+		&apos;	exit function
+		&apos;case &quot;SwXTextFrame&quot;
+		&apos;	leCadreStyle = NomStyleExterne(laSelection.FrameStyleName,TrouveFamille(3))
+		&apos;	leParaStyle = &quot;&quot;
+	 	&apos;	leCaraStyle = &quot;&quot;
+	 	&apos;	lePageStyle = &quot;&quot;
+	 	case else
+	 		leCaraStyle = NomStyleExterne(laSelection.charStyleName,TrouveFamille(0))
+	 		leParaStyle = NomStyleExterne(laSelection.ParaStyleName,TrouveFamille(1))
+	 		lePageStyle = NomStyleExterne(laSelection.PageStyleName,TrouveFamille(2))
+	 		leCadreStyle = NomStyleExterne(laSelection.FrameStyleName,TrouveFamille(3))&apos;&quot;&quot;
+	 end select
+
+
+leControle = oDlg.getControl(&quot;lblStyleParagraphe&quot;)
+leControle.text = leParaStyle
+leControle = oDlg.getControl(&quot;lblStyleCaracteres&quot;)
+leControle.text = leCaraStyle
+leControle = oDlg.getControl(&quot;lblSytlePage&quot;)
+leControle.text = lePageStyle
+leControle = oDlg.getControl(&quot;lblStyleCadre&quot;)
+leControle.text = leCadreStyle
+
+majStylesEnCours = true
+
+End function
+&apos;----------------------------
+sub AppliqueStyle
+&apos;applique le style
+&apos;- soit à la selection en cours
+&apos;- soit en fait le style en cours du document
+
+dim objSelection as object
+dim laSelection as object
+dim i as long
+dim leControle
+dim NumFamille as long, NomPropriete as string
+dim NomDuStyle as string, nomStyleTranslate as string
+&apos;Recupere
+	leControle=oDlg.getControl(&quot;lstCategorie&quot;)
+	NumCateg=leControle.getSelectedItemPos()
+	leControle=oDlg.getControl(&quot;lstStyles&quot;)
+	NumStyle=leControle.getSelectedItemPos()
+	lesStyles = lesCategories(NumCateg,4)
+	nomStyleTranslate = lesStyles(NumStyle,2)
+	NomDuStyle= NomStyleInterne(nomStyleTranslate, TrouveFamille(lesCategories(NumCateg,3)))
+&apos;	NomDuStyle = nomStyleTranslate
+	
+objSelection = leDoc.currentSelection
+
+select case objSelection.ImplementationName
+	
+	case &quot;SwXTextGraphicObject&quot;,  &quot;SwXTextEmbeddedObject&quot;
+		laSelection.setPropertyValue(NomPropriete,NomDuStyle)
+		&apos;Securité - voir http://www.openoffice.org/issues/show_bug.cgi?id=38645
+		Indesko_MsgBox(MSG_STYLIST_IMAGES_NO ,48,GUI_WIZARDNAME)
+		call action_btcRetour
+		exit sub
+
+
+	case &quot;SwXTextTableCursor&quot;
+		&apos;??? un creteTextCursor sur ce Tablecursor ????
+			nbSelection = 1
+			isdirectObjet = true
+			Indesko_MsgBox( MSG_STYLIST_TABLES_NO,48,GUI_WIZARDNAME)
+			call action_btcRetour
+			exit sub
+			
+	case else
+			nbSelection = objSelection.count
+			isDirectObjet = false
+
+end select	
+		
+			for i=0 to nbSelection-1
+			
+			&apos;boucle sur les selections multiples
+				if isDirectObjet then
+					laSelection = objSelection
+				else
+					laSelection=objSelection.getByIndex(i)
+				endif
+				NomPropriete = lesCategories(NumCateg,2)&apos;NomProprieteFamille(NumFamille) &apos;Nom de la propriété applicatble
+				
+				dim isSpecial as boolean
+				isSpecial = lesStyles(NumStyle,3)
+
+				if isSpecial then &apos;Traitements specifiques
+					
+					if nomStyleTranslate = &quot;Exposant&quot; then
+						CharAutoEscapement = True
+						laSelection.CharEscapement = 101
+						laSelection.CharEscapementHeight = 58
+					endif
+	
+					if nomStyleTranslate = &quot;Indice&quot; then
+						CharAutoEscapement = True
+						laSelection.CharEscapement = -101
+						laSelection.CharEscapementHeight = 58				
+					endif
+					
+					if nomStyleTranslate = &quot;CancelExposantIndice&quot; then
+						laSelection.setPropertyToDefault(&quot;CharAutoEscapement&quot;)
+						laSelection.setPropertyToDefault(&quot;CharEscapement&quot;)
+						laSelection.setPropertyToDefault(&quot;CharEscapementHeight&quot;)				
+					endif
+							
+				else
+					NomPropriete=lesCategories(NumCateg,2)
+					laSelection.setPropertyValue(NomPropriete,NomDuStyle)	
+				endif
+				
+				&apos;on ajoute le niveau lors de titre Anenxe
+				if numCateg = 5 and nomDuStyle&lt;&gt;&quot;Standard&quot;then
+					decoupe = split(NomDuStyle, &quot; &quot;)					
+					UnNiveau = val(decoupe(2))-1
+					laSelection.numberingLevel = unNiveau
+				endif
+															
+			next i
+
+
+end sub
+
+</script:module>

@@ -1,0 +1,5 @@
+# format version number, currently 2; this line is compulsory!
+version=2
+
+# Line continuations are performed with \
+http://www.indesko.com/en/downloads/ooo2dbk/downloadFile/attachedFile/ooo2dbk-(.*)-1\.tgz

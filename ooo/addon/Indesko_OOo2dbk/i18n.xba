@@ -1,0 +1,1327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="i18n" script:language="StarBasic">public GUI_ADD, GUI_ADDINDEX
+public GUI_APPENDIX_ADD, GUI_APPENDIX_DELETE, GUI_APPENDIX_DELETEALL, GUI_APPENDIX_MANAGE
+public GUI_APPENDIX_TITLE, GUI_APPENDIX, GUI_APPLY_ON, GUI_APPLY, GUI_GOTO, GUI_AUTHORS
+public GUI_BACK, GUI_BIBLIOGRAPHY, GUI_CHOOSE, GUI_CLOSE, GUI_CONFGROUP, GUI_CONTRACTSPONSORS
+public GUI_CORPAUTHORS, GUI_CREATE, GUI_DELETE, GUI_GLOBAL_ACTIONS, GUI_GLOSSARY, GUI_LAYOUT
+public GUI_MANAGE_CONTENT, GUI_MANAGE_SECTIONS, GUI_METADATA_ABSTRACT_TITLE, GUI_METADATA_ABSTRACT
+public GUI_METADATA_AUTHOR_ADDRESS, GUI_METADATA_AUTHOR_FIRSTNAME, GUI_METADATA_AUTHOR_INFO
+public GUI_METADATA_AUTHOR_NAME, GUI_METADATA_AUTHOR_ORGNAME_ACRONYM, GUI_METADATA_AUTHOR_ORGNAME_DIVISION
+public GUI_METADATA_AUTHOR_ORGNAME, GUI_METADATA_AUTHOR_QUALITY, GUI_METADATA_AUTHOR_ROLE
+public GUI_METADATA_CONFGROUP_ADDRESS, GUI_METADATA_CONFGROUP_DATES, GUI_METADATA_CONFGROUP_REFERENCE
+public GUI_METADATA_CONFGROUP_SPONSOR, GUI_METADATA_CONFGROUP_INFO, GUI_METADATA_CONFGROUP_TITLE
+public GUI_METADATA_CONTRACTSPONSOR_ADDRESS, GUI_METADATA_CONTRACTSPONSOR_CITY, GUI_METADATA_CONTRACTSPONSOR_EMAIL
+public GUI_METADATA_CONTRACTSPONSOR_FAX, GUI_METADATA_CONTRACTSPONSOR_INFO, GUI_METADATA_CONTRACTSPONSOR_ORGNAME_ACRONYM
+public GUI_METADATA_CONTRACTSPONSOR_ORGNAME_DIVISION, GUI_METADATA_CONTRACTSPONSOR_ORGNAME, GUI_METADATA_CONTRACTSPONSOR_POB
+public GUI_METADATA_CONTRACTSPONSOR_STATE, GUI_METADATA_CONTRACTSPONSOR_TEL, GUI_METADATA_CONTRACTSPONSOR_WWW
+public GUI_METADATA_CONTRACTSPONSOR_ZIPCODE, GUI_METADATA_CORPAUTHOR_ADDRESS, GUI_METADATA_CORPAUTHOR_CITY
+public GUI_METADATA_CORPAUTHOR_EMAIL, GUI_METADATA_CORPAUTHOR_FAX, GUI_METADATA_CORPAUTHOR_INFO
+public GUI_METADATA_CORPAUTHOR_ORGNAME_ACRONYM, GUI_METADATA_CORPAUTHOR_ORGNAME_DIVISION, GUI_METADATA_CORPAUTHOR_ORGNAME
+public GUI_METADATA_CORPAUTHOR_POB, GUI_METADATA_CORPAUTHOR_STATE, GUI_METADATA_CORPAUTHOR_TELEPHON
+public GUI_METADATA_CORPAUTHOR_WWW, GUI_METADATA_CORPAUTHOR_ZIPCODE, GUI_METADATA_GENERAL_INFO
+public GUI_METADATA_INFO_ACCES_REVISION, GUI_METADATA_INFO_ACCESS, GUI_METADATA_INFO_BIBLIO_OTHER
+public GUI_METADATA_INFO_CONTRACTNUM, GUI_METADATA_INFO_DATE, GUI_METADATA_INFO_ISRN
+public GUI_METADATA_INFO_KEYWORD, GUI_METADATA_INFO_SERIESVOLNUM, GUI_METADATA_INFO_STATUS
+public GUI_METADATA_INFO_SUBTITLE, GUI_METADATA_INFO_TITLE, GUI_METADATA_INFO_VOLNUM
+public GUI_METADATA_INFO, GUI_METADATA_INFOS, GUI_METADATA_TITLE, GUI_MANAGE_METADATA, GUI_MODIFY
+public GUI_WINDOW_MINIMIZE, GUI_REFRESH, GUI_SECTION
+public GUI_STYLE_CHARACTER, GUI_STYLE_FRAME, GUI_STYLE_PAGE, GUI_STYLE_PARAGRAPH, GUI_STYLISTHELPER
+public GUI_VALIDATE_TITLE, GUI_VALIDATE, GUI_VALIDATION, GUI_VISIBILITY, GUI_VISIBILTY_CLICKCHK
+public GUI_WIZARDNAME, GUI_TRANSLATION
+
+public SECTION_BORDEREAU, SECTION_ABSTRACT, SECTION_FOREWORD, SECTION_PREFACE, SECTION_TOC
+public SECTION_INTRODUCTION, SECTION_BODY, SECTION_TABLE_INDEX, SECTION_TABLE_IMAGE, SECTION_GLOSSARY
+public SECTION_BIBLIOGRAPHY, SECTION_APPENDIX
+
+public SECTION_BORDEREAU,SECTION_ABSTRACT ,SECTION_FOREWORD ,SECTION_PREFACE
+public SECTION_TOC,SECTION_INTRODUCTION,SECTION_BODY,SECTION_TABLE_INDEX,SECTION_TABLE_IMAGE
+public SECTION_GLOSSARY,SECTION_BIBLIOGRAPHY,SECTION_APPENDIX,MSG_SECTION_NOT_FOUND,MSG_FIELD_UPDATED
+public MSG_INDEX_UPDATED,MSG_DOCUMENT_UPDATED,MSG_GLOSSARY_ADD_1,MSG_GLOSSARY_ADD_2,MSG_GLOSSARY_ADD_TITLE
+public MSG_GLOSSARY_ADD_ERROR,MSG_GLOSSARY_INSERT_TERM,MSG_GLOSSARY_INSERT_DEFINITION,MSG_APPENDIX_TITLE
+public MSG_METADATA_AUTHOR_N,MSG_METADATA_CORPAUTHOR_N,MSG_METADATA_CONTRACTSPONSOR_N
+public MSG_METADATA_CHK_AUTHOR_NAME,MSG_METADATA_CHK_CORPAUTHOR_NAME,MSG_METADATA_CHK_CONTRACTSPONSOR_NAME,MSG_METADATA_CHK_TITLE
+public MSG_METADATA_CHK_DATE,MSG_METADATA_CHK_CONFGROUP_TITLE,MSG_METADATA_AUTHORS,MSG_METADATA_CORPAUTHOR
+public MSG_MONTH_1,MSG_MONTH_2,MSG_MONTH_3,MSG_MONTH_4,MSG_MONTH_5,MSG_MONTH_6,MSG_MONTH_7,MSG_MONTH_8,MSG_MONTH_9,MSG_MONTH_10,MSG_MONTH_11,MSG_MONTH_12
+public MSG_GUI_CONTROL_ERROR,MSG_METADATA_CANCEL_1,MSG_METADATA_CANCEL_2,MSG_LOAD_ALREADY_1,MSG_LOAD_ALREADY_2
+public MSG_LOAD_OLE_1,MSG_LOAD_OLE_2,MSG_LOAD_OLE_3,MSG_LOAD_TEMPLATE,MSG_LOAD_ERROR_1,MSG_LOAD_ERROR_2,MSG_LOAD_ERROR_3
+public MSG_VISIBILITY_1, MSG_VISIBILITY_TITLE,GUI_WIZARD,GUI_STYLISTHELPER,MSG_METADATA_MAX_ADD
+public MSG_METADATA_AUTHOR,MSG_METADATA_CORPAUTHOR,MSG_METADATA_CONTRACTSPONSOR,GUI_WINDOW_MAXIMIZE
+public MSG_CHOOSE_DELETE_NO,MSG_APPENDIX_DELETE_CONFIRM_ONE,MSG_APPENDIX_DELETE_CONFIRM_ALL,MSG_VALIDITY_OK
+public MSG_VALIDITY_NOT_OK,MSG_VALIDITY_METADATA_MANDATORY,MSG_VALIDITY_METADATA_MANDATORY_TITLE
+public MSG_VALIDITY_METADATA_MANDATORY_DATE,MSG_VALIDITY_METADATA_MANDATORY_AUTHORS, MSG_VALIDITY_METADATA_MANDATORY_SPONSOR
+public MSG_VALIDITY_STRUCTURE,MSG_VALIDITY_PRE_POST_SECTIONS,MSG_VALIDITY_APPENDIX,GUI_STYLIST_CHARACTER
+public GUI_STYLIST_PARAGRAPH,GUI_STYLIST_TITLES,GUI_STYLIST_APPENDIXTITLES,MSG_STYLIST_IMAGES_NO,MSG_STYLIST_TABLES_NO
+public MSG_STYLIST_CITATION, MSG_VALIDITY_SECTION_STYLE,MSG_VALIDITY_APPENDIX_STYLE,MSG_VALIDITY_SECTION_TITLE
+public MSG_VALIDITY_SECTION_EMPTY,MSG_VALIDITY_HEADING_LEVEL,MSG_VALIDITY_HEADING_EMPTY,MSG_VALIDITY_PARAGRAPH_EMPTY
+
+public STYLENAME_CHAR_DEFAULT, STYLENAME_PARA_DEFAULT
+public STYLENAME_CHAR_EMPHASIS,STYLENAME_CHAR_STRONGEMPHASIS ,STYLENAME_CHAR_QUOTATION  
+public STYLENAME_PARA_QUOTATION, STYLENAME_PARA_BODY ,STYLENAME_PARA_PREFORMATTED 
+public STYLENAME_PARA_HEADING_1 ,STYLENAME_PARA_HEADING_2,STYLENAME_PARA_HEADING_3 
+public STYLENAME_PARA_HEADING_4, STYLENAME_PARA_HEADING_5 , STYLENAME_PARA_HEADING_6 
+public STYLENAME_PARA_HEADING_7 ,STYLENAME_PARA_HEADING_8 ,STYLENAME_PARA_HEADING_9 ,STYLENAME_PARA_HEADING_10
+
+public GUI_STYLENAME_CHAR_DEFAULT, GUI_STYLENAME_PARA_DEFAULT
+public GUI_STYLENAME_CHAR_EMPHASIS,GUI_STYLENAME_CHAR_STRONGEMPHASIS ,GUI_STYLENAME_CHAR_QUOTATION  
+public GUI_STYLENAME_PARA_QUOTATION, GUI_STYLENAME_PARA_BODY ,GUI_STYLENAME_PARA_PREFORMATTED 
+public GUI_STYLENAME_PARA_HEADING_1 ,GUI_STYLENAME_PARA_HEADING_2,GUI_STYLENAME_PARA_HEADING_3 
+public GUI_STYLENAME_PARA_HEADING_4, GUI_STYLENAME_PARA_HEADING_5 , GUI_STYLENAME_PARA_HEADING_6 
+public GUI_STYLENAME_PARA_HEADING_7 ,GUI_STYLENAME_PARA_HEADING_8 ,GUI_STYLENAME_PARA_HEADING_9 ,GUI_STYLENAME_PARA_HEADING_10
+public GUI_STYLENAME_CHAR_UPPERSCRIPT , GUI_STYLENAME_CHAR_SUBSCRIPT , GUI_STYLENAME_CHAR_UNDOSCRIPT 
+public GUI_STYLENAME_PARA_HEADING_NO, GUI_STYLENAME_APPENDIX_HEADING_NO, GUI_STYLENAME_APPENDIX_HEADING_1 
+public GUI_STYLENAME_APPENDIX_HEADING_2 , GUI_STYLENAME_APPENDIX_HEADING_3 , GUI_STYLENAME_APPENDIX_HEADING_4 
+public GUI_STYLENAME_APPENDIX_HEADING_5 
+public GUI_STYLENAME_PARA_REMARK , GUI_STYLENAME_PARA_SECTION , GUI_STYLENAME_PARA_GLOSSARY 
+public GUI_STYLENAME_PARA_PREFACE, GUI_STYLENAME_PARA_LISTING 
+
+public MSG_SECTION_VISIBLE_WRITEHERE
+
+&apos;------------
+public languageList()
+
+&apos;--------------------------
+sub prepareTranslateList
+	
+	redim languageList(0 to 1)
+	languageList(0)=&quot;Français&quot;
+	languageList(1)=&quot;English&quot;
+
+	&apos;the control is in the dialog step 20 to be hidden
+	&apos;not used
+	if CheckDebugMode then
+		nb =  ubound(languageList()) 
+		nb = nb + 1
+		redim preserve languageList(0 to nb)
+		languageList(nb) = &quot;Debug&quot;
+	endif
+	&apos;theList = oDlg.getControl(&quot;lst_translate&quot;)
+	&apos;theList.additems(languageList(),0)
+	
+	select case getlanguageFromField()
+		case &quot;fr&quot;:
+			lang = 0
+		case &quot;en&quot;:
+			lang = 1
+		case &quot;auto&quot;: &apos;OOo UI language
+			select case OOoLang()
+				case &quot;fr&quot;: lang = 0
+				case else : lang = 1
+			end select
+		case else:
+			lang = 1
+	end select
+	
+	&apos;theList.selectItemPos(lang, true)
+
+end sub
+&apos;---------------------------
+function getlanguageFromField()
+
+	&apos;retreive form field
+	nomField = racineFieldMaster + &quot;.&quot; + &quot;indesko_language&quot;
+
+	if  not leDoc.TextFieldMasters.hasByName(nomField) then
+			leTextFieldMaster = leDoc.createInstance(racineFieldMaster)
+			leTextFieldMaster.Name = &quot;indesko_language&quot;
+			leTextFieldMaster.Content = &quot;en&quot;	
+	endif
+	leTextFieldMaster = leDoc.TextFieldMasters.getByName(nomField)
+	
+	getlanguageFromField = letextFieldMaster.content
+
+end function
+&apos;-------------------
+sub switchLanguage()
+
+	&apos;theList = oDlg.getControl(&quot;lst_translate&quot;)
+	&apos;lang = theList.selectedItemPos
+	
+	lang = getlanguageFromField()
+	if lang = &quot;auto&quot; then
+			select case OOoLang()
+				case &quot;fr&quot;: lang = &quot;fr&quot;
+				case else : lang = &quot;en&quot;
+			end select
+	endif			
+	
+	select case lang 
+		case &quot;fr&quot;:
+			call RSC_FR
+		case &quot;en&quot;:
+			call RSC_EN
+		case else:
+			call RSC_DEBUG
+	end select
+	
+	call Translate_Internal_Stylenames
+	call translateGUI
+	
+end sub
+
+&apos;---------------------------------------------------
+Sub translateGUI()
+
+ctrl=oDlg.getControl(&quot;FixedLine1&quot;)
+ctrl.model.label=&quot;&quot;
+
+ctrl=oDlg.getControl(&quot;Label1&quot;)
+ctrl.model.label=GUI_GOTO&apos;&quot;Atteindre&quot;
+
+ctrl=oDlg.getControl(&quot;btcFerme&quot;)
+ctrl.model.label=GUI_CLOSE&apos;&quot;~Fermer&quot;
+
+ctrl=oDlg.getControl(&quot;lbl_reduire&quot;)
+ctrl.model.label=GUI_WINDOW_MINIMIZE&apos;&quot;Enrouler la fenètre&quot;
+
+ctrl=oDlg.getControl(&quot;btcVisibleSection&quot;)
+ctrl.model.label=GUI_SECTION&apos;&quot;Ajouter/Supprimer une ~partie&quot;
+
+ctrl=oDlg.getControl(&quot;FixedLine2&quot;)
+ctrl.model.label=&quot;&quot;
+
+ctrl=oDlg.getControl(&quot;Label2&quot;)
+ctrl.model.label=GUI_VISIBILITY&apos;&quot;Gérer la visibilité des parties&quot;
+
+ctrl=oDlg.getControl(&quot;btcRetour&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;Label3&quot;)
+ctrl.model.label=GUI_VISIBILTY_CLICKCHK&apos;&quot;Cliquer sur les cases à cocher pour afficher ou effacer les différentes parties listées. Attention, le contenu sera perdu !&quot;
+
+ctrl=oDlg.getControl(&quot;btcInsereIndex&quot;)
+ctrl.model.label=GUI_ADDINDEX&apos;&quot;Ajouter un ~index sur la sélection&quot;
+
+ctrl=oDlg.getControl(&quot;btcRetour_FromImage&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;btcBordereau&quot;)
+ctrl.model.label=GUI_MANAGE_METADATA&apos;&quot;~Gérer le bordereau&quot;
+
+ctrl=oDlg.getControl(&quot;Label6&quot;)
+ctrl.model.label=GUI_METADATA_TITLE&apos;&quot;Gestion du bordereau&quot;
+
+ctrl=oDlg.getControl(&quot;FrameControl2&quot;)
+ctrl.model.label=GUI_AUTHORS&apos;&quot;Auteurs&quot;
+
+ctrl=oDlg.getControl(&quot;FrameControl3&quot;)
+ctrl.model.label=GUI_CORPAUTHORS&apos;&quot;Organismes Auteurs&quot;
+
+ctrl=oDlg.getControl(&quot;FrameControl4&quot;)
+ctrl.model.label=GUI_CONTRACTSPONSORS&apos;&quot;Organismes Commanditaires&quot;
+
+ctrl=oDlg.getControl(&quot;btcOrgAuteur_Supprime&quot;)
+ctrl.model.label=GUI_DELETE&apos;&quot;Supprimer&quot;
+
+ctrl=oDlg.getControl(&quot;btcAuteur_Supprime&quot;)
+ctrl.model.label=GUI_DELETE&apos;&quot;Supprimer&quot;
+
+ctrl=oDlg.getControl(&quot;btcInfo_Modifie&quot;)
+ctrl.model.label=GUI_METADATA_INFOS&apos;&quot;Informations&quot;
+
+ctrl=oDlg.getControl(&quot;btcAuteur_Modifie&quot;)
+ctrl.model.label=GUI_MODIFY&apos;&quot;Modifier&quot;
+
+ctrl=oDlg.getControl(&quot;btcOrgAuteur_Modifie&quot;)
+ctrl.model.label=GUI_MODIFY&apos;&quot;Modifier&quot;
+
+ctrl=oDlg.getControl(&quot;btcOrgCom_Modifie&quot;)
+ctrl.model.label=GUI_MODIFY&apos;&quot;Modifier&quot;
+
+ctrl=oDlg.getControl(&quot;btcOrgCom_Ajoute&quot;)
+ctrl.model.label=GUI_ADD&apos;&quot;Ajouter&quot;
+
+ctrl=oDlg.getControl(&quot;btcOrgAuteur_Ajoute&quot;)
+ctrl.model.label=GUI_ADD&apos;&quot;Ajouter&quot;
+
+ctrl=oDlg.getControl(&quot;btcAuteur_Ajoute&quot;)
+ctrl.model.label=GUI_ADD&apos;&quot;Ajouter&quot;
+
+ctrl=oDlg.getControl(&quot;Label7&quot;)
+ctrl.model.label=GUI_METADATA_AUTHOR_INFO&apos;&quot;Informations sur l&apos;auteur&quot;
+
+ctrl=oDlg.getControl(&quot;Label8&quot;)
+ctrl.model.label=GUI_METADATA_AUTHOR_FIRSTNAME&apos;&quot;Prénom&quot;
+
+ctrl=oDlg.getControl(&quot;Label9&quot;)
+ctrl.model.label=GUI_METADATA_AUTHOR_NAME&apos;&quot;Nom&quot;
+
+ctrl=oDlg.getControl(&quot;Label10&quot;)
+ctrl.model.label=GUI_METADATA_AUTHOR_ROLE&apos;&quot;Rôle&quot;
+
+ctrl=oDlg.getControl(&quot;Label11&quot;)
+ctrl.model.label=GUI_METADATA_AUTHOR_QUALITY&apos;&quot;Qualité&quot;
+
+ctrl=oDlg.getControl(&quot;Label12&quot;)
+ctrl.model.label=GUI_METADATA_AUTHOR_ORGNAME&apos;&quot;Nom de l&apos;organisme d&apos;affiliation&quot;
+
+ctrl=oDlg.getControl(&quot;Label13&quot;)
+ctrl.model.label=GUI_METADATA_AUTHOR_ORGNAME_ACRONYM&apos;&quot;Sigle de l&apos;organisme d&apos;affiliation&quot;
+
+ctrl=oDlg.getControl(&quot;Label14&quot;)
+ctrl.model.label=GUI_METADATA_AUTHOR_ORGNAME_DIVISION&apos;&quot;Division de l&apos;organisme d&apos;affiliation&quot;
+
+ctrl=oDlg.getControl(&quot;Label15&quot;)
+ctrl.model.label=GUI_METADATA_AUTHOR_ADDRESS&apos;&quot;Adresse&quot;
+
+ctrl=oDlg.getControl(&quot;CommandButton4&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;CommandButton9&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;CommandButton10&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;btcGoAuteur&quot;)
+ctrl.model.label=GUI_CREATE&apos;&quot;Créer&quot;
+
+ctrl=oDlg.getControl(&quot;Label16&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_INFO&apos;&quot;Informations sur l&apos;organisme auteur&quot;
+
+ctrl=oDlg.getControl(&quot;Label17&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_ORGNAME&apos;&quot;Nom de l&apos;organisme&quot;
+
+ctrl=oDlg.getControl(&quot;Label18&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_ORGNAME_ACRONYM&apos;&quot;sigle de l&apos;organisme&quot;
+
+ctrl=oDlg.getControl(&quot;Label19&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_ORGNAME_DIVISION&apos;&quot;Nom de la division&quot;
+
+ctrl=oDlg.getControl(&quot;Label20&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_ADDRESS&apos;&quot;Adresse&quot;
+
+ctrl=oDlg.getControl(&quot;Label21&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_POB&apos;&quot;Boîte postale&quot;
+
+ctrl=oDlg.getControl(&quot;Label22&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_ZIPCODE&apos;&quot;Code Postal&quot;
+
+ctrl=oDlg.getControl(&quot;Label23&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_CITY&apos;&quot;Ville&quot;
+
+ctrl=oDlg.getControl(&quot;Label24&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_STATE&apos;&quot;Région ou département&quot;
+
+ctrl=oDlg.getControl(&quot;Label25&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_TELEPHON&apos;&quot;Téléphone&quot;
+
+ctrl=oDlg.getControl(&quot;Label26&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_FAX&apos;&quot;FAX&quot;
+
+ctrl=oDlg.getControl(&quot;Label27&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_EMAIL&apos;&quot;E-mail&quot;
+
+ctrl=oDlg.getControl(&quot;Label28&quot;)
+ctrl.model.label=GUI_METADATA_CORPAUTHOR_WWW&apos;&quot;Site Web&quot;
+
+ctrl=oDlg.getControl(&quot;Label41&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_INFO&apos;&quot;Informations sur l&apos;organisme commanditaire&quot;
+
+ctrl=oDlg.getControl(&quot;Label29&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_ORGNAME&apos;&quot;Nom de l&apos;organisme&quot;
+
+ctrl=oDlg.getControl(&quot;Label30&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_ORGNAME_ACRONYM&apos;&quot;sigle de l&apos;organisme&quot;
+
+ctrl=oDlg.getControl(&quot;Label31&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_ORGNAME_DIVISION&apos;&quot;Nom de la division&quot;
+
+ctrl=oDlg.getControl(&quot;Label32&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_ADDRESS&apos;&quot;Adresse&quot;
+
+ctrl=oDlg.getControl(&quot;Label33&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_POB&apos;&quot;Boîte postale&quot;
+
+ctrl=oDlg.getControl(&quot;Label34&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_ZIPCODE&apos;&quot;Code Postal&quot;
+
+ctrl=oDlg.getControl(&quot;Label35&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_CITY&apos;&quot;Ville&quot;
+
+ctrl=oDlg.getControl(&quot;Label36&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_STATE&apos;&quot;Région ou département&quot;
+
+ctrl=oDlg.getControl(&quot;Label37&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_TEL&apos;&quot;Téléphone&quot;
+
+ctrl=oDlg.getControl(&quot;Label38&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_FAX&apos;&quot;FAX&quot;
+
+ctrl=oDlg.getControl(&quot;Label39&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_EMAIL&apos;&quot;E-mail&quot;
+
+ctrl=oDlg.getControl(&quot;Label40&quot;)
+ctrl.model.label=GUI_METADATA_CONTRACTSPONSOR_WWW&apos;&quot;Site Web&quot;
+
+
+ctrl=oDlg.getControl(&quot;btcGoOrgAuteur&quot;)
+ctrl.model.label=GUI_CREATE&apos;&quot;Créer&quot;
+
+ctrl=oDlg.getControl(&quot;btcGoOrgCommanditaire&quot;)
+ctrl.model.label=GUI_CREATE&apos;&quot;Créer&quot;
+
+ctrl=oDlg.getControl(&quot;btcOrgCom_Supprime&quot;)
+ctrl.model.label=GUI_DELETE&apos;&quot;Supprimer&quot;
+
+ctrl=oDlg.getControl(&quot;CommandButton8&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;Label42&quot;)
+ctrl.model.label=GUI_METADATA_INFO&apos;&quot;Informations du document&quot;
+
+ctrl=oDlg.getControl(&quot;btcGoInfosGenerales&quot;)
+ctrl.model.label=GUI_MODIFY&apos;&quot;Modifier&quot;
+
+ctrl=oDlg.getControl(&quot;Label43&quot;)
+ctrl.model.label=GUI_METADATA_INFO_TITLE&apos;&quot;Titre&quot;
+
+ctrl=oDlg.getControl(&quot;Label44&quot;)
+ctrl.model.label=GUI_METADATA_INFO_SUBTITLE&apos;&quot;Sous-Titre&quot;
+
+ctrl=oDlg.getControl(&quot;label46&quot;)
+ctrl.model.label=GUI_METADATA_INFO_VOLNUM&apos;&quot;N° de Volume&quot;
+
+ctrl=oDlg.getControl(&quot;Label45&quot;)
+ctrl.model.label=GUI_METADATA_INFO_SERIESVOLNUM&apos;&quot;N° de Fascicule&quot;
+
+ctrl=oDlg.getControl(&quot;Label48&quot;)
+ctrl.model.label=GUI_METADATA_INFO_KEYWORD&apos;&quot;Mots-clés (sep : virgule)&quot;
+
+ctrl=oDlg.getControl(&quot;Label50&quot;)
+ctrl.model.label=GUI_METADATA_INFO_BIBLIO_OTHER&apos;&quot;Autres informations bibliographiques&quot;
+
+ctrl=oDlg.getControl(&quot;Label51&quot;)
+ctrl.model.label=GUI_METADATA_INFO_DATE&apos;&quot;Date du document&quot;
+
+ctrl=oDlg.getControl(&quot;FrameControl5&quot;)
+ctrl.model.label=GUI_METADATA_GENERAL_INFO&apos;&quot;Informations générales&quot;
+
+ctrl=oDlg.getControl(&quot;btcResume_Modifie&quot;)
+ctrl.model.label=GUI_METADATA_ABSTRACT&apos;&quot;Résumé&quot;
+
+ctrl=oDlg.getControl(&quot;Label52&quot;)
+ctrl.model.label=GUI_METADATA_ABSTRACT_TITLE&apos;&quot;Résumé du document&quot;
+
+ctrl=oDlg.getControl(&quot;CommandButton11&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;CommandButton12&quot;)
+ctrl.model.label=GUI_MODIFY&apos;&quot;Modifier&quot;
+
+ctrl=oDlg.getControl(&quot;CommandButton13&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;Label54&quot;)
+ctrl.model.label=GUI_METADATA_INFO_STATUS&apos;&quot;Statut du rapport&quot;
+
+ctrl=oDlg.getControl(&quot;Label56&quot;)
+ctrl.model.label=GUI_METADATA_INFO_ACCESS&apos;&quot;Conditions d&apos;accès&quot;
+
+ctrl=oDlg.getControl(&quot;Label57&quot;)
+ctrl.model.label=GUI_METADATA_INFO_ACCES_REVISION&apos;&quot;Date de révision des contions d&apos;accès&quot;
+
+ctrl=oDlg.getControl(&quot;Label58&quot;)
+ctrl.model.label=GUI_METADATA_INFO_CONTRACTNUM&apos;&quot;Numéro de contrat&quot;
+
+ctrl=oDlg.getControl(&quot;Label61&quot;)
+ctrl.model.label=GUI_METADATA_INFO_ISRN&apos;&quot;ISRN&quot;
+
+ctrl=oDlg.getControl(&quot;btcGoInfosContrat&quot;)
+ctrl.model.label=GUI_MODIFY&apos;&quot;Modifier&quot;
+
+ctrl=oDlg.getControl(&quot;CommandButton14&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;Label62&quot;)
+ctrl.model.label=GUI_METADATA_CONFGROUP_INFO&apos;&quot;Information sur la conférence&quot;
+
+ctrl=oDlg.getControl(&quot;CommandButton15&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+ctrl=oDlg.getControl(&quot;btcRafraichir&quot;)
+ctrl.model.label=GUI_REFRESH&apos;&quot;~Rafraîchir le document&quot;
+
+ctrl=oDlg.getControl(&quot;btcInsererBibliographie&quot;)
+ctrl.model.label=GUI_BIBLIOGRAPHY&apos;&quot;Ajouter un référence ~bibliographique&quot;
+
+ctrl=oDlg.getControl(&quot;btcInsererGlossaire&quot;)
+ctrl.model.label=GUI_GLOSSARY&apos;&quot;Ajouter une ~entrée au glossaire&quot;
+
+ctrl=oDlg.getControl(&quot;Label65&quot;)
+ctrl.model.label=GUI_LAYOUT&apos;&quot;Mise en forme&quot;
+
+ctrl=oDlg.getControl(&quot;Label66&quot;)
+ctrl.model.label=GUI_APPLY_ON&apos;&quot;Action sur&quot;
+
+ctrl=oDlg.getControl(&quot;Label67&quot;)
+ctrl.model.label=GUI_APPLY&apos;&quot;Appliquer&quot;
+
+ctrl=oDlg.getControl(&quot;Label68&quot;)
+ctrl.model.label=GUI_STYLE_PARAGRAPH&apos;&quot;Paragraphe : &quot;
+
+ctrl=oDlg.getControl(&quot;Label69&quot;)
+ctrl.model.label=GUI_STYLE_CHARACTER&apos;&quot;Caractères : &quot;
+
+ctrl=oDlg.getControl(&quot;Label70&quot;)
+ctrl.model.label=GUI_STYLE_PAGE&apos;&quot;Page : &quot;
+
+ctrl=oDlg.getControl(&quot;Label71&quot;)
+ctrl.model.label=GUI_STYLE_FRAME&apos;&quot;Image/Cadre : &quot;
+
+&apos;              116          btcStylistLight
+ctrl=oDlg.getControl(&quot;btcStylistLight&quot;)
+ctrl.model.label=GUI_STYLISTHELPER&apos;&quot;StylistHelper&quot;
+
+&apos;              118          Label72
+ctrl=oDlg.getControl(&quot;Label72&quot;)
+ctrl.model.label=GUI_WIZARDNAME&apos;&quot;Assistant OOo2DBK&quot;
+
+&apos;              119          FrameControl6
+ctrl=oDlg.getControl(&quot;FrameControl6&quot;)
+ctrl.model.label=GUI_MANAGE_SECTIONS&apos;&quot;Agir sur les sections&quot;
+
+&apos;              120          FrameControl7
+ctrl=oDlg.getControl(&quot;FrameControl7&quot;)
+ctrl.model.label=GUI_MANAGE_CONTENT&apos;&quot;Agir sur le contenu&quot;
+
+&apos;              121          FrameControl9
+ctrl=oDlg.getControl(&quot;FrameControl9&quot;)
+ctrl.model.label=GUI_VALIDATION&apos;&quot;Validation du document&quot;
+
+&apos;              122          Label73
+ctrl=oDlg.getControl(&quot;Label73&quot;)
+ctrl.model.label=GUI_APPENDIX_MANAGE&apos;&quot;Gérer les annexes&quot;
+
+&apos;              123          CommandButton5
+ctrl=oDlg.getControl(&quot;CommandButton5&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+&apos;              124          FrameControl10
+ctrl=oDlg.getControl(&quot;FrameControl10&quot;)
+ctrl.model.label=GUI_GLOBAL_ACTIONS&apos;&quot;Actions Globales&quot;
+
+&apos;              125          btcSupprimeAnnexes
+ctrl=oDlg.getControl(&quot;btcSupprimeAnnexes&quot;)
+ctrl.model.label=GUI_APPENDIX_DELETEALL&apos;&quot;Supprimer toutes les annexes&quot;
+
+&apos;              126          btcInsererAnnexe
+ctrl=oDlg.getControl(&quot;btcInsererAnnexe&quot;)
+ctrl.model.label=GUI_APPENDIX_ADD&apos;&quot;Ajouter une annexe&quot;
+
+&apos;              127          FrameControl12
+ctrl=oDlg.getControl(&quot;FrameControl12&quot;)
+ctrl.model.label=GUI_APPENDIX_TITLE&apos;&quot;Actions sur une annexe&quot;
+
+&apos;              128          Label74
+ctrl=oDlg.getControl(&quot;Label74&quot;)
+ctrl.model.label=GUI_APPENDIX&apos;&quot;Annexe&quot;
+
+&apos;              129          btc_supprime_Annexe
+ctrl=oDlg.getControl(&quot;btc_supprime_Annexe&quot;)
+ctrl.model.label=GUI_APPENDIX_DELETE&apos;&quot;Supprimer l&apos;Annexe&quot;
+
+&apos;              130          btcGesAnnexes
+ctrl=oDlg.getControl(&quot;btcGesAnnexes&quot;)
+ctrl.model.label=GUI_APPENDIX_MANAGE&apos;&quot;Gérer les ~Annexes&quot; &apos; Manage Appendices
+
+&apos;              131          Label75
+ctrl=oDlg.getControl(&quot;Label75&quot;)
+ctrl.model.label=GUI_VALIDATE_TITLE&apos;&quot;Validité du document&quot;
+
+&apos;              132          CommandButton3
+ctrl=oDlg.getControl(&quot;CommandButton3&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+&apos;              133          btcValide
+ctrl=oDlg.getControl(&quot;btcValide&quot;)
+ctrl.model.label=GUI_VALIDATE&apos;&quot;~Valider le document&quot;
+
+
+&apos;              135          CommandButton6
+ctrl=oDlg.getControl(&quot;CommandButton6&quot;)
+ctrl.model.label=GUI_BACK&apos;&quot;&lt;&lt; Retour&quot;
+
+&apos;              136          btcChoisir
+ctrl=oDlg.getControl(&quot;btcChoisir&quot;)
+ctrl.model.label=GUI_CHOOSE&apos;&quot;Choisir &gt;&gt;&quot;
+
+
+&apos;conference
+&apos;              151          Label63
+ctrl=oDlg.getControl(&quot;Label63&quot;)
+ctrl.model.label=GUI_METADATA_CONFGROUP_TITLE&apos;&quot;Titre : &quot;
+
+&apos;              152          Label76
+ctrl=oDlg.getControl(&quot;Label76&quot;)
+ctrl.model.label=GUI_METADATA_CONFGROUP_SPONSOR&apos;&quot;Organisée par : &quot;
+
+&apos;              153          Label77
+ctrl=oDlg.getControl(&quot;Label77&quot;)
+ctrl.model.label=GUI_METADATA_CONFGROUP_DATES&apos;&quot;Dates :  &quot;
+
+&apos;              154          Label78
+ctrl=oDlg.getControl(&quot;Label78&quot;)
+ctrl.model.label=GUI_METADATA_CONFGROUP_REFERENCE&apos;&quot;Références : &quot;
+
+&apos;              155          Label79
+ctrl=oDlg.getControl(&quot;Label79&quot;)
+ctrl.model.label=GUI_METADATA_CONFGROUP_ADDRESS&apos;&quot;Adresse : &quot;
+
+
+&apos;              161          btcConference_Modifie
+ctrl=oDlg.getControl(&quot;btcConference_Modifie&quot;)
+ctrl.model.label=GUI_CONFGROUP&apos;&quot;Conférence&quot;
+
+&apos;              162          btcGoConference
+ctrl=oDlg.getControl(&quot;btcGoConference&quot;)
+ctrl.model.label=GUI_MODIFY&apos;&quot;Modifier&quot;
+
+
+ctrl=oDlg.getControl(&quot;lbl_translation&quot;)
+ctrl.model.label=GUI_TRANSLATION &apos;&quot;traduction dynamique&quot;
+
+
+End Sub
+
+sub RSC_FR()
+
+GUI_ADD=&quot;Ajouter&quot;
+GUI_ADDINDEX=&quot;Ajouter un ~index sur la sélection&quot;
+GUI_APPENDIX_ADD=&quot;Ajouter une annexe&quot;
+GUI_APPENDIX_DELETE=&quot;Supprimer l&apos;Annexe&quot;
+GUI_APPENDIX_DELETEALL=&quot;Supprimer toutes les annexes&quot;
+GUI_APPENDIX_MANAGE=&quot;Gérer les Annexes&quot; &apos; Manage Appendices
+GUI_APPENDIX_TITLE=&quot;Actions sur une annexe&quot;
+GUI_APPENDIX=&quot;Annexe&quot;
+GUI_APPLY_ON=&quot;Action sur&quot;
+GUI_APPLY=&quot;Appliquer&quot;
+GUI_AUTHORS=&quot;Auteurs&quot;
+GUI_BACK=&quot;&lt;&lt; Retour&quot;
+GUI_BIBLIOGRAPHY=&quot;Ajouter un référence ~bibliographique&quot;
+GUI_CHOOSE=&quot;Choisir &gt;&gt;&quot;
+GUI_CLOSE=&quot;~Fermer&quot;
+GUI_CONFGROUP=&quot;Conférence&quot;
+GUI_CONTRACTSPONSORS=&quot;Organismes Commanditaires&quot;
+GUI_CORPAUTHORS=&quot;Organismes Auteurs&quot;
+GUI_CREATE=&quot;Créer&quot;
+GUI_DELETE=&quot;Supprimer&quot;
+GUI_GLOBAL_ACTIONS=&quot;Actions Globales&quot;
+GUI_GLOSSARY=&quot;Ajouter une ~entrée au glossaire&quot;
+GUI_GOTO=&quot;Atteindre&quot;
+GUI_LAYOUT=&quot;Mise en forme&quot;
+GUI_MANAGE_CONTENT=&quot;Agir sur le contenu&quot;
+GUI_MANAGE_METADATA=&quot;~Gérer le bordereau&quot;
+GUI_MANAGE_SECTIONS=&quot;Agir sur les sections&quot;
+GUI_METADATA_ABSTRACT_TITLE=&quot;Résumé du document&quot;
+GUI_METADATA_ABSTRACT=&quot;Résumé&quot;
+GUI_METADATA_AUTHOR_ADDRESS=&quot;Adresse&quot;
+GUI_METADATA_AUTHOR_FIRSTNAME=&quot;Prénom&quot;
+GUI_METADATA_AUTHOR_INFO=&quot;Informations sur l&apos;auteur&quot;
+GUI_METADATA_AUTHOR_NAME=&quot;Nom&quot;
+GUI_METADATA_AUTHOR_ORGNAME_ACRONYM=&quot;Sigle de l&apos;organisme d&apos;affiliation&quot;
+GUI_METADATA_AUTHOR_ORGNAME_DIVISION=&quot;Division de l&apos;organisme d&apos;affiliation&quot;
+GUI_METADATA_AUTHOR_ORGNAME=&quot;Nom de l&apos;organisme d&apos;affiliation&quot;
+GUI_METADATA_AUTHOR_QUALITY=&quot;Qualité&quot;
+GUI_METADATA_AUTHOR_ROLE=&quot;Rôle&quot;
+GUI_METADATA_CONFGROUP_ADDRESS=&quot;Adresse : &quot;
+GUI_METADATA_CONFGROUP_DATES=&quot;Dates :  &quot;
+GUI_METADATA_CONFGROUP_INFO=&quot;Information sur la conférence&quot;
+GUI_METADATA_CONFGROUP_REFERENCE=&quot;Références : &quot;
+GUI_METADATA_CONFGROUP_SPONSOR=&quot;Organisée par : &quot;
+GUI_METADATA_CONFGROUP_TITLE=&quot;Titre : &quot;
+GUI_METADATA_CONTRACTSPONSOR_ADDRESS=&quot;Adresse&quot;
+GUI_METADATA_CONTRACTSPONSOR_CITY=&quot;Ville&quot;
+GUI_METADATA_CONTRACTSPONSOR_EMAIL=&quot;E-mail&quot;
+GUI_METADATA_CONTRACTSPONSOR_FAX=&quot;FAX&quot;
+GUI_METADATA_CONTRACTSPONSOR_INFO=&quot;Informations sur l&apos;organisme commanditaire&quot;
+GUI_METADATA_CONTRACTSPONSOR_ORGNAME_ACRONYM=&quot;sigle de l&apos;organisme&quot;
+GUI_METADATA_CONTRACTSPONSOR_ORGNAME_DIVISION=&quot;Nom de la division&quot;
+GUI_METADATA_CONTRACTSPONSOR_ORGNAME=&quot;Nom de l&apos;organisme&quot;
+GUI_METADATA_CONTRACTSPONSOR_POB=&quot;Boîte postale&quot;
+GUI_METADATA_CONTRACTSPONSOR_STATE=&quot;Région ou département&quot;
+GUI_METADATA_CONTRACTSPONSOR_TEL=&quot;Téléphone&quot;
+GUI_METADATA_CONTRACTSPONSOR_WWW=&quot;Site Web&quot;
+GUI_METADATA_CONTRACTSPONSOR_ZIPCODE=&quot;Code Postal&quot;
+GUI_METADATA_CORPAUTHOR_ADDRESS=&quot;Adresse&quot;
+GUI_METADATA_CORPAUTHOR_CITY=&quot;Ville&quot;
+GUI_METADATA_CORPAUTHOR_EMAIL=&quot;E-mail&quot;
+GUI_METADATA_CORPAUTHOR_FAX=&quot;FAX&quot;
+GUI_METADATA_CORPAUTHOR_INFO=&quot;Informations sur l&apos;organisme auteur&quot;
+GUI_METADATA_CORPAUTHOR_ORGNAME_ACRONYM=&quot;sigle de l&apos;organisme&quot;
+GUI_METADATA_CORPAUTHOR_ORGNAME_DIVISION=&quot;Nom de la division&quot;
+GUI_METADATA_CORPAUTHOR_ORGNAME=&quot;Nom de l&apos;organisme&quot;
+GUI_METADATA_CORPAUTHOR_POB=&quot;Boîte postale&quot;
+GUI_METADATA_CORPAUTHOR_STATE=&quot;Région ou département&quot;
+GUI_METADATA_CORPAUTHOR_TELEPHON=&quot;Téléphone&quot;
+GUI_METADATA_CORPAUTHOR_WWW=&quot;Site Web&quot;
+GUI_METADATA_CORPAUTHOR_ZIPCODE=&quot;Code Postal&quot;
+GUI_METADATA_GENERAL_INFO=&quot;Informations générales&quot;
+GUI_METADATA_INFO_ACCES_REVISION=&quot;Date de révision des contions d&apos;accès&quot;
+GUI_METADATA_INFO_ACCESS=&quot;Conditions d&apos;accès&quot;
+GUI_METADATA_INFO_BIBLIO_OTHER=&quot;Autres informations bibliographiques&quot;
+GUI_METADATA_INFO_CONTRACTNUM=&quot;Numéro de contrat&quot;
+GUI_METADATA_INFO_DATE=&quot;Date du document&quot;
+GUI_METADATA_INFO_ISRN=&quot;ISRN&quot;
+GUI_METADATA_INFO_KEYWORD=&quot;Mots-clés (sep : virgule)&quot;
+GUI_METADATA_INFO_SERIESVOLNUM=&quot;N° de Fascicule&quot;
+GUI_METADATA_INFO_STATUS=&quot;Statut du rapport&quot;
+GUI_METADATA_INFO_SUBTITLE=&quot;Sous-Titre&quot;
+GUI_METADATA_INFO_TITLE=&quot;Titre&quot;
+GUI_METADATA_INFO_VOLNUM=&quot;N° de Volume&quot;
+GUI_METADATA_INFO=&quot;Informations du document&quot;
+GUI_METADATA_INFOS=&quot;Informations&quot;
+GUI_METADATA_TITLE=&quot;Gestion du bordereau&quot;
+GUI_MODIFY=&quot;Modifier&quot;
+GUI_REFRESH=&quot;~Rafraîchir le document&quot;
+GUI_SECTION=&quot;Ajouter/Supprimer une ~partie&quot;
+GUI_STYLE_CHARACTER=&quot;Caractères : &quot;
+GUI_STYLE_FRAME=&quot;Image/Cadre : &quot;
+GUI_STYLE_PAGE=&quot;Page : &quot;
+GUI_STYLE_PARAGRAPH=&quot;Paragraphe : &quot;
+GUI_STYLIST_APPENDIXTITLES=&quot;Titres d&apos;Annexe&quot;
+GUI_STYLIST_CHARACTER=&quot;Caractères&quot;
+GUI_STYLIST_PARAGRAPH=&quot;Paragraphes&quot;
+GUI_STYLIST_TITLES=&quot;Titres&quot;
+GUI_STYLISTHELPER = &quot;StylistHelper&quot;
+GUI_STYLISTHELPER=&quot;StylistHelper&quot;
+GUI_TRANSLATION = &quot;Traduction dynamique&quot;
+GUI_VALIDATE_TITLE=&quot;Validité du document&quot;
+GUI_VALIDATE=&quot;~Valider le document&quot;
+GUI_VALIDATION=&quot;Validation du document&quot;
+GUI_VISIBILITY=&quot;Gérer la visibilité des parties&quot;
+GUI_VISIBILTY_CLICKCHK=&quot;Cliquer sur les cases à cocher pour afficher ou effacer les différentes parties listées. Attention, le contenu sera perdu !&quot;
+GUI_WINDOW_MAXIMIZE = &quot;Dérouler la fenêtre&quot;
+GUI_WINDOW_MINIMIZE=&quot;Enrouler la fenètre&quot;
+GUI_WIZARD = &quot;Assistant&quot;
+GUI_WIZARDNAME=&quot;Assistant OOo2DBK&quot;
+MSG_APPENDIX_DELETE_CONFIRM_ALL = &quot;Etes-vous sur de vouloir supprimer toutes les annexes ?&quot;
+MSG_APPENDIX_DELETE_CONFIRM_ONE = &quot;Etes-vous sur de vouloir supprimer cette annexe ?&quot;
+MSG_APPENDIX_TITLE = &quot;Le titre de l&apos;Annexe&quot;
+MSG_CHOOSE_DELETE_NO = &quot;Suppression impossible&quot;
+MSG_DOCUMENT_UPDATED = &quot;Mise à jour du document&quot;
+MSG_FIELD_UPDATED = &quot;Champs mis à jour&quot;
+MSG_GLOSSARY_ADD_1 = &quot;Le document doit posseder une section Glossaire.&quot;
+MSG_GLOSSARY_ADD_2 = &quot;Voulez-vous l&apos;ajouter ?&quot;
+MSG_GLOSSARY_ADD_ERROR = &quot;Impossible d&apos;ajouter la section Glossaire.&quot;
+MSG_GLOSSARY_ADD_TITLE = &quot;Ajout d&apos;un glossaire&quot;
+MSG_GLOSSARY_INSERT_DEFINITION = &quot;Insérer le texte de définition&quot;
+MSG_GLOSSARY_INSERT_TERM = &quot;Insérer le terme&quot;
+MSG_GUI_CONTROL_ERROR = &quot;Contrôle non géré&quot;
+MSG_INDEX_UPDATED = &quot;Index mis à jour&quot;
+MSG_LOAD_ALREADY_1 =&quot;L&apos;assistant est dejà ouvert sur un autre document&quot;
+MSG_LOAD_ALREADY_2 =&quot;Impossible d&apos;ouvrir plusieurs assistants simultanément&quot;
+MSG_LOAD_ERROR_1 = &quot;Une erreur interne d&apos;OpenOffice.org empêche le bon fonctionnement de l&apos;assitant.&quot;
+MSG_LOAD_ERROR_2 = &quot;Veuiller fermer le document et le réouvrir.&quot;
+MSG_LOAD_ERROR_3 = &quot;Erreur de l&apos;assistant OOo2Dbk&quot;
+MSG_LOAD_OLE_1 = &quot;Une erreur interne d&apos;OpenOffice.org empêche le bon fonctionnement de l&apos;assitant.&quot;
+MSG_LOAD_OLE_2 = &quot;Cette erreur est probalement due à l&apos;édition d&apos;un objet OLE avant son lancement&quot;
+MSG_LOAD_OLE_3 = &quot;Veuiller fermer le document et le réouvrir.&quot;
+MSG_LOAD_TEMPLATE = &quot;Ce document n&apos;est pas un modèle OOo2Dbk&quot;
+MSG_METADATA_AUTHOR = &quot;Auteur&quot;
+MSG_METADATA_AUTHOR_N = &quot;Auteur N°&quot;
+MSG_METADATA_AUTHORS =&quot;Auteurs&quot;
+MSG_METADATA_CANCEL_1 = &quot;Abandon de la saisie ?&quot;
+MSG_METADATA_CANCEL_2 = &quot;Vous perdrez vos modifications&quot;
+MSG_METADATA_CHK_AUTHOR_NAME =&quot;Le nom de l&apos;auteur est obligatoire&quot;
+MSG_METADATA_CHK_CONFGROUP_TITLE = &quot;Le titre de la conférence est obligatoire&quot;
+MSG_METADATA_CHK_CONTRACTSPONSOR_NAME=&quot;Le nom de l&apos;organisme commanditaire est obligatoire&quot;
+MSG_METADATA_CHK_CORPAUTHOR_NAME=&quot;Le nom de l&apos;organisme auteur est obligatoire&quot;
+MSG_METADATA_CHK_DATE = &quot;La date ne peut être vide&quot;
+MSG_METADATA_CHK_TITLE =&quot;Le titre est obligatoire&quot;
+MSG_METADATA_CONTRACTSPONSOR =&quot;Organisme Commanditaire&quot;
+MSG_METADATA_CONTRACTSPONSOR_N =&quot;Organisme Commanditaire N°&quot;
+MSG_METADATA_CORPAUTHOR = &quot;Organisme Auteur&quot;
+MSG_METADATA_CORPAUTHOR = &quot;Société&quot;
+MSG_METADATA_CORPAUTHOR_N = &quot;Organisme Auteur N°&quot;
+MSG_METADATA_MAX_ADD =&quot;Nombre maximum atteint&quot;
+MSG_MONTH_1 = &quot;Janvier&quot;
+MSG_MONTH_10 = &quot;Octobre&quot;
+MSG_MONTH_11 = &quot;Novembre&quot;
+MSG_MONTH_12 = &quot;Décembre&quot;
+MSG_MONTH_2 = &quot;Février&quot;
+MSG_MONTH_3 = &quot;Mars&quot;
+MSG_MONTH_4 = &quot;Avril&quot;
+MSG_MONTH_5 = &quot;Mai&quot;
+MSG_MONTH_6 = &quot;Juin&quot;
+MSG_MONTH_7 = &quot;Juillet&quot;
+MSG_MONTH_8 = &quot;Août&quot;
+MSG_MONTH_9 = &quot;Septembre&quot;
+MSG_SECTION_NOT_FOUND = &quot;Section introuvable&quot;
+MSG_STYLIST_CITATION=&quot;Ce style Citation ne s&apos;applique que sur une sélection&quot;
+MSG_STYLIST_IMAGES_NO =  &quot;Le StylistHelper ne peut pas gérer les images&quot;
+MSG_STYLIST_TABLES_NO =&quot;Le StylistHelper ne peut pas gérer les portions de tableau&quot;
+MSG_VALIDITY_APPENDIX = &quot;Contenu des annexes&quot;
+MSG_VALIDITY_APPENDIX_STYLE = &quot;L&apos;annexe doit commencer par ce style&quot;
+MSG_VALIDITY_HEADING_EMPTY = &quot;Le titre ne peut être vide&quot;
+MSG_VALIDITY_HEADING_LEVEL = &quot;Niveau de titre non valide&quot;
+MSG_VALIDITY_METADATA_MANDATORY =&quot;Bordereau : champ obligatoire&quot;
+MSG_VALIDITY_METADATA_MANDATORY_AUTHORS= &quot;Le nom du premier auteur ou organisme auteur doit être rempli&quot;
+MSG_VALIDITY_METADATA_MANDATORY_DATE=&quot;La date doit être remplie&quot;
+MSG_VALIDITY_METADATA_MANDATORY_SPONSOR=&quot;Le nom du premier organisme commanditaire doit être rempli&quot;
+MSG_VALIDITY_METADATA_MANDATORY_TITLE=&quot;Le titre doit être rempli&quot;
+MSG_VALIDITY_NOT_OK =&quot;Le document n&apos;est pas valide et ne pourra être traité&quot;
+MSG_VALIDITY_OK =&quot;Le document est valide&quot;
+MSG_VALIDITY_PARAGRAPH_EMPTY = &quot;Le paragraphe ne peut être vide&quot;
+MSG_VALIDITY_PRE_POST_SECTIONS =&quot;Contenu des pré- et post-liminaires&quot;
+MSG_VALIDITY_SECTION_EMPTY = &quot;Attention ! la section ne peut être vide&quot;
+MSG_VALIDITY_SECTION_STYLE =&quot;La partie doit commencer par ce style&quot;
+MSG_VALIDITY_SECTION_TITLE = &quot;Le titre de la section ne peut être vide&quot;
+MSG_VALIDITY_STRUCTURE = &quot;Structure du document&quot;
+MSG_VISIBILITY_1 = &quot;Etes-vous sûr de vouloir supprimer le contenu de la section ?&quot;
+MSG_VISIBILITY_TITLE = &quot;Suppression de section&quot;
+SECTION_ABSTRACT = &quot;Résumé&quot;
+SECTION_APPENDIX = &quot;Annexes&quot;
+SECTION_BIBLIOGRAPHY = &quot;Bibliographie&quot;
+SECTION_BODY = &quot;Corps du Document&quot;
+SECTION_BORDEREAU = &quot;Bordereau&quot;
+SECTION_FOREWORD = &quot;Avant-Propos&quot;
+SECTION_GLOSSARY = &quot;Glossaire&quot;
+SECTION_INTRODUCTION = &quot;Introduction&quot;
+SECTION_PREFACE = &quot;Préface&quot;
+SECTION_TABLE_IMAGE = &quot;Table des illustrations&quot;
+SECTION_TABLE_INDEX = &quot;Table des index&quot;
+SECTION_TOC = &quot;Sommaire&quot;
+
+MSG_SECTION_VISIBLE_WRITEHERE = &quot;Insérer votre texte ici&quot;
+	
+end sub
+
+sub RSC_EN()
+GUI_ADD=&quot;Add&quot;
+GUI_ADDINDEX=&quot;Add an ~index over the selection&quot;
+GUI_APPENDIX_ADD=&quot;Add appendix&quot;
+GUI_APPENDIX_DELETE=&quot;Delete appendix&quot;
+GUI_APPENDIX_DELETEALL=&quot;Delete all appendices&quot;
+GUI_APPENDIX_MANAGE=&quot;Manage appendices&quot;
+GUI_APPENDIX_TITLE=&quot;Manage Appendices&quot;
+GUI_APPENDIX=&quot;Appendix&quot;
+GUI_APPLY_ON=&quot;Apply on&quot;
+GUI_APPLY=&quot;Apply&quot;
+GUI_AUTHORS=&quot;Authors&quot;
+GUI_BACK=&quot;&lt;&lt; Back&quot;
+GUI_BIBLIOGRAPHY=&quot;Add bibliograhy entry&quot;
+GUI_CHOOSE=&quot;Choose &gt;&gt;&quot;
+GUI_CLOSE=&quot;~Close&quot;
+GUI_CONFGROUP=&quot;Conference&quot;
+GUI_CONTRACTSPONSORS=&quot;Sponsors&quot;
+GUI_CORPAUTHORS=&quot;Corporate Authors&quot;
+GUI_CREATE=&quot;Create&quot;
+GUI_DELETE=&quot;Delete&quot;
+GUI_GLOBAL_ACTIONS=&quot;Global actions&quot;
+GUI_GLOSSARY=&quot;Add a glossary entry&quot;
+GUI_GOTO=&quot;Goto&quot;
+GUI_LAYOUT=&quot;Formatting&quot;
+GUI_MANAGE_CONTENT=&quot;Manage content&quot;
+GUI_MANAGE_METADATA=&quot;~Manage Metadatas&quot;
+GUI_MANAGE_SECTIONS=&quot;manage Sections&quot;
+GUI_METADATA_ABSTRACT_TITLE=&quot;Document abstract&quot;
+GUI_METADATA_ABSTRACT=&quot;Abstract&quot;
+GUI_METADATA_AUTHOR_ADDRESS=&quot;Address&quot;
+GUI_METADATA_AUTHOR_FIRSTNAME=&quot;Firstname&quot;
+GUI_METADATA_AUTHOR_INFO=&quot;Author Informations&quot;
+GUI_METADATA_AUTHOR_NAME=&quot;Name&quot;
+GUI_METADATA_AUTHOR_ORGNAME_ACRONYM=&quot;Corporation acronym&quot;
+GUI_METADATA_AUTHOR_ORGNAME_DIVISION=&quot;Corporation division&quot;
+GUI_METADATA_AUTHOR_ORGNAME=&quot;Corporation&quot;
+GUI_METADATA_AUTHOR_QUALITY=&quot;Quality&quot;
+GUI_METADATA_AUTHOR_ROLE=&quot;Role&quot;
+GUI_METADATA_CONFGROUP_ADDRESS=&quot;Address&quot;
+GUI_METADATA_CONFGROUP_DATES=&quot;Dates&quot;
+GUI_METADATA_CONFGROUP_INFO=&quot;Informations about conference&quot;
+GUI_METADATA_CONFGROUP_REFERENCE=&quot;References&quot;
+GUI_METADATA_CONFGROUP_SPONSOR=&quot;Sponsor&quot;
+GUI_METADATA_CONFGROUP_TITLE=&quot;Title&quot;
+GUI_METADATA_CONTRACTSPONSOR_ADDRESS=&quot;Address&quot;
+GUI_METADATA_CONTRACTSPONSOR_CITY=&quot;City&quot;
+GUI_METADATA_CONTRACTSPONSOR_EMAIL=&quot;E-mail&quot;
+GUI_METADATA_CONTRACTSPONSOR_FAX=&quot;FAX&quot;
+GUI_METADATA_CONTRACTSPONSOR_INFO=&quot;Informations about Sponsor&quot;
+GUI_METADATA_CONTRACTSPONSOR_ORGNAME_ACRONYM=&quot;Corporation acronym&quot;
+GUI_METADATA_CONTRACTSPONSOR_ORGNAME_DIVISION=&quot;Corporation division&quot;
+GUI_METADATA_CONTRACTSPONSOR_ORGNAME=&quot;Corporation&quot;
+GUI_METADATA_CONTRACTSPONSOR_POB=&quot;Post office box&quot;
+GUI_METADATA_CONTRACTSPONSOR_STATE=&quot;Country&quot;
+GUI_METADATA_CONTRACTSPONSOR_TEL=&quot;Telephon&quot;
+GUI_METADATA_CONTRACTSPONSOR_WWW=&quot;Web site&quot;
+GUI_METADATA_CONTRACTSPONSOR_ZIPCODE=&quot;ZIP code&quot;
+GUI_METADATA_CORPAUTHOR_ADDRESS=&quot;Address&quot;
+GUI_METADATA_CORPAUTHOR_CITY=&quot;City&quot;
+GUI_METADATA_CORPAUTHOR_EMAIL=&quot;E-mail&quot;
+GUI_METADATA_CORPAUTHOR_FAX=&quot;FAX&quot;
+GUI_METADATA_CORPAUTHOR_INFO=&quot;Informations about corporate author&quot;
+GUI_METADATA_CORPAUTHOR_ORGNAME_ACRONYM=&quot;Corporation acronym&quot;
+GUI_METADATA_CORPAUTHOR_ORGNAME_DIVISION=&quot;Corporation division&quot;
+GUI_METADATA_CORPAUTHOR_ORGNAME=&quot;Corporation&quot;
+GUI_METADATA_CORPAUTHOR_POB=&quot;Post office box&quot;
+GUI_METADATA_CORPAUTHOR_STATE=&quot;Country&quot;
+GUI_METADATA_CORPAUTHOR_TELEPHON=&quot;Telephon&quot;
+GUI_METADATA_CORPAUTHOR_WWW=&quot;Web site&quot;
+GUI_METADATA_CORPAUTHOR_ZIPCODE=&quot;ZIP code&quot;
+GUI_METADATA_GENERAL_INFO=&quot;General Informations&quot;
+GUI_METADATA_INFO_ACCES_REVISION=&quot;Access conditions revision date&quot;
+GUI_METADATA_INFO_ACCESS=&quot;Access conditions&quot;
+GUI_METADATA_INFO_BIBLIO_OTHER=&quot;More information&quot;
+GUI_METADATA_INFO_CONTRACTNUM=&quot;Contract number&quot;
+GUI_METADATA_INFO_DATE=&quot;Document date&quot;
+GUI_METADATA_INFO_ISRN=&quot;ISRN&quot;
+GUI_METADATA_INFO_KEYWORD=&quot;Keywords (comma sep.)&quot;
+GUI_METADATA_INFO_SERIESVOLNUM=&quot;Series Number&quot;
+GUI_METADATA_INFO_STATUS=&quot;Status&quot;
+GUI_METADATA_INFO_SUBTITLE=&quot;Subtitle&quot;
+GUI_METADATA_INFO_TITLE=&quot;Title&quot;
+GUI_METADATA_INFO_VOLNUM=&quot;Volum number&quot;
+GUI_METADATA_INFO=&quot;Document Informations&quot;
+GUI_METADATA_INFOS=&quot;Informations&quot;
+GUI_METADATA_TITLE=&quot;Manage Metadatas&quot;
+GUI_MODIFY=&quot;Modify&quot;
+GUI_REFRESH=&quot;~Refresh document&quot;
+GUI_SECTION=&quot;Add/Delete a section&quot;
+GUI_STYLE_CHARACTER=&quot;Character&quot;
+GUI_STYLE_FRAME=&quot;Image/Frame&quot;
+GUI_STYLE_PAGE=&quot;Page&quot;
+GUI_STYLE_PARAGRAPH=&quot;Paragraph&quot;
+GUI_STYLIST_APPENDIXTITLES=&quot;Appendix title&quot;
+GUI_STYLIST_CHARACTER=&quot;Character&quot;
+GUI_STYLIST_PARAGRAPH=&quot;Paragraph&quot;
+GUI_STYLIST_TITLES=&quot;Title&quot;
+GUI_STYLISTHELPER = &quot;StylistHelper&quot;
+GUI_STYLISTHELPER=&quot;StylistHelper&quot;
+GUI_TRANSLATION = &quot;Dynamic translation&quot;
+GUI_VALIDATE_TITLE=&quot;Document validity&quot;
+GUI_VALIDATE=&quot;~Validate document&quot;
+GUI_VALIDATION=&quot;Document Validation&quot;
+GUI_VISIBILITY=&quot;Manage section visibility&quot;
+GUI_VISIBILTY_CLICKCHK=&quot;Check the boxes to show or hide the listed sections. WARNING ! Content will be lost on hidding!&quot;
+GUI_WINDOW_MAXIMIZE = &quot;Display window&quot;
+GUI_WINDOW_MINIMIZE=&quot;Roll up&quot;
+GUI_WIZARD = &quot;Wizard&quot;
+GUI_WIZARDNAME=&quot;OOo2Dbk Wizard&quot;
+MSG_APPENDIX_DELETE_CONFIRM_ALL = &quot;Do you really want to delete all appendices?&quot;
+MSG_APPENDIX_DELETE_CONFIRM_ONE = &quot;Do you really want to delete this appendix ?&quot;
+MSG_APPENDIX_TITLE = &quot;The appendix title&quot;
+MSG_CHOOSE_DELETE_NO = &quot;Unable to delete&quot;
+MSG_DOCUMENT_UPDATED = &quot;Document updated&quot;
+MSG_FIELD_UPDATED = &quot;Fields updated&quot;
+MSG_GLOSSARY_ADD_1 = &quot;Document needs to have a glossary section.&quot;
+MSG_GLOSSARY_ADD_2 = &quot;Add it ?&quot;
+MSG_GLOSSARY_ADD_ERROR = &quot;Unable to add the glossary section.&quot;
+MSG_GLOSSARY_ADD_TITLE = &quot;Add a glossary section&quot;
+MSG_GLOSSARY_INSERT_DEFINITION = &quot;Insert definition&quot;
+MSG_GLOSSARY_INSERT_TERM = &quot;Insert term&quot;
+MSG_GUI_CONTROL_ERROR = &quot;unsupported control&quot;
+MSG_INDEX_UPDATED = &quot;Index updated&quot;
+MSG_LOAD_ALREADY_1 =&quot;Wizard is already open on an other document&quot;
+MSG_LOAD_ALREADY_2 =&quot;Only one wizard at a time.&quot;
+MSG_LOAD_ERROR_1 = &quot;An OpenOffice.org internal error occured.&quot;
+MSG_LOAD_ERROR_2 = &quot;Please close and open the document again.&quot;
+MSG_LOAD_ERROR_3 = &quot;OOo2Dbk Wizard error&quot;
+MSG_LOAD_OLE_1 = &quot;An OpenOffice.org internal error prevents the wizard from launching&quot;&apos;Une erreur interne d&apos;OpenOffice.org empêche le bon fonctionnement de l&apos;assitant.&quot;
+MSG_LOAD_OLE_2 = &quot;An OLE object has probably been edited before&quot; &apos;&quot;Cette erreur est probalement due à l&apos;édition d&apos;un objet OLE avant son lancement&quot;
+MSG_LOAD_OLE_3 = &quot;Please close and open the document again&quot;&apos;Veuiller fermer le document et le réouvrir.&quot;
+MSG_LOAD_TEMPLATE = &quot;This document is not based on an OOo2Dbk template&quot;&apos;Ce document n&apos;est pas un modèle OOo2Dbk&quot;
+MSG_METADATA_AUTHOR = &quot;Author&quot;
+MSG_METADATA_AUTHOR_N = &quot;Author #&quot;
+MSG_METADATA_AUTHORS =&quot;Authors&quot;
+MSG_METADATA_CANCEL_1 = &quot;Discard changes ?&quot;
+MSG_METADATA_CANCEL_2 = &quot;All modifications will be dropped&quot;
+MSG_METADATA_CHK_AUTHOR_NAME =&quot;Author name is mandatory&quot;
+MSG_METADATA_CHK_CONFGROUP_TITLE = &quot;Conference title is mandatory&quot;
+MSG_METADATA_CHK_CONTRACTSPONSOR_NAME=&quot;Sponsor name is mandatory&quot;
+MSG_METADATA_CHK_CORPAUTHOR_NAME=&quot;Corporate name is mandatory&quot;
+MSG_METADATA_CHK_DATE = &quot;Date can not be empty&quot;
+MSG_METADATA_CHK_TITLE =&quot;Title is mandatory&quot;
+MSG_METADATA_CONTRACTSPONSOR =&quot;Contract sponsor&quot;
+MSG_METADATA_CONTRACTSPONSOR_N =&quot;Contract sponsor #&quot;
+MSG_METADATA_CORPAUTHOR = &quot;Corporate author&quot;
+MSG_METADATA_CORPAUTHOR = &quot;Corporate&quot;
+MSG_METADATA_CORPAUTHOR_N = &quot;Corporate author #&quot;
+MSG_METADATA_MAX_ADD =&quot;Maximum number has bneen reached&quot;
+MSG_MONTH_1 = &quot;January&quot;
+MSG_MONTH_10 = &quot;October&quot;
+MSG_MONTH_11 = &quot;November&quot;
+MSG_MONTH_12 = &quot;Décember&quot;
+MSG_MONTH_2 = &quot;February&quot;
+MSG_MONTH_3 = &quot;March&quot;
+MSG_MONTH_4 = &quot;April&quot;
+MSG_MONTH_5 = &quot;May&quot;
+MSG_MONTH_6 = &quot;June&quot;
+MSG_MONTH_7 = &quot;July&quot;
+MSG_MONTH_8 = &quot;August&quot;
+MSG_MONTH_9 = &quot;September&quot;
+MSG_SECTION_NOT_FOUND = &quot;Section not found&quot;
+MSG_STYLIST_CITATION=&quot;Citation style only apply on a selection&quot;
+MSG_STYLIST_IMAGES_NO =  &quot;StylistHelper can not handle images&quot;&apos;&quot;Le StylistHelper ne peut pas gérer les images&quot;
+MSG_STYLIST_TABLES_NO = &quot;StylistHelper can not handle part of arrays&quot;&apos;&quot;Le StylistHelper ne peut pas gérer les portions de tableau&quot;
+MSG_VALIDITY_APPENDIX = &quot;Appendices content&quot;
+MSG_VALIDITY_APPENDIX_STYLE = &quot;Appendix has to begin with this style&quot;
+MSG_VALIDITY_HEADING_EMPTY = &quot;Title can not be empty&quot;
+MSG_VALIDITY_HEADING_LEVEL = &quot;Invalid title level&quot;&apos;Niveau de titre non valide&quot;
+MSG_VALIDITY_METADATA_MANDATORY =&quot;Metadata : mandatory field&quot;
+MSG_VALIDITY_METADATA_MANDATORY_AUTHORS= &quot;The name of the first author or corporate author is mandatory&quot;&apos;Le nom du premier auteur ou organisme auteur doit être rempli&quot;
+MSG_VALIDITY_METADATA_MANDATORY_DATE=&quot;Date mus be fileld&quot;&apos;La date doit être remplie&quot;
+MSG_VALIDITY_METADATA_MANDATORY_SPONSOR=&quot;The name of the first contract sponsor is mandatory&quot;&apos;Le nom du premier organisme commanditaire doit être rempli&quot;
+MSG_VALIDITY_METADATA_MANDATORY_TITLE=&quot;Title must be fileld&quot;&apos;Le titre doit être rempli&quot;
+MSG_VALIDITY_NOT_OK =&quot;The document is not valid and perharps not be processed&quot;&apos;&quot;Le document n&apos;est pas valide et ne pourra être traité&quot;
+MSG_VALIDITY_OK =&quot;The document is valid&quot;&apos;Le document est valide&quot;
+MSG_VALIDITY_PARAGRAPH_EMPTY = &quot;Paragraph can not be empty&quot;&apos;Le paragraphe ne peut être vide&quot;
+MSG_VALIDITY_PRE_POST_SECTIONS =&quot;Sections content&quot;
+MSG_VALIDITY_SECTION_EMPTY = &quot;Warning ! Section can not be empty &quot;&apos;Attention ! la section ne peut être vide&quot;
+MSG_VALIDITY_SECTION_STYLE =&quot;The section has to begin with this style&quot;&apos;La partie doit commencer par ce style&quot;
+MSG_VALIDITY_SECTION_TITLE = &quot;Section title can not be empty&quot;&apos;Le titre de la section ne peut être vide&quot;
+MSG_VALIDITY_STRUCTURE = &quot;Document structure&quot;
+MSG_VISIBILITY_1 = &quot;Please confirm the suppression of the section content&quot;
+MSG_VISIBILITY_TITLE = &quot;Section suppression&quot;
+SECTION_ABSTRACT = &quot;Abstract&quot;
+SECTION_APPENDIX = &quot;Appendices&quot;
+SECTION_BIBLIOGRAPHY = &quot;Bibliography&quot;
+SECTION_BODY = &quot;Document body&quot;
+SECTION_BORDEREAU = &quot;Metadatas&quot;
+SECTION_FOREWORD = &quot;Foreword&quot;
+SECTION_GLOSSARY = &quot;Glossary&quot;
+SECTION_INTRODUCTION = &quot;Introduction&quot;
+SECTION_PREFACE = &quot;Preface&quot;
+SECTION_TABLE_IMAGE = &quot;Table of illustrations&quot;
+SECTION_TABLE_INDEX = &quot;Table of index&quot;
+SECTION_TOC = &quot;Table of content&quot;
+
+MSG_SECTION_VISIBLE_WRITEHERE = &quot;Insert your text here&quot;
+
+end sub
+
+sub RSC_DEBUG
+
+GUI_ADD=&quot;GUI_ADD&quot;
+GUI_ADDINDEX=&quot;GUI_ADDINDEX&quot;
+GUI_APPENDIX_ADD=&quot;GUI_APPENDIX_ADD&quot;
+GUI_APPENDIX_DELETE=&quot;GUI_APPENDIX_DELETE&quot;
+GUI_APPENDIX_DELETEALL=&quot;GUI_APPENDIX_DELETEALL&quot;
+GUI_APPENDIX_MANAGE=&quot;GUI_APPENDIX_MANAGE&quot;
+GUI_APPENDIX_TITLE=&quot;GUI_APPENDIX_TITLE&quot;
+GUI_APPENDIX=&quot;GUI_APPENDIX&quot;
+GUI_APPLY_ON=&quot;GUI_APPLY_ON&quot;
+GUI_APPLY=&quot;GUI_APPLY&quot;
+GUI_AUTHORS=&quot;GUI_AUTHORS&quot;
+GUI_BACK=&quot;GUI_BACK&quot;
+GUI_BIBLIOGRAPHY=&quot;GUI_BIBLIOGRAPHY&quot;
+GUI_CHOOSE=&quot;GUI_CHOOSE&quot;
+GUI_CLOSE=&quot;GUI_CLOSE&quot;
+GUI_CONFGROUP=&quot;GUI_CONFGROUP&quot;
+GUI_CONTRACTSPONSORS=&quot;GUI_CONTRACTSPONSORS&quot;
+GUI_CORPAUTHORS=&quot;GUI_CORPAUTHORS&quot;
+GUI_CREATE=&quot;GUI_CREATE&quot;
+GUI_DELETE=&quot;GUI_DELETE&quot;
+GUI_GLOBAL_ACTIONS=&quot;GUI_GLOBAL_ACTIONS&quot;
+GUI_GLOSSARY=&quot;GUI_GLOSSARY&quot;
+GUI_GOTO=&quot;GUI_GOTO&quot;
+GUI_LAYOUT=&quot;GUI_LAYOUT&quot;
+GUI_MANAGE_CONTENT=&quot;GUI_MANAGE_CONTENT&quot;
+GUI_MANAGE_METADATA=&quot;GUI_MANAGE_METADATA&quot;
+GUI_MANAGE_SECTIONS=&quot;GUI_MANAGE_SECTIONS&quot;
+GUI_METADATA_ABSTRACT_TITLE=&quot;GUI_METADATA_ABSTRACT_TITLE&quot;
+GUI_METADATA_ABSTRACT=&quot;GUI_METADATA_ABSTRACT&quot;
+GUI_METADATA_AUTHOR_ADDRESS=&quot;GUI_METADATA_AUTHOR_ADDRESS&quot;
+GUI_METADATA_AUTHOR_FIRSTNAME=&quot;GUI_METADATA_AUTHOR_FIRSTNAME&quot;
+GUI_METADATA_AUTHOR_INFO=&quot;GUI_METADATA_AUTHOR_INFO&quot;
+GUI_METADATA_AUTHOR_NAME=&quot;GUI_METADATA_AUTHOR_NAME&quot;
+GUI_METADATA_AUTHOR_ORGNAME_ACRONYM=&quot;GUI_METADATA_AUTHOR_ORGNAME_ACRONYM&quot;
+GUI_METADATA_AUTHOR_ORGNAME_DIVISION=&quot;GUI_METADATA_AUTHOR_ORGNAME_DIVISION&quot;
+GUI_METADATA_AUTHOR_ORGNAME=&quot;GUI_METADATA_AUTHOR_ORGNAME&quot;
+GUI_METADATA_AUTHOR_QUALITY=&quot;GUI_METADATA_AUTHOR_QUALITY&quot;
+GUI_METADATA_AUTHOR_ROLE=&quot;GUI_METADATA_AUTHOR_ROLE&quot;
+GUI_METADATA_CONFGROUP_ADDRESS=&quot;GUI_METADATA_CONFGROUP_ADDRESS&quot;
+GUI_METADATA_CONFGROUP_DATES=&quot;GUI_METADATA_CONFGROUP_DATES&quot;
+GUI_METADATA_CONFGROUP_INFO=&quot;GUI_METADATA_CONFGROUP_INFO&quot;
+GUI_METADATA_CONFGROUP_REFERENCE=&quot;GUI_METADATA_CONFGROUP_REFERENCE&quot;
+GUI_METADATA_CONFGROUP_SPONSOR=&quot;GUI_METADATA_CONFGROUP_SPONSOR&quot;
+GUI_METADATA_CONFGROUP_TITLE=&quot;GUI_METADATA_CONFGROUP_TITLE&quot;
+GUI_METADATA_CONTRACTSPONSOR_ADDRESS=&quot;GUI_METADATA_CONTRACTSPONSOR_ADDRESS&quot;
+GUI_METADATA_CONTRACTSPONSOR_CITY=&quot;GUI_METADATA_CONTRACTSPONSOR_CITY&quot;
+GUI_METADATA_CONTRACTSPONSOR_EMAIL=&quot;GUI_METADATA_CONTRACTSPONSOR_EMAIL&quot;
+GUI_METADATA_CONTRACTSPONSOR_FAX=&quot;GUI_METADATA_CONTRACTSPONSOR_FAX&quot;
+GUI_METADATA_CONTRACTSPONSOR_INFO=&quot;GUI_METADATA_CONTRACTSPONSOR_INFO&quot;
+GUI_METADATA_CONTRACTSPONSOR_ORGNAME_ACRONYM=&quot;GUI_METADATA_CONTRACTSPONSOR_ORGNAME_ACRONYM&quot;
+GUI_METADATA_CONTRACTSPONSOR_ORGNAME_DIVISION=&quot;GUI_METADATA_CONTRACTSPONSOR_ORGNAME_DIVISION&quot;
+GUI_METADATA_CONTRACTSPONSOR_ORGNAME=&quot;GUI_METADATA_CONTRACTSPONSOR_ORGNAME&quot;
+GUI_METADATA_CONTRACTSPONSOR_POB=&quot;GUI_METADATA_CONTRACTSPONSOR_POB&quot;
+GUI_METADATA_CONTRACTSPONSOR_STATE=&quot;GUI_METADATA_CONTRACTSPONSOR_STATE&quot;
+GUI_METADATA_CONTRACTSPONSOR_TEL=&quot;GUI_METADATA_CONTRACTSPONSOR_TEL&quot;
+GUI_METADATA_CONTRACTSPONSOR_WWW=&quot;GUI_METADATA_CONTRACTSPONSOR_WWW&quot;
+GUI_METADATA_CONTRACTSPONSOR_ZIPCODE=&quot;GUI_METADATA_CONTRACTSPONSOR_ZIPCODE&quot;
+GUI_METADATA_CORPAUTHOR_ADDRESS=&quot;GUI_METADATA_CORPAUTHOR_ADDRESS&quot;
+GUI_METADATA_CORPAUTHOR_CITY=&quot;GUI_METADATA_CORPAUTHOR_CITY&quot;
+GUI_METADATA_CORPAUTHOR_EMAIL=&quot;GUI_METADATA_CORPAUTHOR_EMAIL&quot;
+GUI_METADATA_CORPAUTHOR_FAX=&quot;GUI_METADATA_CORPAUTHOR_FAX&quot;
+GUI_METADATA_CORPAUTHOR_INFO=&quot;GUI_METADATA_CORPAUTHOR_INFO&quot;
+GUI_METADATA_CORPAUTHOR_ORGNAME_ACRONYM=&quot;GUI_METADATA_CORPAUTHOR_ORGNAME_ACRONYM&quot;
+GUI_METADATA_CORPAUTHOR_ORGNAME_DIVISION=&quot;GUI_METADATA_CORPAUTHOR_ORGNAME_DIVISION&quot;
+GUI_METADATA_CORPAUTHOR_ORGNAME=&quot;GUI_METADATA_CORPAUTHOR_ORGNAME&quot;
+GUI_METADATA_CORPAUTHOR_POB=&quot;GUI_METADATA_CORPAUTHOR_POB&quot;
+GUI_METADATA_CORPAUTHOR_STATE=&quot;GUI_METADATA_CORPAUTHOR_STATE&quot;
+GUI_METADATA_CORPAUTHOR_TELEPHON=&quot;GUI_METADATA_CORPAUTHOR_TELEPHON&quot;
+GUI_METADATA_CORPAUTHOR_WWW=&quot;GUI_METADATA_CORPAUTHOR_WWW&quot;
+GUI_METADATA_CORPAUTHOR_ZIPCODE=&quot;GUI_METADATA_CORPAUTHOR_ZIPCODE&quot;
+GUI_METADATA_GENERAL_INFO=&quot;GUI_METADATA_GENERAL_INFO&quot;
+GUI_METADATA_INFO_ACCES_REVISION=&quot;GUI_METADATA_INFO_ACCES_REVISION&quot;
+GUI_METADATA_INFO_ACCESS=&quot;GUI_METADATA_INFO_ACCESS&quot;
+GUI_METADATA_INFO_BIBLIO_OTHER=&quot;GUI_METADATA_INFO_BIBLIO_OTHER&quot;
+GUI_METADATA_INFO_CONTRACTNUM=&quot;GUI_METADATA_INFO_CONTRACTNUM&quot;
+GUI_METADATA_INFO_DATE=&quot;GUI_METADATA_INFO_DATE&quot;
+GUI_METADATA_INFO_ISRN=&quot;GUI_METADATA_INFO_ISRN&quot;
+GUI_METADATA_INFO_KEYWORD=&quot;GUI_METADATA_INFO_KEYWORD&quot;
+GUI_METADATA_INFO_SERIESVOLNUM=&quot;GUI_METADATA_INFO_SERIESVOLNUM&quot;
+GUI_METADATA_INFO_STATUS=&quot;GUI_METADATA_INFO_STATUS&quot;
+GUI_METADATA_INFO_SUBTITLE=&quot;GUI_METADATA_INFO_SUBTITLE&quot;
+GUI_METADATA_INFO_TITLE=&quot;GUI_METADATA_INFO_TITLE&quot;
+GUI_METADATA_INFO_VOLNUM=&quot;GUI_METADATA_INFO_VOLNUM&quot;
+GUI_METADATA_INFO=&quot;GUI_METADATA_INFO&quot;
+GUI_METADATA_INFOS=&quot;GUI_METADATA_INFOS&quot;
+GUI_METADATA_TITLE=&quot;GUI_METADATA_TITLE&quot;
+GUI_MODIFY=&quot;GUI_MODIFY&quot;
+GUI_REFRESH=&quot;GUI_REFRESH&quot;
+GUI_SECTION=&quot;GUI_SECTION&quot;
+GUI_STYLE_CHARACTER=&quot;GUI_STYLE_CHARACTER&quot;
+GUI_STYLE_FRAME=&quot;GUI_STYLE_FRAME&quot;
+GUI_STYLE_PAGE=&quot;GUI_STYLE_PAGE&quot;
+GUI_STYLE_PARAGRAPH=&quot;GUI_STYLE_PARAGRAPH&quot;
+GUI_STYLISTHELPER=&quot;GUI_STYLISTHELPER&quot;
+GUI_TRANSLATION =&quot;GUI_TRANSLATION&quot;
+GUI_VALIDATE_TITLE=&quot;GUI_VALIDATE_TITLE&quot;
+GUI_VALIDATE=&quot;GUI_VALIDATE&quot;
+GUI_VALIDATION=&quot;GUI_VALIDATION&quot;
+GUI_VISIBILITY=&quot;GUI_VISIBILITY&quot;
+GUI_VISIBILTY_CLICKCHK=&quot;GUI_VISIBILTY_CLICKCHK&quot;
+GUI_WINDOW_MINIMIZE=&quot;GUI_WINDOW_MINIMIZE&quot;
+GUI_WIZARDNAME=&quot;GUI_WIZARDNAME&quot;
+GUI_STYLIST_APPENDIXTITLES=&quot;GUI_STYLIST_APPENDIXTITLES&quot;
+GUI_STYLIST_CHARACTER=&quot;GUI_STYLIST_CHARACTER&quot;
+GUI_STYLIST_PARAGRAPH=&quot;GUI_STYLIST_PARAGRAPH&quot;
+GUI_STYLIST_TITLES=&quot;GUI_STYLIST_TITLES&quot;
+GUI_STYLISTHELPER =&quot;GUI_STYLISTHELPER&quot;
+GUI_WINDOW_MAXIMIZE =&quot;GUI_WINDOW_MAXIMIZE&quot;
+GUI_WIZARD =&quot;GUI_WIZARD&quot;
+MSG_APPENDIX_DELETE_CONFIRM_ALL =&quot;MSG_APPENDIX_DELETE_CONFIRM_ALL&quot;
+MSG_APPENDIX_DELETE_CONFIRM_ONE =&quot;MSG_APPENDIX_DELETE_CONFIRM_ONE&quot;
+MSG_APPENDIX_TITLE =&quot;MSG_APPENDIX_TITLE&quot;
+MSG_CHOOSE_DELETE_NO =&quot;MSG_CHOOSE_DELETE_NO&quot;
+MSG_DOCUMENT_UPDATED =&quot;MSG_DOCUMENT_UPDATED&quot;
+MSG_FIELD_UPDATED =&quot;MSG_FIELD_UPDATED&quot;
+MSG_GLOSSARY_ADD_1 =&quot;MSG_GLOSSARY_ADD_1&quot;
+MSG_GLOSSARY_ADD_2 =&quot;MSG_GLOSSARY_ADD_2&quot;
+MSG_GLOSSARY_ADD_ERROR =&quot;MSG_GLOSSARY_ADD_ERROR&quot;
+MSG_GLOSSARY_ADD_TITLE =&quot;MSG_GLOSSARY_ADD_TITLE&quot;
+MSG_GLOSSARY_INSERT_DEFINITION =&quot;MSG_GLOSSARY_INSERT_DEFINITION&quot;
+MSG_GLOSSARY_INSERT_TERM =&quot;MSG_GLOSSARY_INSERT_TERM&quot;
+MSG_GUI_CONTROL_ERROR =&quot;MSG_GUI_CONTROL_ERROR&quot;
+MSG_INDEX_UPDATED =&quot;MSG_INDEX_UPDATED&quot;
+MSG_LOAD_ALREADY_1 =&quot;MSG_LOAD_ALREADY_1&quot;
+MSG_LOAD_ALREADY_2 =&quot;MSG_LOAD_ALREADY_2&quot;
+MSG_LOAD_ERROR_1 =&quot;MSG_LOAD_ERROR_1&quot;
+MSG_LOAD_ERROR_2 =&quot;MSG_LOAD_ERROR_2&quot;
+MSG_LOAD_ERROR_3 =&quot;MSG_LOAD_ERROR_3&quot;
+MSG_LOAD_OLE_1 =&quot;MSG_LOAD_OLE_1&quot;
+MSG_LOAD_OLE_2 =&quot;MSG_LOAD_OLE_2&quot;
+MSG_LOAD_OLE_3 =&quot;MSG_LOAD_OLE_3&quot;
+MSG_LOAD_TEMPLATE =&quot;MSG_LOAD_TEMPLATE&quot;
+MSG_METADATA_AUTHOR =&quot;MSG_METADATA_AUTHOR&quot;
+MSG_METADATA_AUTHOR_N =&quot;MSG_METADATA_AUTHOR_N&quot;
+MSG_METADATA_AUTHORS =&quot;MSG_METADATA_AUTHORS&quot;
+MSG_METADATA_CANCEL_1 =&quot;MSG_METADATA_CANCEL_1&quot;
+MSG_METADATA_CANCEL_2 =&quot;MSG_METADATA_CANCEL_2&quot;
+MSG_METADATA_CHK_AUTHOR_NAME =&quot;MSG_METADATA_CHK_AUTHOR_NAME&quot;
+MSG_METADATA_CHK_CONFGROUP_TITLE =&quot;MSG_METADATA_CHK_CONFGROUP_TITLE&quot;
+MSG_METADATA_CHK_CONTRACTSPONSOR_NAME=&quot;MSG_METADATA_CHK_CONTRACTSPONSOR_NAME&quot;
+MSG_METADATA_CHK_CORPAUTHOR_NAME=&quot;MSG_METADATA_CHK_CORPAUTHOR_NAME&quot;
+MSG_METADATA_CHK_DATE =&quot;MSG_METADATA_CHK_DATE&quot;
+MSG_METADATA_CHK_TITLE =&quot;MSG_METADATA_CHK_TITLE&quot;
+MSG_METADATA_CONTRACTSPONSOR =&quot;MSG_METADATA_CONTRACTSPONSOR&quot;
+MSG_METADATA_CONTRACTSPONSOR_N =&quot;MSG_METADATA_CONTRACTSPONSOR_N&quot;
+MSG_METADATA_CORPAUTHOR =&quot;MSG_METADATA_CORPAUTHOR&quot;
+MSG_METADATA_CORPAUTHOR =&quot;MSG_METADATA_CORPAUTHOR&quot;
+MSG_METADATA_CORPAUTHOR_N =&quot;MSG_METADATA_CORPAUTHOR_N&quot;
+MSG_METADATA_MAX_ADD =&quot;MSG_METADATA_MAX_ADD&quot;
+MSG_MONTH_1 =&quot;MSG_MONTH_1&quot;
+MSG_MONTH_10 =&quot;MSG_MONTH_10&quot;
+MSG_MONTH_11 =&quot;MSG_MONTH_11&quot;
+MSG_MONTH_12 =&quot;MSG_MONTH_12&quot;
+MSG_MONTH_2 =&quot;MSG_MONTH_2&quot;
+MSG_MONTH_3 =&quot;MSG_MONTH_3&quot;
+MSG_MONTH_4 =&quot;MSG_MONTH_4&quot;
+MSG_MONTH_5 =&quot;MSG_MONTH_5&quot;
+MSG_MONTH_6 =&quot;MSG_MONTH_6&quot;
+MSG_MONTH_7 =&quot;MSG_MONTH_7&quot;
+MSG_MONTH_8 =&quot;MSG_MONTH_8&quot;
+MSG_MONTH_9 =&quot;MSG_MONTH_9&quot;
+MSG_SECTION_NOT_FOUND =&quot;MSG_SECTION_NOT_FOUND&quot;
+MSG_STYLIST_CITATION=&quot;MSG_STYLIST_CITATION&quot;
+MSG_STYLIST_IMAGES_NO =&quot;MSG_STYLIST_IMAGES_NO&quot;
+MSG_STYLIST_TABLES_NO =&quot;MSG_STYLIST_TABLES_NO&quot;
+MSG_VALIDITY_APPENDIX =&quot;MSG_VALIDITY_APPENDIX&quot;
+MSG_VALIDITY_APPENDIX_STYLE =&quot;MSG_VALIDITY_APPENDIX_STYLE&quot;
+MSG_VALIDITY_HEADING_EMPTY =&quot;MSG_VALIDITY_HEADING_EMPTY&quot;
+MSG_VALIDITY_HEADING_LEVEL =&quot;MSG_VALIDITY_HEADING_LEVEL&quot;
+MSG_VALIDITY_METADATA_MANDATORY =&quot;MSG_VALIDITY_METADATA_MANDATORY&quot;
+MSG_VALIDITY_METADATA_MANDATORY_AUTHORS=&quot;MSG_VALIDITY_METADATA_MANDATORY_AUTHORS&quot;
+MSG_VALIDITY_METADATA_MANDATORY_DATE=&quot;MSG_VALIDITY_METADATA_MANDATORY_DATE&quot;
+MSG_VALIDITY_METADATA_MANDATORY_SPONSOR=&quot;MSG_VALIDITY_METADATA_MANDATORY_SPONSOR&quot;
+MSG_VALIDITY_METADATA_MANDATORY_TITLE=&quot;MSG_VALIDITY_METADATA_MANDATORY_TITLE&quot;
+MSG_VALIDITY_NOT_OK =&quot;MSG_VALIDITY_NOT_OK&quot;
+MSG_VALIDITY_OK =&quot;MSG_VALIDITY_OK&quot;
+MSG_VALIDITY_PARAGRAPH_EMPTY =&quot;MSG_VALIDITY_PARAGRAPH_EMPTY&quot;
+MSG_VALIDITY_PRE_POST_SECTIONS =&quot;MSG_VALIDITY_PRE_POST_SECTIONS&quot;
+MSG_VALIDITY_SECTION_EMPTY =&quot;MSG_VALIDITY_SECTION_EMPTY&quot;
+MSG_VALIDITY_SECTION_STYLE =&quot;MSG_VALIDITY_SECTION_STYLE&quot;
+MSG_VALIDITY_SECTION_TITLE =&quot;MSG_VALIDITY_SECTION_TITLE&quot;
+MSG_VALIDITY_STRUCTURE =&quot;MSG_VALIDITY_STRUCTURE&quot;
+MSG_VISIBILITY_1 =&quot;MSG_VISIBILITY_1&quot;
+MSG_VISIBILITY_TITLE =&quot;MSG_VISIBILITY_TITLE&quot;
+SECTION_ABSTRACT =&quot;SECTION_ABSTRACT&quot;
+SECTION_APPENDIX =&quot;SECTION_APPENDIX&quot;
+SECTION_BIBLIOGRAPHY =&quot;SECTION_BIBLIOGRAPHY&quot;
+SECTION_BODY =&quot;SECTION_BODY&quot;
+SECTION_BORDEREAU =&quot;SECTION_BORDEREAU&quot;
+SECTION_FOREWORD =&quot;SECTION_FOREWORD&quot;
+SECTION_GLOSSARY =&quot;SECTION_GLOSSARY&quot;
+SECTION_INTRODUCTION =&quot;SECTION_INTRODUCTION&quot;
+SECTION_PREFACE =&quot;SECTION_PREFACE&quot;
+SECTION_TABLE_IMAGE =&quot;SECTION_TABLE_IMAGE&quot;
+SECTION_TABLE_INDEX =&quot;SECTION_TABLE_INDEX&quot;
+SECTION_TOC =&quot;SECTION_TOC&quot;
+
+MSG_SECTION_VISIBLE_WRITEHERE = &quot;MSG_SECTION_VISIBLE_WRITEHERE&quot;
+
+end sub
+
+Function OOoLang() as string
+  &apos;récupère la version de OOo en cours d&apos;exécution
+
+  Dim aSettings, aConfigProvider
+  Dim aParams2(0) As new com.sun.star.beans.PropertyValue
+  Dim sProvider$, sAccess$
+  sProvider = &quot;com.sun.star.configuration.ConfigurationProvider&quot;
+  sAccess   = &quot;com.sun.star.configuration.ConfigurationAccess&quot;
+  aConfigProvider = createUnoService(sProvider)
+  aParams2(0).Name = &quot;nodepath&quot;
+  aParams2(0).Value = &quot;/org.openoffice.Setup/L10N&quot;
+  aSettings = aConfigProvider.createInstanceWithArguments(sAccess, aParams2())
+
+  Dim OOLangue as string
+  OOLangue= aSettings.getbyname(&quot;ooLocale&quot;)    &apos;en-US
+  OOoLang=lcase(Left(trim(OOLangue),2))         &apos;en
+End Function
+
+sub Translate_Internal_Stylenames
+	&apos;inly depends on OOo UI language, not choosen language
+	&apos;mandatory as Default is not an internal name (Standard in french)
+
+			laFamille = TrouveFamille(0)
+
+			STYLENAME_CHAR_EMPHASIS = NomStyleExterne(&quot;Emphasis&quot;, lafamille)
+			STYLENAME_CHAR_QUOTATION =  NomStyleExterne(&quot;Citation&quot;, lafamille)
+			STYLENAME_CHAR_STRONGEMPHASIS =  NomStyleExterne(&quot;Strong Emphasis&quot;, lafamille)
+
+			laFamille = TrouveFamille(1)			
+
+			STYLENAME_PARA_QUOTATION=NomStyleExterne(&quot;Quotations&quot;, lafamille)
+			STYLENAME_PARA_BODY = NomStyleExterne(&quot;Text body&quot;, lafamille)
+			STYLENAME_PARA_PREFORMATTED =NomStyleExterne( &quot;Preformatted Text&quot;, lafamille)
+			STYLENAME_PARA_HEADING_1  =NomStyleExterne(&quot;Heading 1&quot;, lafamille)
+			STYLENAME_PARA_HEADING_2  =NomStyleExterne(&quot;Heading 2&quot;, lafamille)
+			STYLENAME_PARA_HEADING_3  =NomStyleExterne(&quot;Heading 3&quot;, lafamille)
+			STYLENAME_PARA_HEADING_4  =NomStyleExterne(&quot;Heading 4&quot;, lafamille)
+			STYLENAME_PARA_HEADING_5  =NomStyleExterne(&quot;Heading 5&quot;, lafamille)
+			STYLENAME_PARA_HEADING_6  =NomStyleExterne(&quot;Heading 6&quot;, lafamille)
+			STYLENAME_PARA_HEADING_7  =NomStyleExterne(&quot;Heading 7&quot;, lafamille)
+			STYLENAME_PARA_HEADING_8  =NomStyleExterne(&quot;Heading 8&quot;, lafamille)
+			STYLENAME_PARA_HEADING_9  =NomStyleExterne(&quot;Heading 9&quot;, lafamille)
+			STYLENAME_PARA_HEADING_10  =NomStyleExterne(&quot;Heading 10&quot;	, lafamille)	
+
+
+GUI_STYLENAME_CHAR_EMPHASIS = STYLENAME_CHAR_EMPHASIS
+GUI_STYLENAME_CHAR_STRONGEMPHASIS = STYLENAME_CHAR_STRONGEMPHASIS
+GUI_STYLENAME_CHAR_QUOTATION =  STYLENAME_CHAR_QUOTATION
+GUI_STYLENAME_PARA_QUOTATION = STYLENAME_PARA_QUOTATION
+GUI_STYLENAME_PARA_BODY = STYLENAME_PARA_BODY
+GUI_STYLENAME_PARA_PREFORMATTED = STYLENAME_PARA_PREFORMATTED
+
+
+	select case OOoLang()
+	
+		case &quot;fr&quot;:
+			STYLENAME_CHAR_DEFAULT = &quot;Standard&quot;
+			STYLENAME_PARA_DEFAULT = &quot;Standard&quot;
+			
+			GUI_STYLENAME_CHAR_DEFAULT = STYLENAME_CHAR_DEFAULT
+			GUI_STYLENAME_PARA_DEFAULT = STYLENAME_PARA_DEFAULT
+			
+			GUI_STYLENAME_CHAR_UPPERSCRIPT = &quot;Passer en Exposant&quot;
+			GUI_STYLENAME_CHAR_SUBSCRIPT = &quot;Passer en Indice&quot;
+			GUI_STYLENAME_CHAR_UNDOSCRIPT = &quot;Annuler Exposant / Indice&quot;
+			
+			GUI_STYLENAME_PARA_REMARK = &quot;Remarque&quot;
+			GUI_STYLENAME_PARA_SECTION = &quot;En-tête de section&quot;
+			GUI_STYLENAME_PARA_GLOSSARY =&quot;En-tête de section (Glossaire)&quot;
+			GUI_STYLENAME_PARA_PREFACE = &quot;En-tête de section (Preface)&quot;
+			GUI_STYLENAME_PARA_LISTING = &quot;Program Listing&quot;			
+
+			
+			GUI_STYLENAME_PARA_HEADING_NO = &quot;Pas de titre (Standard)&quot;
+			GUI_STYLENAME_PARA_HEADING_1 = &quot;Titre de Niveau 1&quot;
+			GUI_STYLENAME_PARA_HEADING_2 = &quot;Titre de Niveau 2&quot;
+			GUI_STYLENAME_PARA_HEADING_3 = &quot;Titre de Niveau 3&quot;
+			GUI_STYLENAME_PARA_HEADING_4 = &quot;Titre de Niveau 4&quot;
+			GUI_STYLENAME_PARA_HEADING_5 = &quot;Titre de Niveau 5&quot;
+			GUI_STYLENAME_PARA_HEADING_6 = &quot;Titre de Niveau 6&quot;
+			GUI_STYLENAME_PARA_HEADING_7 = &quot;Titre de Niveau 7&quot;
+			GUI_STYLENAME_PARA_HEADING_8 = &quot;Titre de Niveau 8&quot;
+			GUI_STYLENAME_PARA_HEADING_9 = &quot;Titre de Niveau 9&quot;
+			GUI_STYLENAME_PARA_HEADING_10 = &quot;Titre de Niveau 10&quot;
+			
+			GUI_STYLENAME_APPENDIX_HEADING_NO = &quot;Pas de titre (Standard)&quot;			
+			GUI_STYLENAME_APPENDIX_HEADING_1 = &quot;Titre Annexe de Niveau 1&quot;
+			GUI_STYLENAME_APPENDIX_HEADING_2 = &quot;Titre Annexe de Niveau 2&quot;
+			GUI_STYLENAME_APPENDIX_HEADING_3 = &quot;Titre Annexe de Niveau 3&quot;
+			GUI_STYLENAME_APPENDIX_HEADING_4 = &quot;Titre Annexe de Niveau 4&quot;
+			GUI_STYLENAME_APPENDIX_HEADING_5 = &quot;Titre Annexe de Niveau 5&quot;			
+		
+		case else: &apos;en
+		
+			STYLENAME_PARA_DEFAULT = &quot;Default&quot;
+			STYLENAME_CHAR_DEFAULT = &quot;Default&quot;
+
+			GUI_STYLENAME_CHAR_DEFAULT = STYLENAME_CHAR_DEFAULT
+			GUI_STYLENAME_PARA_DEFAULT = STYLENAME_PARA_DEFAULT
+			
+			GUI_STYLENAME_CHAR_UPPERSCRIPT = &quot;Upperscript&quot;
+			GUI_STYLENAME_CHAR_SUBSCRIPT = &quot;Subscript&quot;
+			GUI_STYLENAME_CHAR_UNDOSCRIPT = &quot;Undo Upperscript / Subscript&quot;
+
+			GUI_STYLENAME_PARA_REMARK = &quot;Remark&quot;
+			GUI_STYLENAME_PARA_SECTION = &quot;Section Heading&quot;
+			GUI_STYLENAME_PARA_GLOSSARY =&quot;Glossary Section Heading&quot;
+			GUI_STYLENAME_PARA_PREFACE = &quot;Preface Section Heading&quot;
+			GUI_STYLENAME_PARA_LISTING = &quot;Program Listing&quot;
+			
+			GUI_STYLENAME_PARA_HEADING_NO = &quot;No title&quot;
+			GUI_STYLENAME_PARA_HEADING_1 = &quot;Heading level 1&quot;
+			GUI_STYLENAME_PARA_HEADING_2 = &quot;Heading level 2&quot;
+			GUI_STYLENAME_PARA_HEADING_3 = &quot;Heading level 3&quot;
+			GUI_STYLENAME_PARA_HEADING_4 = &quot;Heading level 4&quot;
+			GUI_STYLENAME_PARA_HEADING_5 = &quot;Heading level 5&quot;
+			GUI_STYLENAME_PARA_HEADING_6 = &quot;Heading level 6&quot;
+			GUI_STYLENAME_PARA_HEADING_7 = &quot;Heading level 7&quot;
+			GUI_STYLENAME_PARA_HEADING_8 = &quot;Heading level 8&quot;
+			GUI_STYLENAME_PARA_HEADING_9 = &quot;Heading level 9&quot;
+			GUI_STYLENAME_PARA_HEADING_10 = &quot;Heading level 10&quot;
+			
+			GUI_STYLENAME_APPENDIX_HEADING_NO = &quot;No title&quot;			
+			GUI_STYLENAME_APPENDIX_HEADING_1 = &quot;Appendix Heading level 1&quot;
+			GUI_STYLENAME_APPENDIX_HEADING_2 = &quot;Appendix Heading level 2&quot;
+			GUI_STYLENAME_APPENDIX_HEADING_3 = &quot;Appendix Heading level 3&quot;
+			GUI_STYLENAME_APPENDIX_HEADING_4 = &quot;Appendix Heading level 4&quot;
+			GUI_STYLENAME_APPENDIX_HEADING_5 = &quot;Appendix Heading level 5&quot;
+	end select
+			
+end sub
+
+</script:module>

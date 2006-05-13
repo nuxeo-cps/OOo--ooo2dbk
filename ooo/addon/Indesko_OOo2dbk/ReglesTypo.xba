@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ReglesTypo" script:language="StarBasic">
+const guillemetOuvre=&quot;«&quot;
+const guillemetFerme=&quot;»&quot;
+const NomStyleGuillemets=&quot;Guillemets&quot;
+
+&apos;--------------------------------
+&apos; Branchement
+&apos;--------------------------------
+sub traitementRegleTypo (laselection)
+
+
+
+end sub
+
+&apos;---------------------------------
+&apos; Guillemets sur Citation
+&apos;---------------------------------
+
+
+function RecupereStyleGuillemet()
+&apos;verifie si le style &quot;Guillemets&quot; existe
+&apos; le cree le cas echeant
+dim leStyle
+	laFamille = leDoc.styleFamilies.getByName(&quot;CharacterStyles&quot;)
+	if not laFamille.hasByName(NomStyleGuillemets) then
+		leStyle = leDoc.createInstance(&quot;com.sun.star.style.CharacterStyle&quot;)
+		&apos;leStyle.ParentStyle=NomStyleInterne(&quot;Citation&quot;, laFamille) &apos;plante si a ce niveau
+		laFamille.insertByName(NomStyleGuillemets, leStyle)
+		&apos;pas forcement utile mais comem ca on est certain que le style a bien été enregistré
+		leStyle=laFamille.getByName(NomStyleGuillemets)
+		leStyle.ParentStyle=NomStyleInterne(&quot;Citation&quot;, laFamille)
+	else
+		leStyle=laFamille.getByName(NomStyleGuillemets)		
+	endif
+	
+RecupereStyleGuillemet = leStyle
+
+end function
+&apos;----------------------------------------------------------------
+sub RegleGuillemetsOnStyle(laSelection)
+&apos;Encadre la selection en argument par des guillemets et espaces inséables
+&apos;dans le style &quot;Guillemets&quot;
+	
+
+monTexte=leDoc.text
+leCurseur = monTexte.createTextCursorByRange(laSelection)
+
+&apos;Ceci est traité en amont da  sAppliqueStyle
+&apos;if leCurseur.isCollapsed then
+&apos;	&apos; le style citation ne s&apos;applique que sur une selection
+&apos;	msgBox (&quot;Ce style Citation ne s&apos;applique que sur une sélection&quot;)
+&apos;	exit sub
+&apos;endif
+
+
+Espace_insecable=com.sun.star.text.ControlCharacter.HARD_SPACE
+leStyle = RecupereStyleGuillemet()
+	
+leCurseurDebut=leCurseur.text.createTextCursorByRange(leCurseur.start)
+		leCurseurDebut.CharStyleName=leStyle.name
+		monTexte.insertString(leCurseurDebut,guillemetOuvre, false)	
+		monTexte.insertControlCharacter(leCurseurDebut, Espace_insecable,false)
+		
+leCurseurFin = leCurseur.text.createTextCursorByRange(leCurseur.end)
+		leCurseurFin.CharStyleName=leStyle.name
+		monTexte.insertControlCharacter(leCurseurFin, Espace_insecable,false)	
+		monTexte.insertString(leCurseurFin,guillemetFerme, false)	
+
+end sub
+&apos;----------------------------------------------------------------
+sub VerifieGuillemetsOnSave()
+
+&apos;On fige l&apos;interface graphique
+leDoc.lockControllers
+
+leStyle = RecupereStyleGuillemet()
+
+  oSearch = leDoc.createSearchDescriptor
+  
+  &apos;Guillemets ouvrants
+  oSearch.SearchString = guillemetOuvre                  
+  trouve=leDoc.findFirst(oSearch)
+
+  While Not IsNull(trouve)
+	if trouve.CharStyleName&lt;&gt;leStyle.name then
+		trouve.CharStyleName=leStyle.name
+	endif
+    &apos;suivant
+    trouve = leDoc.findNext(trouve.End, oSearch)
+  Wend
+
+  &apos;Guillemets fermants
+  oSearch.SearchString = guillemetFerme                  
+  trouve=leDoc.findFirst(oSearch)
+
+  While Not IsNull(trouve)
+	if trouve.CharStyleName&lt;&gt;leStyle.name then
+		trouve.CharStyleName=leStyle.name
+	endif
+    &apos;suivant
+    trouve = leDoc.findNext(trouve.End, oSearch)
+  Wend
+
+
+&apos;On défige l&apos;interface graphique
+leDoc.unlockControllers
+
+end sub
+
+
+</script:module>

@@ -1,0 +1,18 @@
+ooo2dbk for Debian
+------------------
+
+ - In this package, ooo2dbk.xsl and ooo2dbk have been placed
+   in /usr/share/ooo2dbk. A configuration file can be found in /etc/ooo2dbk.xml
+   and a shell script in /usr/bin/ooo2dbk calls /usr/share/ooo2dbk/ooo2dbk.
+
+ - Use the "template.stw" OpenOffice.org template files provided in
+   /usr/share/doc/ooo2dbk/doc to create your own OOo SXW file. There is
+   one in English and one in French.
+
+ - Unfortunately, you cannot use --ole option in this package because
+   of the lack of pyuno which is not provided by OpenOffice.org binaries
+   and will not be packaged (see #220226). You then need a local version
+   of pyuno installed. You may find the oleimg.py python script in
+   /usr/share/ooo2dbk tough, in case you have pyuno.
+
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>, Fri,  3 Jun 2005 12:23:05 +0100

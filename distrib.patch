@@ -1,0 +1,33 @@
+diff -uNr ooo2dbk.orig/ooo2dbk ooo2dbk/ooo2dbk
+--- ooo2dbk.orig/ooo2dbk	2005-10-21 15:52:03.000000000 +0200
++++ ooo2dbk/ooo2dbk	2005-10-21 15:50:18.000000000 +0200
+@@ -38,7 +38,7 @@
+ 
+ VERSION = '1.4.2'
+ 
+-CONF_FILE_NAME = 'ooo2dbk.xml'
++CONF_FILE_NAME = '/etc/ooo2dbk.xml'
+ 
+ # OpenOffice.org canonical XML files
+ OOO_META_FILE_NAME = 'meta.xml'
+diff -uNr ooo2dbk.orig/ooo2dbk.xml ooo2dbk/ooo2dbk.xml
+--- ooo2dbk.orig/ooo2dbk.xml	2005-10-21 15:53:22.000000000 +0200
++++ ooo2dbk/ooo2dbk.xml	2005-10-21 15:50:18.000000000 +0200
+@@ -92,7 +92,7 @@
+     />
+   <xslt-stylesheet
+     name="o2d4unix"
+-    stylesheetPath="ooo2dbk.xsl"
++    stylesheetPath="/usr/share/xml/ooo2dbk/ooo2dbk.xsl"
+     />
+ 
+   <!-- DTD -->
+@@ -137,7 +137,7 @@
+   -->
+   <ole
+     imgFormat="png"
+-    scriptPath="ole2img.py"
++    scriptPath="/usr/bin/ole2img.py"
+     />
+ 
+   <!--
