@@ -1,10 +1,12 @@
 #!/usr/bin/python
+# (C) copyright 2006 Nuxeo SAS <http://nuxeo.com>
 # (C) Copyright 2004-2005 Nuxeo SARL <http://nuxeo.com>
 # (C) Copyright 2002 Eric Bellot <ebellot@netcourrier.com>
 # Authors:
 # M.-A. Darche (Nuxeo)
 # Ruslan Spivak (Nuxeo)
 # Eric Bellot <ebellot@netcourrier.com>
+# Laurent Godard (lgodard@indesko.com)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as published
@@ -36,7 +38,7 @@ import shutil
 import locale
 from optparse import OptionParser
 
-VERSION = '1.5.0'
+VERSION = '2.0'
 
 CONF_FILE_NAME = 'ooo2dbk.xml'
 
@@ -261,7 +263,7 @@ def createDirectory(path):
 # --------
 
 def setConfFileSettings(config_file_path=None):
-    global docbookXSL, configXML
+    global docbookXSL, docbookXSL_odf, configXML
     global configElts, imgRelDir, imgRootName
     global oooserver_host, oooserver_port
     global ole_img_format, ole2img_script_path, ooopython_path
@@ -289,16 +291,29 @@ def setConfFileSettings(config_file_path=None):
 
     # Using the XSLT stylesheets specified in the config.xml file
     if currentSys == 'unix':
-        stylesheet_file_name = getConfigValue('xslt-stylesheet', 'stylesheetPath',
+        stylesheet_file_name = getConfigValue('xslt-stylesheet', 
+                                              'stylesheetPath',
                                               name='o2d4unix')
+        stylesheet_file_name_odf = getConfigValue('xslt-stylesheet', 
+                                              'stylesheetPath',
+                                              name='o2d4unix_odf')
     else:
         stylesheet_file_name = getConfigValue('xslt-stylesheet', 'stylesheetPath',
                                               name='o2d4windows')
+        stylesheet_file_name_odf = getConfigValue('xslt-stylesheet', 'stylesheetPath',
+                                              name='o2d4windows_odf')
     stylesheet_file_name = verifPath(stylesheet_file_name)
     if stylesheet_file_name == None:
-        msg = "Bad filename for 'xslt-stylesheet' in 'config.xml'"
+        msg = "Bad filename %s for 'xslt-stylesheet' in 'config.xml'" % (stylesheet_file_name_odf)
         print msg
+
+    stylesheet_file_name_odf = verifPath(stylesheet_file_name_odf)
+    if stylesheet_file_name_odf == None:
+        msg = "Bad filename %s for 'xslt-stylesheet' in 'config.xml'" % (stylesheet_file_name_odf)
+        print msg
+
     docbookXSL = os.path.join(getModulePath(), stylesheet_file_name)
+    docbookXSL_odf = os.path.join(getModulePath(), stylesheet_file_name_odf)
 
     # Images relative directory
     imgRelDir = getConfigValue('images', 'imagesRelativeDirectory')
@@ -357,7 +372,8 @@ def setUserSettings(ooofile, docbook, command, imagesrew, deltemp, dtd,
                     xslt_file_path, xslParams):
     global docOOoSXW, docbookXML, globalXML
     global imgRelDir, imgAbsDir, rewriteImg
-    global XSLCmdTemplate, dtdPublic, dtdSystem, docbookXSL, XSLParams
+    global XSLCmdTemplate, dtdPublic, dtdSystem, XSLParams
+    global docbookXSL, docbookXSL_odf
 
     # OpenOffice.org filename
     ooofile = verifPath(ooofile)
@@ -420,6 +436,7 @@ def setUserSettings(ooofile, docbook, command, imagesrew, deltemp, dtd,
     # XSLT stylesheet
     if xslt_file_path is not None:
         docbookXSL = xslt_file_path
+        docbookXSL_odf = xslt_file_path
 
     # XSLT Params
     if xslParams is not None:
@@ -553,6 +570,81 @@ def replaceImageNode(vChildNodes):
             replaceImageNode(wChilNodes)
 
 
+def getGlobalRootHead(sourcefile, XMLFile):
+
+  strXML = extractOooArchive(docOOoSXW, XMLFile)
+  XMLparse = minidom.parseString(strXML)
+  rootNode = XMLparse.documentElement
+
+  if rootNode.attributes['xmlns:office'].value == 'http://openoffice.org/2000/office':
+      oooVersion = 'ooo1'
+  elif rootNode.attributes['xmlns:office'].value == 'urn:oasis:names:tc:opendocument:xmlns:office:1.0':
+      oooVersion = 'ooo2'
+
+  if oooVersion == 'ooo1':
+    # OpenOffice.org 1.x
+    globalRootHead = """\
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="http://openoffice.org/2000/office"
+                 xmlns:style="http://openoffice.org/2000/style"
+                 xmlns:text="http://openoffice.org/2000/text"
+                 xmlns:table="http://openoffice.org/2000/table"
+                 xmlns:draw="http://openoffice.org/2000/drawing"
+                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:number="http://openoffice.org/2000/datastyle"
+                 xmlns:svg="http://www.w3.org/2000/svg"
+                 xmlns:chart="http://openoffice.org/2000/chart"
+                 xmlns:dr3d="http://openoffice.org/2000/dr3d"
+                 xmlns:math="http://www.w3.org/1998/Math/MathML"
+                 xmlns:form="http://openoffice.org/2000/form"
+                 xmlns:script="http://openoffice.org/2000/script"
+                 xmlns:dc="http://purl.org/dc/elements/1.1/"
+                 xmlns:meta="http://openoffice.org/2000/meta"
+                 office:class="text"
+                 office:version="1.0">
+"""
+
+  elif oooVersion == 'ooo2':
+    # OpenOffice.org 2.x - OpenDocument
+    globalRootHead = """\
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document
+                 xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+                 xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 xmlns:dc="http://purl.org/dc/elements/1.1/"
+                 xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
+                 xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
+                 xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+                 xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0"
+                 xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0"
+                 xmlns:math="http://www.w3.org/1998/Math/MathML"
+                 xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0"
+                 xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0"
+                 xmlns:ooo="http://openoffice.org/2004/office"
+                 xmlns:ooow="http://openoffice.org/2004/writer"
+                 xmlns:oooc="http://openoffice.org/2004/calc"
+                 xmlns:dom="http://www.w3.org/2001/xml-events"
+                 xmlns:xforms="http://www.w3.org/2002/xforms"
+                 xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 office:version="1.0">
+"""
+
+  globalRootFoot = """\
+</office:document>
+"""
+
+
+  return globalRootHead, globalRootFoot, oooVersion
+
 def createGlobalXML(globalFile, ooo_file_path):
     """
     Create a global XML file by concatening the different XML files contained
@@ -564,32 +656,10 @@ def createGlobalXML(globalFile, ooo_file_path):
     if os.path.exists(imgAbsDir):
         shutil.rmtree(imgAbsDir)
 
-    globalRootHead = """\
-<?xml version="1.0" encoding="UTF-8"?>
-<office:document
-    xmlns:office="http://openoffice.org/2000/office"
-    xmlns:style="http://openoffice.org/2000/style"
-    xmlns:text="http://openoffice.org/2000/text"
-    xmlns:table="http://openoffice.org/2000/table"
-    xmlns:draw="http://openoffice.org/2000/drawing"
-    xmlns:fo="http://www.w3.org/1999/XSL/Format"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:number="http://openoffice.org/2000/datastyle"
-    xmlns:svg="http://www.w3.org/2000/svg"
-    xmlns:chart="http://openoffice.org/2000/chart"
-    xmlns:dr3d="http://openoffice.org/2000/dr3d"
-    xmlns:math="http://www.w3.org/1998/Math/MathML"
-    xmlns:form="http://openoffice.org/2000/form"
-    xmlns:script="http://openoffice.org/2000/script"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:meta="http://openoffice.org/2000/meta"
-    office:class="text"
-    office:version="1.0">
-"""
-    globalRootFoot = """\
-</office:document>
-"""
+    globalRootHead, globalRootFoot, oooVersion = getGlobalRootHead(docOOoSXW,
+                                                                   OOO_META_FILE_NAME)
     globalRootStr = globalRootHead + globalRootFoot
+
     globalStrParse = minidom.parseString(globalRootStr)
     globalRoot = globalStrParse.documentElement
     metaListElts = listChildNodes(docOOoSXW, OOO_META_FILE_NAME, ooo_file_path)
@@ -604,6 +674,8 @@ def createGlobalXML(globalFile, ooo_file_path):
     fileXML = codecs.open(globalFile, 'w', 'utf-8')
     fileXML.write(strXMLNS)
     fileXML.close()
+    
+    return oooVersion
 
 
 def tempFilesDelete(deltemp):
@@ -723,7 +795,8 @@ def convert(ooo_file_path, command=None, docbook_file_path=None,
     if VERBOSE:
         print "   2 - Initialization (configuration file and computed options)"
         print "       - preferred encoding: %s" % preferred_encoding
-        print "       - XSLT file: %s" % docbookXSL
+        print "       - XSLT file OOo 1.x: %s" % (docbookXSL)
+        print "       - XSLT file OOo 2.x OpenDocument: %s" % (docbookXSL_odf)
         print "       - OpenOffice.org file computed path: %s" % docOOoSXW
         print "       - DocBook file computed path: %s" % docbookXML
         if process_ole_objects:
@@ -733,16 +806,34 @@ def convert(ooo_file_path, command=None, docbook_file_path=None,
             print "       - OOo Python path: %s" % ooopython_path
         print "       ==>", duration, "sec.\n"
         print "   3 - Unzip and concat OpenOffice.org XML files"
+    
     startTime = time.time()
-    createGlobalXML(globalXML, ooo_file_path)
+    oooVersion = createGlobalXML(globalXML, ooo_file_path)
     endTime = time.time()
     duration = round(endTime - startTime, 2)
 
+    # choose xslt regarding ooo version
+    if oooVersion == 'ooo1':
+        xsltFile = docbookXSL
+    else:
+        xsltFile = docbookXSL_odf
+        
+
     if VERBOSE:
+        
+        if oooVersion == 'ooo1':
+            print "\n       - OOo 1.x file format"
+            print "       - XSLT choosen file is %s" % xsltFile
+        else:
+            print "\n       - OOo 2.x OpenDocument file format"
+            print "       - XSLT choosen file is %s " % xsltFile
+        
         print "       ==>", duration, "sec.\n"
 
         print "   4 - DocBook file creation"
-    o2dConvert(globalXML, docbookXML, docbookXSL)
+
+
+    o2dConvert(globalXML, docbookXML, xsltFile)
 
     tempFilesDelete(deltemp)
     if VERBOSE:

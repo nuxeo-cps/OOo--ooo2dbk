@@ -89,6 +89,7 @@ $Id$
   -->
 
   <!-- Relative path of OpenOffice.org to DocBook stylesheet -->
+  <!-- For OOo 1 file format-->
   <xslt-stylesheet
     name="o2d4windows"
     stylesheetPath="ooo2dbk.xsl"
@@ -97,7 +98,16 @@ $Id$
     name="o2d4unix"
     stylesheetPath="ooo2dbk.xsl"
     />
-
+  <!-- For OOo 2 ODF file format-->
+  <xslt-stylesheet
+    name="o2d4windows_odf"
+    stylesheetPath="ooo2dbk.odf.xsl"
+    />
+  <xslt-stylesheet
+    name="o2d4unix_odf"
+    stylesheetPath="ooo2dbk.odf.xsl"
+    />
+  
   <!-- DTD -->
   <dtd
     name="docbook44"

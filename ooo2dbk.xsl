@@ -3,6 +3,7 @@
 <!ENTITY nbsp "&#160;">
 ]>
 <!--
+(C) Copyright 2006 Nuxeo SAS <http://nuxeo.com>
 (C) Copyright 2004-2005 Nuxeo SARL <http://nuxeo.com>
 (C) Copyright 2003 Stefan Rinke <stefan@stefan-rinke.de>
 (C) Copyright 2002 Eric Bellot <ebellot@netcourrier.com>
