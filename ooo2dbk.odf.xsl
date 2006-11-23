@@ -3,8 +3,7 @@
 <!ENTITY nbsp "&#160;">
 ]>
 <!--
-Copyright (c) 2006 Nuxeo SAS <http://nuxeo.com>
-Copyright (c) 2004-2005 Nuxeo SARL <http://nuxeo.com>
+Copyright (c) 2004-2006 Nuxeo SARL <http://nuxeo.com>
 Copyright (c) 2003 Stefan Rinke <stefan@stefan-rinke.de>
 Copyright (c) 2002 Eric Bellot <ebellot@netcourrier.com>
 
@@ -13,7 +12,7 @@ M.-A. Darche (Nuxeo)
 Stefan Rinke <stefan@stefan-rinke.de>
 Eric Bellot <ebellot@netcourrier.com>
 Laurent Godard <lgodard@indesko.com>
-TARDELLI Maurice - CERTU/SYS/ITS <Maurice.Tardelli@equipement.gouv.fr> for ODF
+Maurice TARDELLI - CERTU/SYS/ITS <Maurice.Tardelli@equipement.gouv.fr> for ODF
 
 This script is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public

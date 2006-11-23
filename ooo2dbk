@@ -1,6 +1,5 @@
 #!/usr/bin/python
-# (C) copyright 2006 Nuxeo SAS <http://nuxeo.com>
-# (C) Copyright 2004-2005 Nuxeo SARL <http://nuxeo.com>
+# (C) Copyright 2003-2006 Nuxeo SAS <http://nuxeo.com>
 # (C) Copyright 2002 Eric Bellot <ebellot@netcourrier.com>
 #
 # Authors:
@@ -768,19 +767,19 @@ def createDocbookArchive():
 
 
 def convert(ooo_file_path, 
-            command = None,
-            docbook_file_path = None,
-            imagesrew = 1,
-            deltemp = 1,
-            dtd = None,
-            config_file_path = None,
-            xslt_file_path = None,
-            xslParams = None,
-            VERBOSE = False,
-            ZIPFILE = False,
-            docbook_top_element = 'book',
-            process_ole_objects = False,
-            docbookXSL = None,
+            command=None,
+            docbook_file_path=None,
+            imagesrew=1,
+            deltemp=1,
+            dtd=None,
+            config_file_path=None,
+            xslt_file_path=None,
+            xslParams=None,
+            VERBOSE=False,
+            ZIPFILE=False,
+            docbook_top_element='book',
+            process_ole_objects=False,
+            docbookXSL=None,
             ):
     """Convert OpenOffice.org Writer file to DocBook XML.
     """
