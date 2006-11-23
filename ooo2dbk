@@ -187,11 +187,11 @@ def execArgs():
             xslParams=xslParams,
             docbook_file_path=options.dbkfile,
             deltemp=options.flatxml,
-            VERBOSE = options.verbose,
-            ZIPFILE = options.zipfile,
-            docbook_top_element = docbook_top_element,
-            process_ole_objects = options.ole,
-            docbookXSL = None,
+            VERBOSE=options.verbose,
+            ZIPFILE=options.zipfile,
+            docbook_top_element=docbook_top_element,
+            process_ole_objects=options.ole,
+            docbookXSL=None,
             )
     return
 
