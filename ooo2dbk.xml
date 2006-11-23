@@ -140,7 +140,7 @@ $Id$
   -->
   <ole
     imgFormat="png"
-    scriptPath="/usr/bin/ole2img.py"
+    scriptPath="ole2img.py"
     />
 
   <!--
