@@ -58,7 +58,7 @@ ZIP_FILE_ENCODING = 'cp437'
 # initialization (attempt to remove global statements)
 oooVersion = 'ooo1'
 docbookXSL = None
-VERBOSE = False
+VERBOSE = True
 ZIPFILE = None
 docbook_top_element = 'book'
 process_ole_objects = False
@@ -164,9 +164,6 @@ def execArgs():
         parser.error("incorrect number of arguments")
 
     ooo_file_path = args[0]
-
-    VERBOSE = options.verbose
-    ZIPFILE = options.zipfile
 
     if options.book:
         docbook_top_element = 'book'
@@ -370,7 +367,7 @@ def getConfigValue(element, attribute, name=''):
 
 
 def setUserSettings(ooofile, docbook, command, imagesrew, deltemp, dtd,
-                    xslt_file_path, xslParams):
+                    xslt_file_path, xslParams, VERBOSE):
     global docOOoSXW, docbookXML, globalXML
     global imgRelDir, imgAbsDir, rewriteImg
     global XSLCmdTemplate, dtdPublic, dtdSystem, XSLParams
@@ -457,11 +454,11 @@ def setUserSettings(ooofile, docbook, command, imagesrew, deltemp, dtd,
 
 
 def initializeSets(ooo_file_path, docbook, command, imagesrew, deltemp, dtd,
-                   config_file_path, xslt_file_path, xslParams):
+                   config_file_path, xslt_file_path, xslParams, VERBOSE):
     verifSys()
     setConfFileSettings(config_file_path)
     setUserSettings(ooo_file_path, docbook, command, imagesrew, deltemp, dtd,
-                    xslt_file_path, xslParams)
+                    xslt_file_path, xslParams, VERBOSE)
 
 # --------------------
 # Conversion functions
@@ -485,7 +482,7 @@ def extractOooArchive(docOOoSXW, XMLFile):
                 zip_file.close()
                 return strOOoXML
 
-def listChildNodes(docOOoSXW, XMLFile, ooo_file_path):
+def listChildNodes(docOOoSXW, XMLFile, ooo_file_path, VERBOSE):
     """Extract and parse Zip XML files for concat.
     """
     # Extract and parse XML file
@@ -644,7 +641,7 @@ def getGlobalRootHead(sourcefile, XMLFile):
 
   return globalRootHead, globalRootFoot, oooVersion
 
-def createGlobalXML(globalFile, ooo_file_path):
+def createGlobalXML(globalFile, ooo_file_path, VERBOSE):
     """
     Create a global XML file by concatening the different XML files contained
     within a .sxw OOo file (meta.xml, styles.xml, content.xml).
@@ -661,9 +658,9 @@ def createGlobalXML(globalFile, ooo_file_path):
 
     globalStrParse = minidom.parseString(globalRootStr)
     globalRoot = globalStrParse.documentElement
-    metaListElts = listChildNodes(docOOoSXW, OOO_META_FILE_NAME, ooo_file_path)
-    stylesListElts = listChildNodes(docOOoSXW, OOO_STYLES_FILE_NAME, ooo_file_path)
-    contentListElts = listChildNodes(docOOoSXW, OOO_CONTENT_FILE_NAME, ooo_file_path)
+    metaListElts = listChildNodes(docOOoSXW, OOO_META_FILE_NAME, ooo_file_path, VERBOSE)
+    stylesListElts = listChildNodes(docOOoSXW, OOO_STYLES_FILE_NAME, ooo_file_path, VERBOSE)
+    contentListElts = listChildNodes(docOOoSXW, OOO_CONTENT_FILE_NAME, ooo_file_path, VERBOSE)
     globalListElts = metaListElts + stylesListElts + contentListElts
     for node in globalListElts:
         globalRoot.appendChild(node)
@@ -682,7 +679,7 @@ def tempFilesDelete(deltemp):
         os.remove(globalXML)
 
 
-def getXsltCommand(input_file_path, output_file_path, stylesheet):
+def getXsltCommand(input_file_path, output_file_path, stylesheet, VERBOSE):
     """Return the actual XSLT processing command.
     """
     global XSLCmdTemplate
@@ -720,21 +717,20 @@ def toUnicode(s):
     return unicode(s, preferred_encoding)
 
 
-def o2dConvert(input, output, stylesheet):
+def o2dConvert(input, output, stylesheet, VERBOSE):
     """Generic conversion.
     """
     startTime = time.time()
-    os.system(getXsltCommand(input, output, stylesheet))
+    os.system(getXsltCommand(input, output, stylesheet,VERBOSE))
     endTime = time.time()
     duration = round(endTime - startTime, 2)
-    if VERBOSE:
-        print "       ==>", duration, "sec.\n"
+
 
 # -------------
 # User commands
 # -------------
 
-def createDocbookArchive():
+def createDocbookArchive(ZIPFILE):
     pjoin = os.path.join
     psplit = os.path.split
     psplitext = os.path.splitext
@@ -796,7 +792,8 @@ def convert(ooo_file_path,
         print "       - process OLE objects: %s" % process_ole_objects
 
     initializeSets(ooo_file_path, docbook_file_path, command, imagesrew,
-                   deltemp, dtd, config_file_path, xslt_file_path, xslParams)
+                   deltemp, dtd, config_file_path, xslt_file_path, xslParams,
+                   VERBOSE)
 
     ooo_file_path = toUnicode(ooo_file_path)
     if docbook_file_path is not None:
@@ -814,7 +811,7 @@ def convert(ooo_file_path,
 
     startTime = time.time()
 
-    oooVersion = createGlobalXML(globalXML, ooo_file_path)
+    oooVersion = createGlobalXML(globalXML, ooo_file_path, VERBOSE)
 
     endTime = time.time()
     duration = round(endTime - startTime, 2)
@@ -844,7 +841,7 @@ def convert(ooo_file_path,
         print "\n   4 - DocBook file creation"
         
     startTime = time.time()
-    o2dConvert(globalXML, docbookXML, docbookXSL)
+    o2dConvert(globalXML, docbookXML, docbookXSL, VERBOSE)
 
     tempFilesDelete(deltemp)
     endTime = time.time()
@@ -854,7 +851,7 @@ def convert(ooo_file_path,
         print "Conversion completed\n"
 
     if ZIPFILE:
-        createDocbookArchive()
+        createDocbookArchive(ZIPFILE)
         if VERBOSE:
             print "Zip archive created\n"
 
