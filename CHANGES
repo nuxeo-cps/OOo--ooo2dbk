@@ -4,11 +4,12 @@ Requires:
 New features:
 ~~~~~~~~~~~~~
 - supports opendocument OOo 2.x file format
-(xslt contributed by TARDELLI Maurice - CERTU/SYS/ITS" <Maurice.Tardelli@equipement.gouv.fr>)
+(xslt modifications by TARDELLI Maurice - CERTU/SYS/ITS" <Maurice.Tardelli@equipement.gouv.fr>)
 
 Bug fixes:
 ~~~~~~~~~~
 - 
 New internal features:
 ~~~~~~~~~~~~~~~~~~~~~~
--
+- refactoring: no more plateform dependand xslt files in ooo2dbk.xml
+- refactoring: OOo file analyzed at first to obtain oooVersion file 

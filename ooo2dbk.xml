@@ -89,22 +89,12 @@ $Id$
   -->
 
   <!-- Relative path of OpenOffice.org to DocBook stylesheet -->
-  <!-- For OOo 1 file format-->
   <xslt-stylesheet
-    name="o2d4windows"
+    name="ooo1"
     stylesheetPath="ooo2dbk.xsl"
     />
   <xslt-stylesheet
-    name="o2d4unix"
-    stylesheetPath="ooo2dbk.xsl"
-    />
-  <!-- For OOo 2 ODF file format-->
-  <xslt-stylesheet
-    name="o2d4windows_odf"
-    stylesheetPath="ooo2dbk.odf.xsl"
-    />
-  <xslt-stylesheet
-    name="o2d4unix_odf"
+    name="ooo2"
     stylesheetPath="ooo2dbk.odf.xsl"
     />
   
@@ -150,7 +140,7 @@ $Id$
   -->
   <ole
     imgFormat="png"
-    scriptPath="ole2img.py"
+    scriptPath="/usr/bin/ole2img.py"
     />
 
   <!--

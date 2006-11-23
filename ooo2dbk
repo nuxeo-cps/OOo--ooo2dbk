@@ -2,6 +2,7 @@
 # (C) copyright 2006 Nuxeo SAS <http://nuxeo.com>
 # (C) Copyright 2004-2005 Nuxeo SARL <http://nuxeo.com>
 # (C) Copyright 2002 Eric Bellot <ebellot@netcourrier.com>
+#
 # Authors:
 # M.-A. Darche (Nuxeo)
 # Ruslan Spivak (Nuxeo)
@@ -54,6 +55,14 @@ DOCBOOK_FILE_SUFFIX = '.docb.xml'
 # Read [ 878120 ] Zipfile archive name can't be unicode
 # https://sourceforge.net/tracker/?func=detail&atid=105470&aid=878120&group_id=5470
 ZIP_FILE_ENCODING = 'cp437'
+
+# initialization (attempt to remove global statements)
+oooVersion = 'ooo1'
+docbookXSL = None
+VERBOSE = False
+ZIPFILE = None
+docbook_top_element = 'book'
+process_ole_objects = False
 
 def execArgs():
     """Analyze command line arguments.
@@ -157,13 +166,9 @@ def execArgs():
 
     ooo_file_path = args[0]
 
-    global VERBOSE
     VERBOSE = options.verbose
-
-    global ZIPFILE
     ZIPFILE = options.zipfile
 
-    global docbook_top_element
     if options.book:
         docbook_top_element = 'book'
     elif options.article:
@@ -174,17 +179,22 @@ def execArgs():
     xslParams.append('topElementName')
     xslParams.append(docbook_top_element)
 
-    global process_ole_objects
     process_ole_objects = options.ole
 
     convert(ooo_file_path,
             config_file_path=options.config,
             command=options.cmdxslt,
-            xslt_file_path=options.xslt, xslParams=xslParams,
+            xslt_file_path=options.xslt,
+            xslParams=xslParams,
             docbook_file_path=options.dbkfile,
             deltemp=options.flatxml,
+            VERBOSE = options.verbose,
+            ZIPFILE = options.zipfile,
+            docbook_top_element = docbook_top_element,
+            process_ole_objects = options.ole,
+            docbookXSL = None,
             )
-
+    return
 
 # ---------
 # Utilities
@@ -262,8 +272,24 @@ def createDirectory(path):
 # SETTINGS
 # --------
 
+def getXSLfile(oooVersion):
+
+    # Using the XSLT stylesheets specified in the config.xml file
+    stylesheet_file_name = getConfigValue('xslt-stylesheet', 
+                                              'stylesheetPath',
+                                              name=oooVersion)
+    stylesheet_file_name = verifPath(stylesheet_file_name)
+    if stylesheet_file_name == None:
+        print "Bad filename %s for 'xslt-stylesheet' %s in 'config.xml'" % (
+                                                stylesheet_file_name, 
+                                                oooVersion )
+
+    xsltfile = os.path.join(getModulePath(), stylesheet_file_name)
+
+    return xsltfile
+
 def setConfFileSettings(config_file_path=None):
-    global docbookXSL, docbookXSL_odf, configXML
+    global configXML
     global configElts, imgRelDir, imgRootName
     global oooserver_host, oooserver_port
     global ole_img_format, ole2img_script_path, ooopython_path
@@ -289,31 +315,7 @@ def setConfFileSettings(config_file_path=None):
             tupleElt = (node.nodeName, dictAtt)
             configElts.append(tupleElt)
 
-    # Using the XSLT stylesheets specified in the config.xml file
-    if currentSys == 'unix':
-        stylesheet_file_name = getConfigValue('xslt-stylesheet', 
-                                              'stylesheetPath',
-                                              name='o2d4unix')
-        stylesheet_file_name_odf = getConfigValue('xslt-stylesheet', 
-                                              'stylesheetPath',
-                                              name='o2d4unix_odf')
-    else:
-        stylesheet_file_name = getConfigValue('xslt-stylesheet', 'stylesheetPath',
-                                              name='o2d4windows')
-        stylesheet_file_name_odf = getConfigValue('xslt-stylesheet', 'stylesheetPath',
-                                              name='o2d4windows_odf')
-    stylesheet_file_name = verifPath(stylesheet_file_name)
-    if stylesheet_file_name == None:
-        msg = "Bad filename %s for 'xslt-stylesheet' in 'config.xml'" % (stylesheet_file_name_odf)
-        print msg
 
-    stylesheet_file_name_odf = verifPath(stylesheet_file_name_odf)
-    if stylesheet_file_name_odf == None:
-        msg = "Bad filename %s for 'xslt-stylesheet' in 'config.xml'" % (stylesheet_file_name_odf)
-        print msg
-
-    docbookXSL = os.path.join(getModulePath(), stylesheet_file_name)
-    docbookXSL_odf = os.path.join(getModulePath(), stylesheet_file_name_odf)
 
     # Images relative directory
     imgRelDir = getConfigValue('images', 'imagesRelativeDirectory')
@@ -373,7 +375,6 @@ def setUserSettings(ooofile, docbook, command, imagesrew, deltemp, dtd,
     global docOOoSXW, docbookXML, globalXML
     global imgRelDir, imgAbsDir, rewriteImg
     global XSLCmdTemplate, dtdPublic, dtdSystem, XSLParams
-    global docbookXSL, docbookXSL_odf
 
     # OpenOffice.org filename
     ooofile = verifPath(ooofile)
@@ -436,7 +437,6 @@ def setUserSettings(ooofile, docbook, command, imagesrew, deltemp, dtd,
     # XSLT stylesheet
     if xslt_file_path is not None:
         docbookXSL = xslt_file_path
-        docbookXSL_odf = xslt_file_path
 
     # XSLT Params
     if xslParams is not None:
@@ -674,7 +674,7 @@ def createGlobalXML(globalFile, ooo_file_path):
     fileXML = codecs.open(globalFile, 'w', 'utf-8')
     fileXML.write(strXMLNS)
     fileXML.close()
-    
+
     return oooVersion
 
 
@@ -767,24 +767,37 @@ def createDocbookArchive():
         shutil.rmtree(imgAbsDir)
 
 
-def convert(ooo_file_path, command=None, docbook_file_path=None,
-            imagesrew=1, deltemp=1, dtd=None,
-            config_file_path=None, xslt_file_path=None, xslParams=None):
+def convert(ooo_file_path, 
+            command = None,
+            docbook_file_path = None,
+            imagesrew = 1,
+            deltemp = 1,
+            dtd = None,
+            config_file_path = None,
+            xslt_file_path = None,
+            xslParams = None,
+            VERBOSE = False,
+            ZIPFILE = False,
+            docbook_top_element = 'book',
+            process_ole_objects = False,
+            docbookXSL = None,
+            ):
     """Convert OpenOffice.org Writer file to DocBook XML.
     """
+
+    startTime = time.time()
+
     if VERBOSE:
         print "   1 - Initialization (command line options)"
-    startTime = time.time()
     if VERBOSE:
         print "       - OOo2DBK config file: %s" % config_file_path
         print "       - OpenOffice.org file: %s" % ooo_file_path
         print "       - DocBook file: %s" % docbook_file_path
         print "       - top element is: %s" % docbook_top_element
         print "       - process OLE objects: %s" % process_ole_objects
+
     initializeSets(ooo_file_path, docbook_file_path, command, imagesrew,
                    deltemp, dtd, config_file_path, xslt_file_path, xslParams)
-    endTime = time.time()
-    duration = round(endTime - startTime, 2)
 
     ooo_file_path = toUnicode(ooo_file_path)
     if docbook_file_path is not None:
@@ -792,11 +805,34 @@ def convert(ooo_file_path, command=None, docbook_file_path=None,
     if xslt_file_path is not None:
         xslt_file_path = toUnicode(xslt_file_path)
 
+    endTime = time.time()
+    duration = round(endTime - startTime, 2)
+
     if VERBOSE:
-        print "   2 - Initialization (configuration file and computed options)"
+        print "       ==>", duration, "sec.\n"
+
+        print "   2 - Unzip and concat OpenOffice.org XML files"
+
+    startTime = time.time()
+
+    oooVersion = createGlobalXML(globalXML, ooo_file_path)
+
+    endTime = time.time()
+    duration = round(endTime - startTime, 2)
+
+    if VERBOSE:
+        print "       - Detected file format: %s" % (oooVersion)
+        print "       ==>", duration, "sec.\n"
+
+        print "   3 - Initialization (configuration file and computed options)"
+
+    if docbookXSL is None:
+        # get XSLT file to use from configuration file
+        docbookXSL = getXSLfile(oooVersion)
+
+    if VERBOSE:
         print "       - preferred encoding: %s" % preferred_encoding
-        print "       - XSLT file OOo 1.x: %s" % (docbookXSL)
-        print "       - XSLT file OOo 2.x OpenDocument: %s" % (docbookXSL_odf)
+        print "       - XSLT file: %s" % (docbookXSL)
         print "       - OpenOffice.org file computed path: %s" % docOOoSXW
         print "       - DocBook file computed path: %s" % docbookXML
         if process_ole_objects:
@@ -804,39 +840,18 @@ def convert(ooo_file_path, command=None, docbook_file_path=None,
             print "       - oooserver port: %s" % oooserver_port
             print "       - exported OLE image format: %s" % ole_img_format
             print "       - OOo Python path: %s" % ooopython_path
-        print "       ==>", duration, "sec.\n"
-        print "   3 - Unzip and concat OpenOffice.org XML files"
-    
-    startTime = time.time()
-    oooVersion = createGlobalXML(globalXML, ooo_file_path)
-    endTime = time.time()
-    duration = round(endTime - startTime, 2)
-
-    # choose xslt regarding ooo version
-    if oooVersion == 'ooo1':
-        xsltFile = docbookXSL
-    else:
-        xsltFile = docbookXSL_odf
-        
 
     if VERBOSE:
+        print "\n   4 - DocBook file creation"
         
-        if oooVersion == 'ooo1':
-            print "\n       - OOo 1.x file format"
-            print "       - XSLT choosen file is %s" % xsltFile
-        else:
-            print "\n       - OOo 2.x OpenDocument file format"
-            print "       - XSLT choosen file is %s " % xsltFile
-        
-        print "       ==>", duration, "sec.\n"
-
-        print "   4 - DocBook file creation"
-
-
-    o2dConvert(globalXML, docbookXML, xsltFile)
+    startTime = time.time()
+    o2dConvert(globalXML, docbookXML, docbookXSL)
 
     tempFilesDelete(deltemp)
+    endTime = time.time()
+    duration = round(endTime - startTime, 2)
     if VERBOSE:
+        print "       ==>", duration, "sec.\n"
         print "Conversion completed\n"
 
     if ZIPFILE:
@@ -844,7 +859,7 @@ def convert(ooo_file_path, command=None, docbook_file_path=None,
         if VERBOSE:
             print "Zip archive created\n"
 
-
 # Shell conversion
 if __name__ == "__main__":
+
     execArgs()

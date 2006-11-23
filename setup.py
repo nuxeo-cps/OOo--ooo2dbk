@@ -14,13 +14,14 @@ if platform.system() == 'Windows':
 elif platform.system() == 'Linux':
     os.system('patch -p1 <distrib.patch')
     setup(name='ooo2dbk',
-        version='1.5.0',
+        version='2.0',
         package_dir={'ooo2dbk': '.'},
         scripts=['ooo2dbk', 'ole2img.py'],
         data_files=[('/etc', ['ooo2dbk.xml',]),
                     ('/usr/local/share/xml/ooo2dbk', ['ooo2dbk-fo.xsl',
                                                 'docbook-psmi.xsl',
-                                                'ooo2dbk.xsl']),
+                                                'ooo2dbk.xsl',
+                                                'ooo2dbk.odf.xsl']),
                     ('/usr/local/share/doc/ooo2dbk', ['README.txt',
                                             'HISTORY',
                                             'COPYING',
