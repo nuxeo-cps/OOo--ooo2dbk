@@ -1,3 +1,26 @@
+===========================================================
+Package: ooo2dbk 2.0.0
+===========================================================
+First release built by: lgodard at: 2006-11-23T17:06:46
+SVN Tag: https://svn.nuxeo.org/pub/OOo/ooo2dbk/tags/2.0.0
+Build from: https://svn.nuxeo.org/pub/OOo/ooo2dbk/trunk@50229
+
+Requires:
+~~~~~~~~~
+-
+New features:
+~~~~~~~~~~~~~
+- supports opendocument OOo 2.x file format
+(xslt modifications by TARDELLI Maurice - CERTU/SYS/ITS" <Maurice.Tardelli@equipement.gouv.fr>)
+
+Bug fixes:
+~~~~~~~~~~
+- 
+New internal features:
+~~~~~~~~~~~~~~~~~~~~~~
+- refactoring: no more plateform dependand xslt files in ooo2dbk.xml
+- refactoring: OOo file analyzed at first to obtain oooVersion file 
+
 *******************************************
 ** ooo2dbk V1.5.0 [R1 build 2005/12/06-15:53 by madarche]
 ** SVN URL: https://svn.nuxeo.org/pub/ooo2dbk/trunk Revision: 30354
