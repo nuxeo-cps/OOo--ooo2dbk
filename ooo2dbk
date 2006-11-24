@@ -55,11 +55,11 @@ DOCBOOK_FILE_SUFFIX = '.docb.xml'
 # https://sourceforge.net/tracker/?func=detail&atid=105470&aid=878120&group_id=5470
 ZIP_FILE_ENCODING = 'cp437'
 
-# initialization (attempt to remove global statements)
+# initialization (attempt to remove some global statements)
 oooVersion = 'ooo1'
 docbookXSL = None
-VERBOSE = True
-ZIPFILE = None
+verbose = True
+zipfile = None
 docbook_top_element = 'book'
 process_ole_objects = False
 
@@ -184,8 +184,8 @@ def execArgs():
             xslParams=xslParams,
             docbook_file_path=options.dbkfile,
             deltemp=options.flatxml,
-            VERBOSE=options.verbose,
-            ZIPFILE=options.zipfile,
+            verbose=options.verbose,
+            zipfile=options.zipfile,
             docbook_top_element=docbook_top_element,
             process_ole_objects=options.ole,
             docbookXSL=None,
@@ -367,7 +367,7 @@ def getConfigValue(element, attribute, name=''):
 
 
 def setUserSettings(ooofile, docbook, command, imagesrew, deltemp, dtd,
-                    xslt_file_path, xslParams, VERBOSE):
+                    xslt_file_path, xslParams, verbose):
     global docOOoSXW, docbookXML, globalXML
     global imgRelDir, imgAbsDir, rewriteImg
     global XSLCmdTemplate, dtdPublic, dtdSystem, XSLParams
@@ -447,18 +447,18 @@ def setUserSettings(ooofile, docbook, command, imagesrew, deltemp, dtd,
         XSLParams = ("%s" % (param_syntax)) % tuple(xslParams)
     else:
         XSLParams = ' '
-    if VERBOSE:
+    if verbose:
         print "       - xslParams = %s" % xslParams
         print "       - param_syntax = %s" % param_syntax
         print "       - XSLParams = %s" % XSLParams
 
 
 def initializeSets(ooo_file_path, docbook, command, imagesrew, deltemp, dtd,
-                   config_file_path, xslt_file_path, xslParams, VERBOSE):
+                   config_file_path, xslt_file_path, xslParams, verbose):
     verifSys()
     setConfFileSettings(config_file_path)
     setUserSettings(ooo_file_path, docbook, command, imagesrew, deltemp, dtd,
-                    xslt_file_path, xslParams, VERBOSE)
+                    xslt_file_path, xslParams, verbose)
 
 # --------------------
 # Conversion functions
@@ -482,7 +482,7 @@ def extractOooArchive(docOOoSXW, XMLFile):
                 zip_file.close()
                 return strOOoXML
 
-def listChildNodes(docOOoSXW, XMLFile, ooo_file_path, VERBOSE):
+def listChildNodes(docOOoSXW, XMLFile, ooo_file_path, verbose):
     """Extract and parse Zip XML files for concat.
     """
     # Extract and parse XML file
@@ -512,7 +512,7 @@ def listChildNodes(docOOoSXW, XMLFile, ooo_file_path, VERBOSE):
                 imgAbsDir,
                 oooserver_host, oooserver_port,
                 ole_img_format, ooo_file_path))
-            if VERBOSE:
+            if verbose:
                 print cmd
             os.system(cmd)
         replaceImageNode(vChildNodes)
@@ -646,7 +646,7 @@ def getGlobalRootHead(sourcefile, XMLFile):
 
   return globalRootHead, globalRootFoot, oooVersion
 
-def createGlobalXML(globalFile, ooo_file_path, VERBOSE):
+def createGlobalXML(globalFile, ooo_file_path, verbose):
     """
     Create a global XML file by concatening the different XML files contained
     within a .sxw OOo file (meta.xml, styles.xml, content.xml).
@@ -663,9 +663,9 @@ def createGlobalXML(globalFile, ooo_file_path, VERBOSE):
 
     globalStrParse = minidom.parseString(globalRootStr)
     globalRoot = globalStrParse.documentElement
-    metaListElts = listChildNodes(docOOoSXW, OOO_META_FILE_NAME, ooo_file_path, VERBOSE)
-    stylesListElts = listChildNodes(docOOoSXW, OOO_STYLES_FILE_NAME, ooo_file_path, VERBOSE)
-    contentListElts = listChildNodes(docOOoSXW, OOO_CONTENT_FILE_NAME, ooo_file_path, VERBOSE)
+    metaListElts = listChildNodes(docOOoSXW, OOO_META_FILE_NAME, ooo_file_path, verbose)
+    stylesListElts = listChildNodes(docOOoSXW, OOO_STYLES_FILE_NAME, ooo_file_path, verbose)
+    contentListElts = listChildNodes(docOOoSXW, OOO_CONTENT_FILE_NAME, ooo_file_path, verbose)
     globalListElts = metaListElts + stylesListElts + contentListElts
     for node in globalListElts:
         globalRoot.appendChild(node)
@@ -684,7 +684,7 @@ def tempFilesDelete(deltemp):
         os.remove(globalXML)
 
 
-def getXsltCommand(input_file_path, output_file_path, stylesheet, VERBOSE):
+def getXsltCommand(input_file_path, output_file_path, stylesheet, verbose):
     """Return the actual XSLT processing command.
     """
     global XSLCmdTemplate
@@ -713,7 +713,7 @@ def getXsltCommand(input_file_path, output_file_path, stylesheet, VERBOSE):
         elif var == '%v':
             varSplit = '%s%s%s' % (varSplit[0], XSLParams, varSplit[1])
         cmd = join(varSplit, '')
-    if VERBOSE:
+    if verbose:
         print cmd
     return cmd.encode(preferred_encoding)
 
@@ -722,11 +722,11 @@ def toUnicode(s):
     return unicode(s, preferred_encoding)
 
 
-def o2dConvert(input, output, stylesheet, VERBOSE):
+def o2dConvert(input, output, stylesheet, verbose):
     """Generic conversion.
     """
     startTime = time.time()
-    os.system(getXsltCommand(input, output, stylesheet,VERBOSE))
+    os.system(getXsltCommand(input, output, stylesheet,verbose))
     endTime = time.time()
     duration = round(endTime - startTime, 2)
 
@@ -735,14 +735,14 @@ def o2dConvert(input, output, stylesheet, VERBOSE):
 # User commands
 # -------------
 
-def createDocbookArchive(ZIPFILE):
+def createDocbookArchive(zipfile):
     pjoin = os.path.join
     psplit = os.path.split
     psplitext = os.path.splitext
     pbasename = os.path.basename
 
-    arch_dest_dir = psplit(ZIPFILE)[0]
-    arch_top_dir = psplitext(pbasename(ZIPFILE))[0]
+    arch_dest_dir = psplit(zipfile)[0]
+    arch_top_dir = psplitext(pbasename(zipfile))[0]
     arch_path = pjoin(arch_dest_dir, arch_top_dir + '.zip')
     arch = zipfile.ZipFile(arch_path, 'w', zipfile.ZIP_DEFLATED)
     docbook_fname = pbasename(docbookXML)
@@ -776,8 +776,8 @@ def convert(ooo_file_path,
             config_file_path=None,
             xslt_file_path=None,
             xslParams=None,
-            VERBOSE=False,
-            ZIPFILE=False,
+            verbose=False,
+            zipfile=False,
             docbook_top_element='book',
             process_ole_objects=False,
             docbookXSL=None,
@@ -787,9 +787,9 @@ def convert(ooo_file_path,
 
     startTime = time.time()
 
-    if VERBOSE:
+    if verbose:
         print "   1 - Initialization (command line options)"
-    if VERBOSE:
+    if verbose:
         print "       - OOo2DBK config file: %s" % config_file_path
         print "       - OpenOffice.org file: %s" % ooo_file_path
         print "       - DocBook file: %s" % docbook_file_path
@@ -798,7 +798,7 @@ def convert(ooo_file_path,
 
     initializeSets(ooo_file_path, docbook_file_path, command, imagesrew,
                    deltemp, dtd, config_file_path, xslt_file_path, xslParams,
-                   VERBOSE)
+                   verbose)
 
     ooo_file_path = toUnicode(ooo_file_path)
     if docbook_file_path is not None:
@@ -809,19 +809,19 @@ def convert(ooo_file_path,
     endTime = time.time()
     duration = round(endTime - startTime, 2)
 
-    if VERBOSE:
+    if verbose:
         print "       ==>", duration, "sec.\n"
 
         print "   2 - Unzip and concat OpenOffice.org XML files"
 
     startTime = time.time()
 
-    oooVersion = createGlobalXML(globalXML, ooo_file_path, VERBOSE)
+    oooVersion = createGlobalXML(globalXML, ooo_file_path, verbose)
 
     endTime = time.time()
     duration = round(endTime - startTime, 2)
 
-    if VERBOSE:
+    if verbose:
         print "       - Detected file format: %s" % (oooVersion)
         print "       ==>", duration, "sec.\n"
 
@@ -831,7 +831,7 @@ def convert(ooo_file_path,
         # get XSLT file to use from configuration file
         docbookXSL = getXSLfile(oooVersion)
 
-    if VERBOSE:
+    if verbose:
         print "       - preferred encoding: %s" % preferred_encoding
         print "       - XSLT file: %s" % (docbookXSL)
         print "       - OpenOffice.org file computed path: %s" % docOOoSXW
@@ -842,22 +842,22 @@ def convert(ooo_file_path,
             print "       - exported OLE image format: %s" % ole_img_format
             print "       - OOo Python path: %s" % ooopython_path
 
-    if VERBOSE:
+    if verbose:
         print "\n   4 - DocBook file creation"
         
     startTime = time.time()
-    o2dConvert(globalXML, docbookXML, docbookXSL, VERBOSE)
+    o2dConvert(globalXML, docbookXML, docbookXSL, verbose)
 
     tempFilesDelete(deltemp)
     endTime = time.time()
     duration = round(endTime - startTime, 2)
-    if VERBOSE:
+    if verbose:
         print "       ==>", duration, "sec.\n"
         print "Conversion completed\n"
 
-    if ZIPFILE:
-        createDocbookArchive(ZIPFILE)
-        if VERBOSE:
+    if zipfile:
+        createDocbookArchive(zipfile)
+        if verbose:
             print "Zip archive created\n"
 
 # Shell conversion
