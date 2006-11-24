@@ -449,7 +449,8 @@ $Id: ooo2dbk.xsl 28486 2005-10-21 13:10:18Z madarche $
   <xsl:template match="text:p"/>
 
   <xsl:template name="metaInfo">
-    <xsl:param name="bodyRootPara" select="/office:document/office:body/text:p"/>
+    <xsl:param name="bodyRootPara" select="/office:document/office:body/office:text/text:p"/>
+    <DEBUG><xsl:value-of select="$topElementMetainfoName"/></DEBUG>
     <xsl:element name="{$topElementMetainfoName}">
       <xsl:apply-templates select="$bodyRootPara" mode="metaInfo"/>
       <xsl:apply-templates select="/office:document/office:meta/dc:title"/>

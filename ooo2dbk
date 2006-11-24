@@ -535,7 +535,7 @@ def replaceImageNode(vChildNodes):
     for node in vChildNodes:
         if node.nodeName == 'draw:image':
             hRefValue = node.attributes['xlink:href'].value
-            if find(hRefValue, '#Pictures/', 0) != -1:
+            if find(hRefValue, 'Pictures/', 0) != -1:
                 nameImgOld = os.path.split(hRefValue)[1]
 
                 # XXX: What is this block for? Please add comment if you know.
@@ -547,7 +547,12 @@ def replaceImageNode(vChildNodes):
                     nameImgNew = imgRootName + "%03i" % numImg + extImg
                     hrefImgNew = os.path.join(imgRelDir, nameImgNew)
                     pathImgNew = os.path.join(imgAbsDir, nameImgNew)
-                    pathImgZip = hRefValue[1:]
+                    if hRefValue.startswith('#'):
+                        # OOo 1
+                        pathImgZip = hRefValue[1:]
+                    else:
+                        # OOo 2
+                        pathImgZip = hRefValue
                     zipImg = myZip.read(pathImgZip)
                     if os.path.isfile(pathImgNew) and rewriteImg:
                         os.remove(pathImgNew)
