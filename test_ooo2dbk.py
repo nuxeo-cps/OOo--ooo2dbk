@@ -1,0 +1,86 @@
+#!/usr/bin/python
+# (C) Copyright 2003-2006 Nuxeo SAS <http://nuxeo.com>
+#
+# Authors:
+# Laurent Godard (lgodard@indesko.com)
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as published
+# by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# See ``COPYING`` for more information
+#
+# $Id$
+
+import zipfile
+import os, os.path
+import tempfile
+
+test_cases= [{'input_file': 'tests/input/test.sxw', 
+              'expected_dir': 'tests/output/sxw.out'},
+
+             {'input_file': 'tests/input/test.odt',
+             'expected_dir': 'tests/output/odt.out'},
+            ]
+
+def ooo2dbk_tester(input_file, expected_dir):
+
+    target_dir = tempfile.mkdtemp(prefix = 'ooo2dbk-test-')
+
+    command = './ooo2dbk -d %s %s' % (os.path.join(target_dir,'test.docb.xml'),
+                                                   input_file)
+    print command
+    os.system(command)
+
+    status = True
+
+    # are all the images processed ?
+    expected_images_dir = os.path.join(expected_dir, 'images')
+    for image in os.listdir(expected_images_dir):
+        image_to_find = os.path.join(expected_images_dir, image)
+        if os.path.isfile(image_to_find): #to avoid .svn dir
+            expect = os.path.join(target_dir, 'images',image)
+            if not os.path.isfile(expect):
+                status = status and False
+                print 'image %s not found' % image
+
+    # compare docbook files ?
+    f = open(os.path.join(expected_dir, 'test.docb.xml'))
+    model = '\n'.join(f.readlines())
+    f.close()
+    g = open(os.path.join(target_dir, 'test.docb.xml'))
+    computed = '\n'.join(g.readlines())
+    g.close()
+
+    if computed != model:
+        status = False
+        print "docbook files are different !"
+        command = "diff %s %s" % (os.path.join(expected_dir, 'test.docb.xml'),
+                                  os.path.join(target_dir, 'test.docb.xml'))
+        os.system(command)
+
+    # clean temp file
+    os.system('rmdir --ignore-fail-on-non-empty %s' % target_dir)
+
+    return status
+
+if __name__ == '__main__':
+
+    for test in test_cases:
+        print '--------------------'
+        status = ooo2dbk_tester(test['input_file'], test['expected_dir'])
+        if status:
+            result = 'PASS'
+        else:
+            result = 'FAIL'
+        print "\n%s on %s" %(result, test['input_file'])

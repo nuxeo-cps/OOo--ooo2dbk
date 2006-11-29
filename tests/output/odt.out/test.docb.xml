@@ -1,0 +1,467 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN" "file:///var/devcertu/testsXml/paramcertu/docbookdtd/4.4/docbookx.dtd">
+<book lang="fr-FR">
+<?ooogenerator OpenOffice.org/2.0$Linux OpenOffice.org_project/680m5$Build-9073
+  ?>
+<?oooversion 2.0$Linux?>
+  <bookinfo>
+    <date>2006-11-21T16:18:11</date>
+    <keywordset>
+      <keyword>docbook</keyword>
+      <keyword>openoffice</keyword>
+      <keyword>assistant</keyword>
+    </keywordset>
+    <subtitle>OpenOffice.org pour générer des documents DocBook</subtitle>
+    <bibliomisc>Licence LGPL/FDL</bibliomisc>
+    <date>08/04/2005</date>
+    <abstract>
+      <para>Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes.  Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes.  Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. Ceci est un essai sur plusieurs lignes. </para>
+    </abstract>
+    <publisher>
+      <publishername>Indesko</publishername>
+      <address>
+        <street>18, rue Soleillet</street>
+        <postcode>75020</postcode>
+        <city>Paris</city>
+        <state>France</state>
+        <phone>+33 (0)1 40 33 79 87</phone>
+        <fax>+33 (0)1 40 33 71 41</fax>
+        <email>contact@indesko.com</email>
+        <otheraddr>
+          <ulink url="http://www.indesko.com">http://www.indesko.com</ulink>
+        </otheraddr>
+      </address>
+    </publisher>
+    <contractsponsor>CNCC</contractsponsor>
+    <contractsponsor>Ministère de l'équipement</contractsponsor>
+    <confgroup>
+      <conftitle>titre</conftitle>
+      <confnum>Reference</confnum>
+      <confsponsor>Organisateurs</confsponsor>
+    </confgroup>
+  </bookinfo>
+  <preface>
+<?print-orientation portrait?>
+    <title>Préface</title>
+    <para>Ce document est soumis à la licence suivante :</para>
+    <para>Vous avez la permission de copier, de distribuer et/ou de modifier ce document selon les termes de la GNU Free Documentation License, Version 1.1 telle que publiée par la Free Software Foundation (http://www.gnu.org/copyleft/fdl.html) sans texte de couverture (Front Cover Text), avec comme texte de 4ème de couverture (Back Cover Text) « Vous êtes libres de copier et de modifier ce manuel, comme tout le logiciel et la documentation libres produits par la société Indesko, selon les termes de la GNU Free Documentation licence », et comme section invariante (Invariant Section) la section « Support commercial ».</para>
+  </preface>
+  <chapter>
+<?print-orientation portrait?>
+    <title>OOo2Dbk </title>
+    <para>OOo2dbk est un <emphasis role="strong">convertisseur</emphasis> de documents <emphasis role="strong">OpenOffice.org</emphasis> en documents <emphasis role="strong">DocBook</emphasis> <emphasis>soit de type book soit de type article</emphasis>. </para>
+    <para>Cette transformation permet d'envisager une réutilisation du contenu pour l'archivage et la retransformation vers d'autres formats comme le HTML ou le PDF en se servant de DocBook, standard reconnu, comme format pivot.</para>
+    <para>La référence des éléments DocBook est disponible sur <ulink url="http://docbook.org/tdg/en/html/" type="">http://docbook.org/tdg/en/html/</ulink> </para>
+    <para>OOo2Dbk est le résultat des travaux d'Indesko pour le compte de la CNCC et le CETE Nord-Picardie du Ministère de l'Equipement. Cet ensemble logiciel est distribué sous licence libre LGPL sur la base de l'ancien logiciel libre ooo2sdbk d'Eric Bellot désormais plus maintenu. </para>
+    <section>
+      <title>Caractéristiques et évolutions par rapport à ooo2sdbk</title>
+      <itemizedlist>
+    <listitem>
+     <para>Support DocBook</para>
+     <itemizedlist>
+      <listitem>
+       <para>Génération de « DocBook XML V4.3 »</para>
+      </listitem>
+      <listitem>
+       <para>Génération de documents de type <emphasis>article</emphasis> <emphasis>ou book</emphasis> suivant le choix de l'utilisateur. Les documents générés ont la structure adequate. </para>
+      </listitem>
+      <listitem>
+       <para>Support des éléments <emphasis>preface</emphasis> et <emphasis>appendix</emphasis> de DocBook. </para>
+      </listitem>
+      <listitem>
+       <para>Support des formatages <emphasis>exposants</emphasis> et <emphasis>indices</emphasis>. </para>
+      </listitem>
+      <listitem>
+       <para>Prise en compte de l'alignement des cellules dans les tableaux. </para>
+      </listitem>
+      <listitem>
+       <para>Prise en compte du style de bordure des cellules dans les tableaux. Ces informations sont passées en tant qu'instructions de traitement (processing instructions) gérées par les feuilles XSLT. </para>
+      </listitem>
+      <listitem>
+       <para>Support de "f<emphasis>ont-name</emphasis>" de OpenOffice.org permettant des distinguer les fontes utilisant des symboles. </para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+   </itemizedlist>
+      <itemizedlist>
+    <listitem>
+     <para>Interactions OpenOffice.org</para>
+     <itemizedlist>
+      <listitem>
+       <para>Support des méta-informations par l'intermédiaire de champs utilisateurs OpenOffice.org (<emphasis>text:user-field-decl</emphasis>) </para>
+      </listitem>
+      <listitem>
+       <para>Ne traite pas les sections invisibles (<emphasis>text:display="none"</emphasis>). </para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+   </itemizedlist>
+      <itemizedlist>
+    <listitem>
+     <para>Options et configuration </para>
+     <itemizedlist>
+      <listitem>
+       <para>Option <emphasis>-zFILE/--zipfile=FILE</emphasis> pour créer une archive ZIP contenant le résultat DocBook et les éléments dépendants si il y en a.</para>
+      </listitem>
+      <listitem>
+       <para>Option <emphasis>-xFILE/--xslt=FILE</emphasis> pour spécifier une feuille de styles XSLT alternative permettant d'adapter simplement ooo2dbk.xsl. </para>
+      </listitem>
+      <listitem>
+       <para>Option <emphasis>-v/--verbose</emphasis> traçant le déroulement du script ooo2dbk. </para>
+      </listitem>
+      <listitem>
+       <para>Extension du fichier de configuration <emphasis>config.xml</emphasis> afin que chaque "<emphasis>xslt-command</emphasis>" ait un attribut "<emphasis>param-syntax</emphasis>". Ainsi, ooo2dbk s'adapte mieux au différents processeurs XSLT disponibles, ceux-ci ayant des options de lancement différentes.</para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+   </itemizedlist>
+    </section>
+    <section>
+      <title>Contenu de OOo2Dbk</title>
+      <para>L'ensemble OOo2Dbk est composé d'un modèle de document proposant un structure de document ainsi que d'un assistant facilitant la navigation et la gestion des meta-données. Cet assistant, nommé StylistHelper, offre des raccourcis pour l'application des styles. C'est un outil qui se veut convivial et puissant.</para>
+      <para>Un script Python externe permet de préparer le travail sur le document, notamment pour ce qui est de la gestion des images et des objets OLE. Ce script Python lance enfin la transformation XSLT.</para>
+      <para>Le script ole2img, optionnel, est un script Python pilotant une instance d'OpenOffice.org à travers le bridge pyUNO. Les objets OLE sont alors automatiquement transformés en images dont plusieurs formats de sortie sont disponibles.</para>
+    </section>
+  </chapter>
+  <chapter>
+    <title>Installation</title>
+    <section>
+      <title>Outils pour OpenOffice.org</title>
+      <itemizedlist>
+    <listitem>
+     <para>la version testée d'OpenOffice.org est la 1.1.4. Le format de document est du OpenOffice.org 1.x (extension sxw)</para>
+    </listitem>
+    <listitem>
+     <para>installer l'addon en le copiant dans <emphasis>&lt;ooo&gt;/share/uno_packages</emphasis> et ensuite en lançant (après fermeture de OOo) </para><para role="lineBreak"><emphasis>&lt;ooo&gt;/program/pkgchk -f -s</emphasis></para>
+    </listitem>
+    <listitem>
+     <para>Ce document peut servir de base à la création d'un modèle. Il suffit de supprimer ce qui n'est pas désiré. Attention cependant à ne pas détruire la structure des sections.</para>
+    </listitem>
+    <listitem>
+     <para>L'utilisateur pourra ajouter une barre d'outils personnalisée pointant sur la macro <emphasis>Indesko_OOo2Dbk.GesFenetreOutils.ChargeFenetre</emphasis><emphasis role="strong">Attention </emphasis>: Lancer l'assistant bloque toutes les fonctionnalités présentes dans la même barre d 'outils. C'est une limitation de OOo. Il est donc conseillé de créer une nouvelle barre d'outils par <emphasis>Outils &gt; Adaptation &gt; Barres d'outils &gt; Nouveau</emphasis></para>
+    </listitem>
+   </itemizedlist>
+    </section>
+    <section>
+      <title>Python</title>
+      <para>La version minimum de l'environnement Python est la 2.3 du fait de la dépendance au module <emphasis>optparse</emphasis></para>
+      <para>Le Python livré avec OpenOffice.org doit être utilisé par ole2img. Il est néanmoins possible dans certains cas de repointer vers le Python installé sur le système : <ulink url="http://udk.openoffice.org/python/python-bridge.html#replacing" type="">http://udk.openoffice.org/python/python-bridge.html#replacing</ulink> </para>
+      <para>Si la solution proposée sur le lien précédent n'est pas possible, il est possible de copier les modules utilisés par ooo2dbk dans le Python livré avec OOo (version 2.2 pour OOo 1.1.4).</para>
+      <para>Le répertoire de Python sous OOo est &lt;ooo&gt;/program/python-core</para>
+      <para>Les modules nécessaires sont :</para>
+      <itemizedlist>
+    <listitem>
+     <para>optparse.py</para>
+    </listitem>
+   </itemizedlist>
+      <itemizedlist>
+    <listitem>
+     <para>textwrap.py</para>
+    </listitem>
+   </itemizedlist>
+    </section>
+    <section>
+      <title>Transformation XSLT</title>
+      <para>Tout processeur XSLT peut être utilisé (à paramétrer dans le fichier ooo2dbk.xml). Par défaut, ooo2dbk utilise xsltproc mais tout autre comme Saxon peut être utilisé.</para>
+      <programlisting>&lt;!--</programlisting>
+      <programlisting>============================</programlisting>
+      <programlisting>OOo2DBK - Configuration File</programlisting>
+      <programlisting>============================</programlisting>
+      <programlisting>--&gt;</programlisting>
+      <programlisting>&lt;config&gt;</programlisting>
+      <programlisting>   &lt;!-- Command for conversion with XsltProc (http://xmlsoft.org) --&gt;</programlisting>
+      <programlisting>   &lt;xslt-command</programlisting>
+      <programlisting>     name="xsltproc"</programlisting>
+      <programlisting>     command="xsltproc %v -o %o %s %i"</programlisting>
+      <programlisting>     param-syntax="--stringparam %s %s"</programlisting>
+      <programlisting>     /&gt;</programlisting>
+    </section>
+    <section>
+      <title>Etape pour les utilisateurs de Microsoft Windows</title>
+      <para>Si aucun processeur XSLT n'est installé sous Microsoft Windows, vous rencontrez ce message d'erreur :</para>
+      <programlisting>C:\WINDOWS\Bureau\ooo2dbk-1.0.2-1&gt;c:\python23\python ooo2dbk --book --zipfile=document.zip document.sxw</programlisting>
+      <programlisting>Commande ou nom de fichier incorrect</programlisting>
+      <programlisting>Traceback (most recent call last):</programlisting>
+      <programlisting>   File "ooo2dbk", line 587, in ?</programlisting>
+      <programlisting>     exec_args()</programlisting>
+      <programlisting>   File "ooo2dbk", line 131, in exec_args</programlisting>
+      <programlisting>     deltemp=options.flatxml, xslParams=xslParams)</programlisting>
+      <programlisting>   File "ooo2dbk", line 560, in convert</programlisting>
+      <programlisting>     make_zip()</programlisting>
+      <programlisting>   File "ooo2dbk", line 508, in make_zip</programlisting>
+      <programlisting>     zarchive.write(sDocbookXML, pjoin(archive_top_dir, docbook_fname))</programlisting>
+      <programlisting>   File "C:\PYTHON23\lib\zipfile.py", line 391, in write</programlisting>
+      <programlisting>     st = os.stat(filename)</programlisting>
+      <programlisting>OSError: [Errno 2] No such file or directory: 'C:\\WINDOWS\\Bureau\\ooo2dbk-1.0.2-1\\document.docb.xml'</programlisting>
+      <para>Le fichier README.txt de ooo2dbk contient les liens et le détail pour installer le processeur XSLT.</para>
+    </section>
+    <section>
+      <title>Ole2img</title>
+      <para>Ole2img est optionnel. Il s'appuie sur OpenOffice.org pour transformer les objets OLE en images.</para>
+      <para>Une phase préparatoire de l'environnement de travail est nécessaire.</para>
+      <para>OpenOffice.org doit être démarré en mode listen pour que le bridge UNO puisse fonctionner.</para>
+      <para>Comme OpenOffice.org a besoin d'un environnement graphique, si l'exécution est envisagée sur un serveur, il faudra lui en fournir un. On pourra utiliser XVFB (X Virtual Frame Buffer) qui permet d'en simuler un sous environnement Linux. XVFB est package de XFree86.</para>
+      <para>La question ne se pose pas sous Microsoft Windows puisque l'environnement graphique y est obligatoire... </para>
+      <section>
+        <title>XVFB</title>
+        <para>OpenOffice.org a besoin d'un environnement graphique pour s'exécuter. On utilise XVFB sur le display :2.0</para>
+        <programlisting>Xvfb :2 -auth ./Xauth.cfg -screen 0 1024x768x24</programlisting>
+        <para>La résolution adoptée est 1024x768. Ne pas dépasser une profondeur de 24 bits sous peine de dégradation et comportements inattendus des couleurs</para>
+        <para>Le fichier <emphasis role="strong">Xauth.cfg</emphasis> contient une unique ligne</para>
+        <programlisting>localhost</programlisting>
+      </section>
+      <section>
+        <title>OpenOffice.org en mode listen</title>
+        <para>Pour être contacté à travers le bridge pyUNO, OpenOffice.org doit être lancé en mode listen</para>
+        <para>Le port utilisé est 2002.</para>
+        <para>Si XVFB est utilisé, nous lançons OpenOffice.org sous le display (:2.0) de XVFB</para>
+        <programlisting>DISPLAY=":2.0" /opt/OpenOffice.org1.1.4/program/soffice "-accept=socket,host=localhost,port=2002;urp;"&amp;</programlisting>
+      </section>
+    </section>
+  </chapter>
+  <chapter>
+    <title>Utilisation</title>
+    <section>
+      <title>Le modèle</title>
+      <para>Le modèle contient des champs utilisateurs reprenant les termes DocBook. Ces champs, visibles dans le menu <emphasis>Insertion &gt; Champs &gt; autres &gt; Variables &gt; champs</emphasis> utilisateurs seront les méta-données utilisées dans le document DocBook.</para>
+      <para>Ces méta-données sont essentiellement regroupées dans le bordereau en début de document. Ce bordereau ne se retrouvera pas dans les sorties produites par les transformations XSLT. Seules les méta-données seront exploitées.</para>
+    </section>
+    <section>
+      <title>L'assistant OOo2Dbk</title>
+      <para>Il est conçu pour être utilisé avec le modèle. Il regarde la présence du champ utilisateur indesko_version_modele pour savoir si il peut démarrer.</para>
+      <section>
+        <title>Écran Principal</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/img001.png" width="9.46cm" depth="6.65cm"/>
+          </imageobject>
+        </mediaobject>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/img002.png" width="2.671cm" depth="1.251cm"/>
+          </imageobject>
+        </mediaobject>
+        <para>
+    
+    </para>
+        <para>La partie supérieure contient plusieurs outils :</para>
+        <itemizedlist>
+    <listitem>
+     <para>L'accès au StylistHelper</para>
+    </listitem>
+    <listitem>
+     <para>Un accès direct à la section du document</para>
+    </listitem>
+    <listitem>
+     <para>Une réduction de la taille de la fenêtre permettant de travailler sans avoir à fermer l'assistant</para>
+    </listitem>
+   </itemizedlist>
+        <para>Plusieurs actions sont possibles à partir de cette page d'accueil :</para>
+        <itemizedlist>
+    <listitem>
+     <para>Gérer le bordereau : remplir les méta-données</para>
+    </listitem>
+   </itemizedlist>
+        <itemizedlist>
+    <listitem>
+     <para>Ajouter/Supprimer une partie : montrer et cacher les sections pre- ou post-liminaires. Attention, cacher une section efface son contenu...</para>
+    </listitem>
+   </itemizedlist>
+        <itemizedlist>
+    <listitem>
+     <para>Ajouter un entrée au glossaire</para>
+    </listitem>
+    <listitem>
+     <para>Ajouter un index sur la sélection</para>
+    </listitem>
+    <listitem>
+     <para>Ajouter une référence bibliographique</para>
+    </listitem>
+   </itemizedlist>
+        <itemizedlist>
+    <listitem>
+     <para>Gérer les annexes : ajoute une section après la section Annexe. Permet de supprimer une annexe particulière. Permet d'affecter les styles corrects pour la détection des annexes dans la transformation XSLT vers DocBook</para>
+    </listitem>
+   </itemizedlist>
+        <itemizedlist>
+    <listitem>
+     <para>Rafraîchir le document : met à jour tous les champs utilisateurs</para>
+    </listitem>
+   </itemizedlist>
+        <itemizedlist>
+    <listitem>
+     <para>Valider le document : Donne une indication sur la validité du document en vue de la transformation vers DocBook</para>
+    </listitem>
+   </itemizedlist>
+      </section>
+      <section>
+        <title>Gestion du bordereau</title>
+        <para>La gestion du bordereau permet un accès rapide aux méta-données afin de les modifier. Chaque famille (informations générales, auteurs, organismes, etc.) donne accès à un panneau différent.</para>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/img003.png" width="9.46cm" depth="6.65cm"/>
+          </imageobject>
+        </mediaobject>
+        <para>
+    </para>
+        <para>Les écrans de saisie ont été conçus pour une saisie rapide des informations. Les informations ne sont vraiment mises à jour et reportées dans le document que lors de la validation par le bouton « Modifier »</para>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/img004.png" width="9.46cm" depth="6.65cm"/>
+          </imageobject>
+        </mediaobject>
+        <para>
+    </para>
+        <para>Le même type d'écran que celui présenté pour les informations générales du document est disponible pour les auteurs, les organismes auteurs et les organismes commanditaires ainsi que les méta-données de conférence.</para>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/img005.png" width="9.46cm" depth="6.65cm"/>
+          </imageobject>
+        </mediaobject>
+        <para>
+    </para>
+        <para>Il est également possible de saisir plusieurs de ces informations (plusieurs auteurs par exemple). L'utilisateur peut alors choisir de modifier les informations déjà saisie ou même de supprimer l'entrée (sauf la première qui reste obligatoire).</para>
+      </section>
+      <section>
+        <title>Le StylistHelper</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/img006.png" width="9.46cm" depth="6.65cm"/>
+          </imageobject>
+        </mediaobject>
+        <para>
+    </para>
+        <para>Le StylistHelper offre un accès simplifié au stylist d'OpenOffice.org. Il regroupe par famille des actions sur la mise en forme et l'application de styles. Un double clic sur la fenêtre de droite applique le style sur la sélection en cours dans le document.</para>
+        <para>Le StylistHelper offre une information contextuelle très utile : les styles de la sélection en cours sont indiqués au bas de la fenêtre.</para>
+        <para>La bouton Assistant permet de revenir à l'écran d'accueil. Cette fenêtre peut également être enroulée/déroulée.</para>
+      </section>
+      <section>
+        <title>Traduction</title>
+        <para>L'assistant est structurellement prêt à accueillir des traductions de son interface utilisateur. Celles-ci se situent dans le <emphasis>module i18n</emphasis>. OOo2Dbk supporte d'ores et déjà le français et l'anglais. La langue de l'assistant est déterminée par le valeur du champ <emphasis>indesko_language</emphasis> accessible par <emphasis>insertion &gt; champs &gt; autres &gt; variables&gt; champs d'utilisateur</emphasis>. Le français est activé par une valeur à <emphasis>fr</emphasis>, l'anglais par <emphasis>en</emphasis>. Par defaut, la valeur <emphasis>auto</emphasis> applique la langue de l'interface de OOo si celle-ci est définie (sinon,l'anglais).</para>
+      </section>
+    </section>
+    <section>
+      <title>La transformation ooo2dbk</title>
+      <para>Plusieurs options sont disponibles suivant la sortie désirée :</para>
+      <programlisting>ooo2dbk --article --zipfile=document.zip document.sxw</programlisting>
+      <programlisting>ooo2dbk --book --zipfile=document.zip document.sxw</programlisting>
+      <para>Les options possibles sont accessibles par l'option - -help :</para>
+      <programlisting>$ ./ooo2dbk --help</programlisting>
+      <programlisting>usage: ooo2dbk [options] openoffice.org-file</programlisting>
+      <programlisting>options:</programlisting>
+      <programlisting>   --version              show program's version number and exit</programlisting>
+      <programlisting>   -h, --help             show this help message and exit</programlisting>
+      <programlisting>   -zFILE, --zipfile=FILE</programlisting>
+      <programlisting>                         Use FILE as the filename for the generated ZIP archive</programlisting>
+      <programlisting>   -dFILE, --dbkfile=FILE</programlisting>
+      <programlisting>                         Use FILE as the filename for the generated DocBook XML</programlisting>
+      <programlisting>                         file. This option has no effect if the -z/--zipfile</programlisting>
+      <programlisting>                         option is used.</programlisting>
+      <programlisting>   -b, --book             Produce a DocBook XML book. This is the default.</programlisting>
+      <programlisting>   -a, --article          Produce a DocBook XML article.</programlisting>
+      <programlisting>   --ole                  Include potential OLE objects as images in the</programlisting>
+      <programlisting>                         resulting DocBook XML document. This option needs that</programlisting>
+      <programlisting>                         a listening OpenOffice.org instance be running.</programlisting>
+      <programlisting>   -cFILE, --config=FILE</programlisting>
+      <programlisting>                         Use FILE as the file path for the program configuration</programlisting>
+      <programlisting>                         file. Defaults to the ooo2dbk ooo2dbk.xml configuration</programlisting>
+      <programlisting>                         file.</programlisting>
+      <programlisting>   -xFILE, --xslt=FILE    Use FILE as the file path for the XSLT stylesheet.</programlisting>
+      <programlisting>                         Defaults to the ooo2dbk ooo2dbk.xsl stylesheet.</programlisting>
+      <programlisting>   -mNAME, --cmdxslt=NAME</programlisting>
+      <programlisting>                         Use command NAME as the XSLT processor. Available</programlisting>
+      <programlisting>                         command names are defined in the ooo2dbk configuration</programlisting>
+      <programlisting>                         file. Defaults to xsltproc.</programlisting>
+      <programlisting>   -f, --flatxml          Preserve the intermediate OpenOffice.org XML file</programlisting>
+      <programlisting>                         (global.xml)</programlisting>
+      <programlisting>   -v, --verbose          Print additional information to stdout when running</programlisting>
+      <programlisting>                         conversion</programlisting>
+    </section>
+    <section>
+      <title>Ole2img</title>
+      <para>Ole2img est un script Python utilisant le bridge pyUNO pour exporter sous forme de fichiers images tous les objets OLE du document. Ce script ole2img est appelé par ooo2dbk avant la transformation XSLT. Il peut être également utilisé de manière autonome.</para>
+      <para>Par exemple, cet objet pourra être transformé en image :</para>
+      <para><inlinemediaobject><imageobject><imagedata fileref="images/Objet1.png" width="4.701cm" depth="1.177cm"/></imageobject></inlinemediaobject>
+    </para>
+      <para>Il est en de même pour des objets Calc, Draw voire même provenant d'autres applications.</para>
+      <section>
+        <title>Prérequis</title>
+        <para>OpenOffice.org et éventuellement un émulateur de terminal X sur serveurs Linux doivent être installés (voir la partie Installation).</para>
+      </section>
+      <section>
+        <title>Principe</title>
+        <para>Le principe de Ole2img est de boucler sur la collection des objets OLE du document source, copier chaque objet dans une instance de l'application Draw et l'exporter en tant qu'image en utilisant les filtres d'export inclus dans OpenOffice.org. Les formats PNG, JPG, SVG, TIFF, BMP, GIF, EPS sont supportés.</para>
+      </section>
+      <section>
+        <title>Utilisation en ligne de commande</title>
+        <para>Ole2img est accessible en ligne de commande. Un appel avec l'argument -–help donne tous les arguments requis.</para>
+        <para>A noter que ce script Python doit être lancé avec le Python fourni avec OpenOffice.org afin que le bridge UNO soit trouvé. Ooo2Dbk possède dans ces paramètres un champ permettant de spécifier le chemin à utiliser.</para>
+        <programlisting>/home/lgodard/OpenOffice.org1.1.4_Tests/program/python ./ole2img.py --help</programlisting>
+        <programlisting>usage: ole2img [options] openoffice.org-file</programlisting>
+        <programlisting>options:</programlisting>
+        <programlisting>   --target     target directory (mandatory)</programlisting>
+        <programlisting>   --oooserverhost the name of server running OpenOffice.org (defaults to localhost)</programlisting>
+        <programlisting>   --oooserverport the name of server running OpenOffice.org (defaults to localhost)</programlisting>
+        <programlisting>   --format     exported image format (defaults to png)</programlisting>
+        <programlisting>               [bmp-ms, gif, png, tiff, svg, bmp-portable, eps, jpg]</programlisting>
+        <programlisting>   --version    show version and exit</programlisting>
+        <programlisting>   --help       show this help message and exit</programlisting>
+        <programlisting>Example:</programlisting>
+        <programlisting>~/OpenOffice.org1.1.2/program/python ole2img --format png --target ~/outputdir/ ~/exampleFile.sxw</programlisting>
+        <programlisting>OpenOffice.org must run in listen mode</programlisting>
+        <programlisting>./soffice "-accept=socket,host=localhost,port=2002;urp;"</programlisting>
+      </section>
+      <section>
+        <title>Utilisation avec OOo2dbk</title>
+        <para>Le fichier de configuration ooo2dbk.xml contient des entrées permettant d'automatiser l'utilisation d'Ole2img.</para>
+        <programlisting>&lt;!--</programlisting>
+        <programlisting>   Listening OpenOffice.org instances to use for OLE processing.</programlisting>
+        <programlisting>   This configuration item is only used when the "ole" option is specified.</programlisting>
+        <programlisting>   --&gt;</programlisting>
+        <programlisting>   &lt;oooserver</programlisting>
+        <programlisting>     host="localhost"</programlisting>
+        <programlisting>     port="2002"</programlisting>
+        <programlisting>     /&gt;</programlisting>
+        <programlisting>   &lt;!--</programlisting>
+        <programlisting>   The image format for the images generated from potential OLE objects.a</programlisting>
+        <programlisting>   This configuration item is only used when the "ole" option is specified.</programlisting>
+        <programlisting>   --&gt;</programlisting>
+        <programlisting>   &lt;ole</programlisting>
+        <programlisting>     imgformat="png"</programlisting>
+        <programlisting>     /&gt;</programlisting>
+        <programlisting>   &lt;!--</programlisting>
+        <programlisting>   The python shipped with OpenOffice.org.</programlisting>
+        <programlisting>   This option should not be needed if OpenOffice.org was shipping Python 2.3</programlisting>
+        <programlisting>   or if PyUNO bridge could easily be used from the system Python.</programlisting>
+        <programlisting>   This configuration item is only used when the "ole" option is specified.</programlisting>
+        <programlisting>   --&gt;</programlisting>
+        <programlisting>   &lt;ooopython</programlisting>
+        <programlisting>     path="/home/lgodard/OpenOffice.org1.1.4/program/python"</programlisting>
+        <programlisting>     /&gt;</programlisting>
+      </section>
+    </section>
+  </chapter>
+  <appendix>
+    <title>Support Commercial</title>
+    <orderedlist continuation="restarts" numeration="arabic">
+     <listitem>
+      <para>À propos d'Indesko</para>
+     </listitem>
+    </orderedlist>
+    <para>Indesko est une division de Nuxeo, spécialisée dans les services autour de la bureautique libre et de la suite OpenOffice.org. Indesko conseille et accompagne ses clients dans leurs projets de migration vers OpenOffice.org et vers la bureautique libre, et développe des modules métiers et des applications dédiées leur permettant d'intégrer la suite logicielle au sein de leur système d'information tout en optimisant leurs processus de travail.</para>
+    <orderedlist continuation="restarts" numeration="arabic">
+     <listitem>
+      <para>Pour nous contacter</para>
+     </listitem>
+    </orderedlist>
+    <para>
+      <emphasis>Indesko</emphasis>
+    </para>
+    <para>18-20, rue Soleillet</para>
+    <para>75020 Paris</para>
+    <para>Tél: +33 (0)1 40 33 71 56</para>
+    <para>Fax: +33 (0)1 43 58 14 15</para>
+    <para>Mél: <ulink url="mailto:contact@indesko.com" type="">contact@indesko.com</ulink> </para>
+    <para>Web: <ulink url="http://www.indesko.com/" type="">http://www.indesko.com/</ulink> </para>
+  </appendix>
+</book>
