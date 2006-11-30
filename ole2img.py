@@ -181,7 +181,7 @@ def ole2img(source, target,
     # Now connected to OOo
 
     # load source file
-    args = (PropertyValue('Hidden', 0, False, 0),)
+    args = (PropertyValue('Hidden', 0, True, 0),)
     url = unohelper.systemPathToFileUrl(source)
     sourceDoc = desktop.loadComponentFromURL(url, '_blank', 0, args)
 
@@ -198,7 +198,7 @@ def ole2img(source, target,
                     'com.sun.star.frame.DispatchHelper', ctx)
 
     #creates an hidden draw docuement
-    args = (PropertyValue('Hidden', 0, False, 0),)
+    args = (PropertyValue('Hidden', 0, True, 0),)
     url = 'private:factory/sdraw'
     drawDoc = desktop.loadComponentFromURL(url, '_blank', 0, args)
 
@@ -270,8 +270,8 @@ def ole2img(source, target,
             oGraphic.filter(argsExport)
 
     # Close files
-    #drawDoc.close(True)
-    #sourceDoc.close(True)
+    drawDoc.close(True)
+    sourceDoc.close(True)
 
 
 # Shell access
