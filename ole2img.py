@@ -34,7 +34,7 @@ from os import sep
 from os import remove
 import time
 
-VERSION = '0.5.2'
+VERSION = '0.6'
 
 #filter parameters
 FILTER_PARAMS = {
@@ -181,9 +181,15 @@ def ole2img(source, target,
     # Now connected to OOo
 
     # load source file
-    args = (PropertyValue('Hidden', 0, True, 0),)
+    args = (PropertyValue('Hidden', 0, False, 0),)
     url = unohelper.systemPathToFileUrl(source)
     sourceDoc = desktop.loadComponentFromURL(url, '_blank', 0, args)
+
+    # Hack/Bug : Needed to sanitize the object hierarchy for use with CurrentController
+    url = unohelper.systemPathToFileUrl(target + 'temp.sxw')
+    sourceDoc.storeToURL(url,())
+    os.remove(target + 'temp.sxw')
+
     oGraphic=smgr.createInstanceWithContext(
                             'com.sun.star.drawing.GraphicExportFilter', ctx)
 
@@ -192,14 +198,16 @@ def ole2img(source, target,
                     'com.sun.star.frame.DispatchHelper', ctx)
 
     #creates an hidden draw docuement
-    args = (PropertyValue('Hidden', 0, True, 0),)
+    args = (PropertyValue('Hidden', 0, False, 0),)
     url = 'private:factory/sdraw'
     drawDoc = desktop.loadComponentFromURL(url, '_blank', 0, args)
 
     theOleObjects = sourceDoc.EmbeddedObjects
 
+
     for i in range(theOleObjects.Count):
         oleObject = theOleObjects.getByIndex(i)
+        print oleObject.Name
         # Selection
         sourceDoc.CurrentController.select(oleObject)
 
@@ -208,8 +216,10 @@ def ole2img(source, target,
         # sometimes the current object may not be selected
         # the selection remains on the previous in the loop
 
+        # May be not needed any more as done previously ?
+
         # Verify the selection is ok
-        obj = sourceDoc.CurrentController.Selection
+        obj = sourceDoc.CurrentController.getSelection()
         if obj.Name != oleObject.Name:
             # Save the file and select again the object
             # Updates the object and the can be selected
@@ -223,6 +233,7 @@ def ole2img(source, target,
         # creates an image telling a problem occured
         if obj.Name != oleObject.Name:
             print "unable to process " + oleObject.Name
+            print 1/0
             drawingShape = drawDoc.createInstance("com.sun.star.drawing.TextShape")
             theSapeSize = drawingShape.Size
             drawDoc.DrawPages.getByIndex(0).add(drawingShape)
@@ -249,19 +260,18 @@ def ole2img(source, target,
                                        ())
 
             # Rename draw object
-            objDraw = drawDoc.CurrentController.Selection.getByIndex(0)
-            objDraw.Name = oleObject.Name
+            objDraw = drawDoc.CurrentController.Selection
 
             # Export
             oGraphic.setSourceDocument(objDraw)
-            url = unohelper.systemPathToFileUrl(target + objDraw.Name + extension)
+            url = unohelper.systemPathToFileUrl(target + oleObject.Name + extension)
             argsExport = (PropertyValue('URL' , 0 , url, 0 ),
                           PropertyValue('MediaType' , 0 , theFilter, 0 ))
             oGraphic.filter(argsExport)
 
     # Close files
-    drawDoc.close(True)
-    sourceDoc.close(True)
+    #drawDoc.close(True)
+    #sourceDoc.close(True)
 
 
 # Shell access
