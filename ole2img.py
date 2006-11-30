@@ -204,7 +204,6 @@ def ole2img(source, target,
 
     theOleObjects = sourceDoc.EmbeddedObjects
 
-
     for i in range(theOleObjects.Count):
         oleObject = theOleObjects.getByIndex(i)
         print oleObject.Name
@@ -233,7 +232,6 @@ def ole2img(source, target,
         # creates an image telling a problem occured
         if obj.Name != oleObject.Name:
             print "unable to process " + oleObject.Name
-            print 1/0
             drawingShape = drawDoc.createInstance("com.sun.star.drawing.TextShape")
             theSapeSize = drawingShape.Size
             drawDoc.DrawPages.getByIndex(0).add(drawingShape)
@@ -259,7 +257,7 @@ def ole2img(source, target,
                                        0,
                                        ())
 
-            # Rename draw object
+            # get draw object
             objDraw = drawDoc.CurrentController.Selection
 
             # Export
