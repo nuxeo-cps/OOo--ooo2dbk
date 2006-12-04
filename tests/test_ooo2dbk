@@ -26,19 +26,19 @@ import zipfile
 import os, os.path
 import tempfile
 
-test_cases= [{'input_file': 'tests/input/test.sxw', 
-              'expected_dir': 'tests/output/sxw.out'},
+test_cases= [{'input_file': 'input/test.sxw',
+              'expected_dir': 'output/sxw.out'},
 
-             {'input_file': 'tests/input/test.odt',
-             'expected_dir': 'tests/output/odt.out'},
+             {'input_file': 'input/test.odt',
+              'expected_dir': 'output/odt.out'},
             ]
 
 def ooo2dbk_tester(input_file, expected_dir):
 
-    target_dir = tempfile.mkdtemp(prefix = 'ooo2dbk-test-')
+    target_dir = tempfile.mkdtemp(prefix='ooo2dbk-test-')
 
-    command = './ooo2dbk -d %s %s' % (os.path.join(target_dir,'test.docb.xml'),
-                                                   input_file)
+    command = '../ooo2dbk -d %s %s' % (os.path.join(target_dir,'test.docb.xml'),
+                                      input_file)
     print command
     os.system(command)
 
@@ -49,7 +49,7 @@ def ooo2dbk_tester(input_file, expected_dir):
     for image in os.listdir(expected_images_dir):
         image_to_find = os.path.join(expected_images_dir, image)
         if os.path.isfile(image_to_find): #to avoid .svn dir
-            expect = os.path.join(target_dir, 'images',image)
+            expect = os.path.join(target_dir, 'images', image)
             if not os.path.isfile(expect):
                 status = status and False
                 print 'image %s not found' % image
@@ -65,8 +65,11 @@ def ooo2dbk_tester(input_file, expected_dir):
     if computed != model:
         status = False
         print "docbook files are different !"
-        command = "diff %s %s" % (os.path.join(expected_dir, 'test.docb.xml'),
-                                  os.path.join(target_dir, 'test.docb.xml'))
+        command = ("diff -u %s %s" %
+                   (os.path.join(expected_dir, 'test.docb.xml'),
+                    os.path.join(target_dir, 'test.docb.xml')
+                    )
+                   )
         os.system(command)
 
     # clean temp file
