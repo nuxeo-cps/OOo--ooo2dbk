@@ -271,13 +271,13 @@ def createDirectory(path):
 def getXSLfile(oooVersion):
 
     # Using the XSLT stylesheets specified in the config.xml file
-    stylesheet_file_name = getConfigValue('xslt-stylesheet', 
+    stylesheet_file_name = getConfigValue('xslt-stylesheet',
                                               'stylesheetPath',
                                               name=oooVersion)
     stylesheet_file_name = verifPath(stylesheet_file_name)
     if stylesheet_file_name == None:
         print "Bad filename %s for 'xslt-stylesheet' %s in 'config.xml'" % (
-                                                stylesheet_file_name, 
+                                                stylesheet_file_name,
                                                 oooVersion )
 
     xsltfile = os.path.join(getModulePath(), stylesheet_file_name)
@@ -767,7 +767,7 @@ def createDocbookArchive(zipfile_target):
         shutil.rmtree(imgAbsDir)
 
 
-def convert(ooo_file_path, 
+def convert(ooo_file_path,
             command=None,
             docbook_file_path=None,
             imagesrew=1,
@@ -844,7 +844,7 @@ def convert(ooo_file_path,
 
     if verbose:
         print "\n   4 - DocBook file creation"
-        
+
     startTime = time.time()
     o2dConvert(globalXML, docbookXML, docbookXSL, verbose)
 
