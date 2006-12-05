@@ -1,10 +1,9 @@
-
 ====
 TODO
 ====
-*$Id$*
 
-- Process the XML generated from the OpenOffice.org 2.x series.
+:Revision: $Id$
+
 
 - Code cleaning: Remove the use of "global" variables.
 
@@ -25,3 +24,9 @@ TODO
 - Take jobtitle and quality correctly into naccount in the docbook.xsl
 
 - Deploy ooo2dbk as a module using distutils : need to rename to .py and create a caller script
+
+
+.. Local Variables:
+.. mode: rst
+.. End:
+.. vim: set filetype=rst:
