@@ -2468,9 +2468,11 @@ $Id: ooo2dbk.xsl 28486 2005-10-21 13:10:18Z madarche $
     <!-- on ajoute l'attribut Id au noeud uniquement s'il ne s'agit pas d'un titre
            dans le cas d'un titre, le lien Id est ajoute au niveau superieur par le template GenereIDSection -->
    	<xsl:if test="not(name(..) = 'text:h')">
-      <xsl:attribute name="id">
-	    <xsl:value-of select="@text:name"/>
-	  </xsl:attribute>
+            <phrase>
+              <xsl:attribute name="id">
+                <xsl:value-of select="@text:name"/>
+              </xsl:attribute>
+            </phrase>
 	</xsl:if>
     <!-- fin rajout MT -->
 
