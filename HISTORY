@@ -1,6 +1,26 @@
 ===========================================================
 Package: ooo2dbk 2.0.0
 ===========================================================
+First release built by: lgodard at: 2006-12-05T16:56:33
+SVN Tag: https://svn.nuxeo.org/pub/OOo/ooo2dbk/tags/2.0.0
+Build from: https://svn.nuxeo.org/pub/OOo/ooo2dbk/trunk@50506
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+-
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+-
+
+===========================================================
+Package: ooo2dbk 2.0.0
+===========================================================
 First release built by: lgodard at: 2006-11-27T14:30:02
 SVN Tag: https://svn.nuxeo.org/pub/OOo/ooo2dbk/tags/2.0.0
 Build from: https://svn.nuxeo.org/pub/OOo/ooo2dbk/trunk@50313
