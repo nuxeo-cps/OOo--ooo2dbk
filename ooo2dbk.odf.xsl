@@ -62,8 +62,8 @@ $Id: ooo2dbk.xsl 28486 2005-10-21 13:10:18Z madarche $
 
   <xsl:output method="xml" indent="yes" omit-xml-declaration="no"
     doctype-public="-//OASIS//DTD DocBook XML V4.4//EN"
-    doctype-system="file:///var/devcertu/testsXml/paramcertu/docbookdtd/4.4/docbookx.dtd"/>
-
+    doctype-system="http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd"/>
+    
   <!--
   Parameter used to determine which top element the resulting tree will have.
   This parameter can be overridden by passing a parameter to the XSLT processor.
