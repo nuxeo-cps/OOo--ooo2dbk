@@ -291,10 +291,18 @@ def setConfFileSettings(config_file_path=None):
     global ole_img_format, ole2img_script_path, ooopython_path
 
     # Configuration file
+    # look at options.config priorities for parameters file
+    #   1- c file.xml
+    #   2- /etc/ooo2dbk.xml
+    #   3- ooo2dbk.xml in the cuurent directory
     if config_file_path is not None:
         configXML = config_file_path
     else:
-        configXML = os.path.join(getModulePath(), CONF_FILE_NAME)
+        if os.path.isfile(os.path.join('/etc', CONF_FILE_NAME)):
+            configXML = os.path.join('/etc', CONF_FILE_NAME)
+        else:
+            configXML = os.path.join(getModulePath(), CONF_FILE_NAME)
+
     configParse = minidom.parse(configXML)
     configDocElt = configParse.documentElement
     eltsParse = configDocElt.childNodes
