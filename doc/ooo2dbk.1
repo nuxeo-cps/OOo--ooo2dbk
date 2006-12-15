@@ -1,7 +1,7 @@
 .\"                                      Hey, EMACS: -*- nroff -*-
 .TH OOo2Dbk 1 "January  7, 2005"
 .SH NAME
-OOo2Dbk \- program to convert OpenOffice.org-Writer SXW files to DocBook XML documents.
+OOo2Dbk \- program to convert OpenOffice.org-Writer (ODT and SXW) files to DocBook XML documents.
 .SH SYNOPSIS
 .B OOo2Dbk
 .RI [ options ] " openoffice.org-file"
@@ -18,7 +18,7 @@ This version of OOo2Dbk understands the following command line options.
 Show summary of options.
 .TP
 .B \-cFILE, \-\-config=FILE
-Use FILE as the file path for the program configuration file. Defaults to the ooo2dbk.xml configuration file.
+Use FILE as the file path for the program configuration file. Defaults to the global /etc/ooo2dbk.xml configuration file or to the ooo2dbk.xml configuration file in the ooo2dbk executable directory.
 .TP
 .B \-zFILE, \-\-zipfile=FILE
 Use FILE as the filename for the generated ZIP archive

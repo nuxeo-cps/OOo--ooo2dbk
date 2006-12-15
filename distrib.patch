@@ -1,15 +1,3 @@
-diff -uNr ooo2dbk.orig/ooo2dbk ooo2dbk/ooo2dbk
---- ooo2dbk.orig/ooo2dbk	2006-11-23 15:43:51.000000000 +0100
-+++ ooo2dbk/ooo2dbk	2006-11-23 15:45:43.000000000 +0100
-@@ -40,7 +40,7 @@
- 
- VERSION = '2.0'
- 
--CONF_FILE_NAME = 'ooo2dbk.xml'
-+CONF_FILE_NAME = '/etc/ooo2dbk.xml'
- 
- # OpenOffice.org canonical XML files
- OOO_META_FILE_NAME = 'meta.xml'
 diff -uNr ooo2dbk.orig/ooo2dbk.xml ooo2dbk/ooo2dbk.xml
 --- ooo2dbk.orig/ooo2dbk.xml	2006-11-23 15:48:13.000000000 +0100
 +++ ooo2dbk/ooo2dbk.xml	2006-11-23 15:46:41.000000000 +0100

@@ -3,14 +3,20 @@
 OOo2DBK: Generating DocBook from OpenOffice.org
 ===============================================
 
-*$Id$*
+:Authors: - Marc-Aurèle Darche
+          - Laurent Godard
+
+:Revision: $Id$
+
+.. sectnum::    :depth: 4
+.. contents::   :depth: 4
 
 
 Presentation
 ============
 
-OOo2DBK is an OpenOffice.org document to DocBook XML converter. It can produce
-both DocBook "article" and DocBook "book" documents.
+OOo2DBK is an OpenOffice.org document (ODT and SXW) to DocBook XML converter. It
+can produce both DocBook "article" and DocBook "book" documents.
 
 The online reference presenting all the available DocBook elements is
 http://docbook.org/tdg/en/html/
@@ -23,7 +29,8 @@ be found at http://www.stefan-rinke.de/articles/publish/en/
 
 Use the templates provided in the ooo directory of this package to create your own OOo
 documents from which DocBook documents will be generated.
-These templates (in french and English) contain all the information on installing and using OOo2dbk
+These templates (in French and English) contain all the information on
+installing and using OOo2dbk.
 
 Features and changes over ooo2sdbk
 ==================================
@@ -63,7 +70,7 @@ Download
 ========
 
 Get the latest ooo2dbk snapshot from Nuxeo SVN repository:
-http://svn.nuxeo.org/trac/pub/browser/ooo2dbk/trunk/
+https://svn.nuxeo.org/pub/OOo/ooo2dbk/trunk
 
 Bugs can be reported at http://svn.nuxeo.org/trac/pub/newticket
 Reports must include the output of ooo2sdbk with the "--verbose" option and the
@@ -72,3 +79,8 @@ input OOo file.
 Improvements suggestions are welcomed, especially if they come with a diff
 file and an input OOo example file.
 
+
+.. Local Variables:
+.. mode: rst
+.. End:
+.. vim: set filetype=rst:
