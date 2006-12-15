@@ -1,4 +1,24 @@
 ===========================================================
+Package: ooo2dbk 2.0.3
+===========================================================
+First release built by: madarche at: 2006-12-15T12:28:48
+SVN Tag: https://svn.nuxeo.org/pub/OOo/ooo2dbk/tags/2.0.3
+Build from: https://svn.nuxeo.org/pub/OOo/ooo2dbk/trunk@50617
+
+Requires
+~~~~~~~~
+-
+New features
+~~~~~~~~~~~~
+-
+Bug fixes
+~~~~~~~~~
+- Updated doc and patch.
+New internal features
+~~~~~~~~~~~~~~~~~~~~~
+- 
+
+===========================================================
 Package: ooo2dbk 2.0.2
 ===========================================================
 First release built by: madarche at: 2006-12-15T12:18:10
