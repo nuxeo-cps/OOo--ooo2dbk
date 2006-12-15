@@ -55,7 +55,7 @@ DOCBOOK_FILE_SUFFIX = '.docb.xml'
 # https://sourceforge.net/tracker/?func=detail&atid=105470&aid=878120&group_id=5470
 ZIP_FILE_ENCODING = 'cp437'
 
-# initialization (attempt to remove some global statements)
+# Initialization (attempt to remove some global statements)
 oooVersion = 'ooo1'
 docbookXSL = None
 verbose = True
@@ -117,7 +117,9 @@ def execArgs():
                       metavar='FILE',
                       default=None,
                       help="Use FILE as the file path for the program configuration file. "
-                      "Defaults to the ooo2dbk %s configuration file." % CONF_FILE_NAME)
+                      "Defaults to the global /etc/%s configuration file or to the "
+                      "%s configuration file in the ooo2dbk executable directory."
+                      % (CONF_FILE_NAME, CONF_FILE_NAME))
 
     parser.add_option('-x', '--xslt',
                       action='store',
@@ -178,7 +180,7 @@ def execArgs():
     process_ole_objects = options.ole
 
     convert(ooo_file_path,
-            config_file_path=options.config,
+            conf_file_path=options.config,
             command=options.cmdxslt,
             xslt_file_path=options.xslt,
             xslParams=xslParams,
@@ -197,6 +199,8 @@ def execArgs():
 # ---------
 
 def getModulePath():
+    """Return the path of the directory in which the ooo2dbk executable resides.
+    """
     moduleFullname = os.path.abspath(execArgs.func_code.co_filename)
     modulePath = os.path.split(moduleFullname)[0]
     return modulePath
@@ -225,10 +229,6 @@ def verifSys():
         currentSys = 'windows'
     else:
         currentSys = 'unix'
-    #elif sys.platform.lower().find('linux') > -1:
-    #    currentSys = 'linux'
-    #else:
-    #    raise Error('Only Win32 and Linux are supported.')
 
 
 def verifPath(path):
@@ -284,7 +284,7 @@ def getXSLfile(oooVersion):
 
     return xsltfile
 
-def setConfFileSettings(config_file_path=None):
+def setConfFileSettings(conf_file_path=None):
     global configXML
     global configElts, imgRelDir, imgRootName
     global oooserver_host, oooserver_port
@@ -295,11 +295,12 @@ def setConfFileSettings(config_file_path=None):
     #   1- c file.xml
     #   2- /etc/ooo2dbk.xml
     #   3- ooo2dbk.xml in the cuurent directory
-    if config_file_path is not None:
-        configXML = config_file_path
+    if conf_file_path is not None:
+        configXML = conf_file_path
     else:
-        if os.path.isfile(os.path.join('/etc', CONF_FILE_NAME)):
-            configXML = os.path.join('/etc', CONF_FILE_NAME)
+        conf_file_path_global = os.path.join('/etc', CONF_FILE_NAME)
+        if os.path.isfile(conf_file_path_global):
+            configXML = conf_file_path_global
         else:
             configXML = os.path.join(getModulePath(), CONF_FILE_NAME)
 
@@ -462,9 +463,9 @@ def setUserSettings(ooofile, docbook, command, imagesrew, deltemp, dtd,
 
 
 def initializeSets(ooo_file_path, docbook, command, imagesrew, deltemp, dtd,
-                   config_file_path, xslt_file_path, xslParams, verbose):
+                   conf_file_path, xslt_file_path, xslParams, verbose):
     verifSys()
-    setConfFileSettings(config_file_path)
+    setConfFileSettings(conf_file_path)
     setUserSettings(ooo_file_path, docbook, command, imagesrew, deltemp, dtd,
                     xslt_file_path, xslParams, verbose)
 
@@ -781,7 +782,7 @@ def convert(ooo_file_path,
             imagesrew=1,
             deltemp=1,
             dtd=None,
-            config_file_path=None,
+            conf_file_path=None,
             xslt_file_path=None,
             xslParams=None,
             verbose=False,
@@ -792,20 +793,18 @@ def convert(ooo_file_path,
             ):
     """Convert OpenOffice.org Writer file to DocBook XML.
     """
-
     startTime = time.time()
 
     if verbose:
-        print "   1 - Initialization (command line options)"
-    if verbose:
-        print "       - OOo2DBK config file: %s" % config_file_path
-        print "       - OpenOffice.org file: %s" % ooo_file_path
-        print "       - DocBook file: %s" % docbook_file_path
-        print "       - top element is: %s" % docbook_top_element
-        print "       - process OLE objects: %s" % process_ole_objects
+        print "   1 - Command line options"
+        print "       - OOo2DBK config file : %s" % conf_file_path
+        print "       - OpenOffice.org file : %s" % ooo_file_path
+        print "       - DocBook file        : %s" % docbook_file_path
+        print "       - top element is      : %s" % docbook_top_element
+        print "       - process OLE objects : %s" % process_ole_objects
 
     initializeSets(ooo_file_path, docbook_file_path, command, imagesrew,
-                   deltemp, dtd, config_file_path, xslt_file_path, xslParams,
+                   deltemp, dtd, conf_file_path, xslt_file_path, xslParams,
                    verbose)
 
     ooo_file_path = toUnicode(ooo_file_path)
@@ -819,7 +818,6 @@ def convert(ooo_file_path,
 
     if verbose:
         print "       ==>", duration, "sec.\n"
-
         print "   2 - Unzip and concat OpenOffice.org XML files"
 
     startTime = time.time()
@@ -832,25 +830,24 @@ def convert(ooo_file_path,
     if verbose:
         print "       - Detected file format: %s" % (oooVersion)
         print "       ==>", duration, "sec.\n"
-
         print "   3 - Initialization (configuration file and computed options)"
 
     if docbookXSL is None:
-        # get XSLT file to use from configuration file
+        # Get XSLT file to use from configuration file
         docbookXSL = getXSLfile(oooVersion)
 
     if verbose:
-        print "       - preferred encoding: %s" % preferred_encoding
-        print "       - XSLT file: %s" % (docbookXSL)
-        print "       - OpenOffice.org file computed path: %s" % docOOoSXW
-        print "       - DocBook file computed path: %s" % docbookXML
+        global configXML
+        print "       - preferred encoding       : %s" % preferred_encoding
+        print "       - OOo2DBK config file      : %s" % configXML
+        print "       - XSLT file                : %s" % docbookXSL
+        print "       - OpenOffice.org file path : %s" % docOOoSXW
+        print "       - DocBook file path        : %s" % docbookXML
         if process_ole_objects:
-            print "       - oooserver host: %s" % oooserver_host
-            print "       - oooserver port: %s" % oooserver_port
-            print "       - exported OLE image format: %s" % ole_img_format
+            print "       - oooserver host            : %s" % oooserver_host
+            print "       - oooserver port            : %s" % oooserver_port
+            print "       - exported OLE image format : %s" % ole_img_format
             print "       - OOo Python path: %s" % ooopython_path
-
-    if verbose:
         print "\n   4 - DocBook file creation"
 
     startTime = time.time()
@@ -870,5 +867,4 @@ def convert(ooo_file_path,
 
 # Shell conversion
 if __name__ == "__main__":
-
     execArgs()
