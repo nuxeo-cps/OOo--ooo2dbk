@@ -1413,7 +1413,7 @@ $Id$
   ============
 
   Examples of OOo markup:
-  <text:bibliography-mark text:author="Borges, Malte; Schumacher, Jörg" text:bibliography-type="book" text:identifier="BOR02a" text:isbn="3827262763" text:pages="900" text:publisher="Markt &amp; Technik Verlag" text:title="StarOffice 6.0 Kompendium" text:year="2002">
+  <text:bibliography-mark text:author="Borges, Malte; Schumacher, J" text:bibliography-type="book" text:identifier="BOR02a" text:isbn="3827262763" text:pages="900" text:publisher="Markt &amp; Technik Verlag" text:title="StarOffice 6.0 Kompendium" text:year="2002">
   <text:bibliography-mark text:author="Bob" text:bibliography-type="book" text:identifier="XSLT" text:title="XSLT Poet">
   -->
   <xsl:template name="bibliography">

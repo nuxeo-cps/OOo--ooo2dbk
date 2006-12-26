@@ -6,7 +6,7 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- Removed bad characters in ooo2dbk.xsl file.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
