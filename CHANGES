@@ -3,10 +3,10 @@ Requires
 -
 New features
 ~~~~~~~~~~~~
--
+- 
 Bug fixes
 ~~~~~~~~~
 - Removed bad characters in ooo2dbk.xsl file.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
-- 
+- ooo2dbk.xml defaults first to /etc/ooo2dbk.xml, then to CONF_FILE_NAME
