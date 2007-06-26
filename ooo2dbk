@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# (C) Copyright 2003-2006 Nuxeo SAS <http://nuxeo.com>
+# (C) Copyright 2003-2007 Nuxeo SAS <http://nuxeo.com>
 # (C) Copyright 2002 Eric Bellot <ebellot@netcourrier.com>
 #
 # Authors:
@@ -270,15 +270,17 @@ def createDirectory(path):
 
 def getXSLfile(oooVersion):
 
-    # Using the XSLT stylesheets specified in the config.xml file
+    # Using the XSLT stylesheets specified in the CONF_FILE_NAME file
     stylesheet_file_name = getConfigValue('xslt-stylesheet',
                                               'stylesheetPath',
                                               name=oooVersion)
     stylesheet_file_name = verifPath(stylesheet_file_name)
     if stylesheet_file_name == None:
-        print "Bad filename %s for 'xslt-stylesheet' %s in 'config.xml'" % (
+        print "Bad filename %s for 'xslt-stylesheet' %s in '%s'" % (
                                                 stylesheet_file_name,
-                                                oooVersion )
+                                                oooVersion,
+                                                CONF_FILE_NAME,
+						)
 
     xsltfile = os.path.join(getModulePath(), stylesheet_file_name)
 
@@ -326,16 +328,17 @@ def setConfFileSettings(conf_file_path=None):
     imgRelDir = getConfigValue('images', 'imagesRelativeDirectory')
     verifPathIRD = re.match(r"^[a-zA-Z0-9]+$", imgRelDir)
     if verifPathIRD == None:
-        msg = ("Only one depth relative directory (no '" + os.sep + "') "
-               "and only alphanum chars for 'imagesRelativeDirectory' in 'config.xml'\n"
-               "Actual name is : '" + imgRelDir + "'")
+        msg = ("Only one depth relative directory (no '%s') "
+               "and only alphanum chars for 'imagesRelativeDirectory' in '%s'\n"
+               "Actual name is : '%s'"
+               % (os.sep, CONF_FILE_NAME, imgRelDir))
         print msg
         sys.exit(1)
     # Images root name
     imgRootName = getConfigValue('images', 'imageNameRoot')
     verifPathIR = re.match(r"^[a-zA-Z0-9]+$", imgRootName)
     if verifPathIR == None:
-        print "Only alphanum chars for 'imageNameRoot' in 'config.xml'"
+        print "Only alphanum chars for 'imageNameRoot' in '%s'" % CONF_FILE_NAME
         print "Actual name is :", imgRootName
         sys.exit(1)
 
@@ -348,7 +351,7 @@ def setConfFileSettings(conf_file_path=None):
 
 def getConfigValue(element, attribute, name=''):
     """
-    Return from the config.xml file the value of the specified attribute
+    Return from the CONF_FILE_NAME file the value of the specified attribute
     ('command', 'param-syntax', etc.) for the specified element type
     'xslt-command', 'xslt-stylesheet', etc.) with its 'name' attribute having
     the name value.
@@ -371,7 +374,7 @@ def getConfigValue(element, attribute, name=''):
     else:
         if name != '':
             print ("There isn't any value for this parameter. "
-                   "There should be an error in your config.xml.")
+                   "There should be an error in your %s." % CONF_FILE_NAME)
             sys.exit(1)
 
 

@@ -6,7 +6,8 @@ New features
 -
 Bug fixes
 ~~~~~~~~~
--
+- Fixed reference in the comments and messages to config.xml file which is now a
+  constant that may change.
 New internal features
 ~~~~~~~~~~~~~~~~~~~~~
 - 
